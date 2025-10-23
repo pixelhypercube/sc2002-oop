@@ -1,21 +1,12 @@
 package sc2002OOP.obj;
 
 public class Staff extends User {
-	private String staffID,role,department;
+	private String role,department;
 	
-	public Staff(String staffID, String name, String role, String department, String email,String password) {
-		super(name,email,password);
-		this.staffID = staffID;
+	public Staff(String userID, String name, String role, String department, String email,String password) {
+		super(userID,name,email,password);
 		this.role = role;
 		this.department = department;
-	}
-
-	public String getStaffID() {
-		return staffID;
-	}
-
-	public void setStaffID(String staffID) {
-		this.staffID = staffID;
 	}
 
 	public String getRole() {

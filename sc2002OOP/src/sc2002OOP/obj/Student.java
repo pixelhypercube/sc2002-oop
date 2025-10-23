@@ -1,22 +1,13 @@
 package sc2002OOP.obj;
 
 public class Student extends User {
-	private String studentId,major;
+	private String major;
 	private int year;
 	
-	public Student(String studentId, String name, String major, int year, String email, String password) {
-		super(name,email,password);
-		this.studentId = studentId;
+	public Student(String userID, String name, String major, int year, String email, String password) {
+		super(userID,name,email,password);
 		this.major = major;
 		this.year = year;
-	}
-
-	public String getStudentId() {
-		return studentId;
-	}
-
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
 	}
 
 	public String getMajor() {
