@@ -3,8 +3,8 @@ package sc2002OOP.obj;
 public class Staff extends User {
 	private String staffID,role,department;
 	
-	public Staff(String staffID, String name, String role, String department, String email) {
-		super(name,email);
+	public Staff(String staffID, String name, String role, String department, String email,String password) {
+		super(name,email,password);
 		this.staffID = staffID;
 		this.role = role;
 		this.department = department;
