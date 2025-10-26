@@ -1,11 +1,12 @@
 package sc2002OOP.obj;
 
-public class Company {
-	private String companyRepID, name, companyName, department, position, email,status;
+public class CompanyRepresentative extends User {
+	private String companyName, department, position, email, status;
 
-	public Company(String companyRepID, String name, String companyName, String department, String position, String email, String status) {
-		this.companyRepID = companyRepID;
-		this.name = name;
+	public CompanyRepresentative() {}
+	
+	public CompanyRepresentative(String userID, String name, String companyName, String department, String position, String email, String status, String password) {
+		super(userID,name,email,password);
 		this.companyName = companyName;
 		this.department = department;
 		this.position = position;
@@ -13,22 +14,6 @@ public class Company {
 		this.status = status;
 	}
 	
-	public String getCompanyRepID() {
-		return companyRepID;
-	}
-
-	public void setCompanyRepID(String companyRepID) {
-		this.companyRepID = companyRepID;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getCompanyName() {
 		return companyName;
 	}

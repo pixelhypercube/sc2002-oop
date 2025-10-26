@@ -1,12 +1,17 @@
 package sc2002OOP.obj;
 
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class User {
 	private String userID, name, email, password;
 	
+	public User() {}
+	
 	public User(String userID, String name, String email, String password) {
-		this.userID = userID;
+		this.setUserID(userID);
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -23,8 +28,36 @@ public class User {
 		System.out.print("Enter your password: ");
 		if (sc.next()=="TEST") password = sc.next();
 		
-		this.userID = uID;
+		this.setUserID(uID);
 		this.password = password;
+	}
+	
+	public void forgotPassword() throws IOException {
+		try (Scanner sc = new Scanner(System.in)) {
+			String uID = null;
+			String password = null;
+			
+			System.out.print("Enter your NTU Email: ");
+			String email = sc.next();
+			final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+			Pattern pattern = Pattern.compile(EMAIL_REGEX);
+			
+			Matcher matcher = pattern.matcher(EMAIL_REGEX);
+			if (matcher.matches()) {
+				
+			}
+			
+		}
+	}
+	
+	public void displayHome() {
+		System.out.println("Welcome, " + name);
+		
+		
+	}
+	
+	public void logout() {
+		
 	}
 
 	public String getName() {
@@ -49,5 +82,13 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getUserID() {
+		return userID;
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
 	}
 }
