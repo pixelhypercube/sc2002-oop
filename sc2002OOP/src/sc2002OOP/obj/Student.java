@@ -3,10 +3,12 @@ package sc2002OOP.obj;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import sc2002OOP.main.Constants;
 import sc2002OOP.main.FileIOHandler;
+import sc2002OOP.main.PasswordManager;
 
 public class Student extends User {
 	private String major;
@@ -27,7 +29,7 @@ public class Student extends User {
 	
 	public void viewInternshipOpportunities(Scanner sc) {
 		if (internships != null) {
-			System.out.println(super.getName()+"'s list of Internship Opportunities:");
+			System.out.println(super.getName()+"'s list of Internship Opportunities available:");
 			for (InternshipApplication internship : InternshipApplication.getFilteredInternshipApplications("", super.getUserID(), "", null)) {
 				System.out.println("Internship ID: "+internship.getInternshipID());
 				
@@ -43,9 +45,6 @@ public class Student extends User {
 						statusStr = "Filled";
 				}
 				System.out.println("Status:        "+statusStr);
-//				System.out.println("Company Name: "+internship.getCompanyName());
-//				System.out.println("Title: "+internship.getTitle());
-//				System.out.println("Description: "+internship.getDescription());
 			}
 		} else {
 			System.out.println("You do not have any internship opportunities!");
@@ -56,11 +55,7 @@ public class Student extends User {
 	public void viewProfile(Scanner sc) {
 		System.out.println("STUDENT PROFILE: ");
 		System.out.println("==========================================");
-		System.out.println("Student ID : " + getUserID());
-		System.out.println("Name       : " + getName());
-		System.out.println("Major      : " + getMajor());
-		System.out.println("Year       : " + getYear());
-		System.out.println("Email      : " + getEmail());
+		print();
 		System.out.println("==========================================");
 	}
 	
@@ -75,17 +70,18 @@ public class Student extends User {
 					"",
 					null,
 					(year<=2) 
-					? new InternshipLevel[]{InternshipLevel.BASIC,InternshipLevel.INTERMEDIATE}
-					: new InternshipLevel[]{InternshipLevel.BASIC,InternshipLevel.INTERMEDIATE,InternshipLevel.ADVANCED},
+					? new InternshipOpportunityLevel[]{InternshipOpportunityLevel.BASIC,InternshipOpportunityLevel.INTERMEDIATE}
+					: new InternshipOpportunityLevel[]{InternshipOpportunityLevel.BASIC,InternshipOpportunityLevel.INTERMEDIATE,InternshipOpportunityLevel.ADVANCED},
+					null,
 					true
 				);
 		
 		if (internshipList != null) {
 			System.out.println("LIST OF INTERNSHIPS: ");
-			System.out.println("=======================================");
+			System.out.println("=====================================================");
 			for (InternshipOpportunity internship : internshipList) {
 				internship.printInternship();
-				System.out.println("=======================================");
+				System.out.println("=====================================================");
 			}
 		}
 	}
@@ -130,6 +126,8 @@ public class Student extends User {
 						newStudent.setYear(Integer.parseInt(field));
 					else if (headers.get(i).equals("Email"))
 						newStudent.setEmail(field);
+					else if (headers.get(i).equals("Password"))
+						newStudent.setPassword(field);
 					
 				}
 			}
@@ -170,6 +168,75 @@ public class Student extends User {
 		this.year = year;
 	}
 	
+//	 WITHDRWAW INTERNSHIP APPLICATION
+	public void withdraw(Scanner sc) {
+		ArrayList<WithdrawalRequest> withdrawalReqList = WithdrawalRequest.getAllWithdrawalRequests();
+		
+		ArrayList<InternshipApplication> internshipAppList = InternshipApplication.getFilteredInternshipApplications(
+					"",
+					getUserID(),
+					"",
+					InternshipApplicationStatus.PENDING
+				);
+		
+		Set<String> excludedApplicationIDs = withdrawalReqList.stream()
+				.map(WithdrawalRequest::getApplicationID)
+				.collect(Collectors.toSet());
+		
+		ArrayList<InternshipApplication> filteredInternshipAppList = internshipAppList.stream()
+				.filter(app->!excludedApplicationIDs.contains(app.getApplicationID()))
+				.collect(Collectors.toCollection(ArrayList::new));
+		
+		if (internshipAppList.size()>0) {
+			System.out.println("=====================================================");
+			for (InternshipApplication internshipApp : filteredInternshipAppList) {
+				internshipApp.print();
+				System.out.println("=====================================================");
+			}
+			
+			String applicationID = "";
+			boolean found = false;
+			boolean inWithdrawalReqList = false;
+			while (applicationID.isEmpty() || !found || inWithdrawalReqList) {
+				inWithdrawalReqList = false;
+				System.out.print("Enter an Application ID to withdraw: ");
+				applicationID = sc.next();
+				// check if it's inside withdrawal req list
+				for (WithdrawalRequest withdrawalReq : withdrawalReqList) {
+					if (withdrawalReq.getApplicationID().equals(applicationID)) {
+						System.out.println("You have already submitted the request for this application! Please try another application.");
+						inWithdrawalReqList = true;
+						break;
+					}
+				}
+				
+				if (inWithdrawalReqList) continue;
+				
+				for (InternshipApplication internshipApp : filteredInternshipAppList) {
+					if (internshipApp.getApplicationID().equals(applicationID)) {
+						found = true;
+						
+						
+						// create new record
+						String contents = FileIOHandler.getFileContents(Constants.WITHDRAWAL_REQS_FILE);
+						contents += applicationID + ",";
+						contents += "PENDING\n";
+						
+						System.out.println("Successfully Submitted Withdrawal Application!");
+						
+						FileIOHandler.writeFileContents(Constants.WITHDRAWAL_REQS_FILE, contents);
+						break;
+					}
+				}
+				if (!found) System.out.println("Application ID not found. Please try again!");
+			}
+		} else {
+			System.out.println("Sorry, you don't have any pending internship applications at the moment.");
+		}
+		
+		
+	}
+	
 	public void applyInternship(Scanner sc) {
 		printAllInternships();
 		
@@ -184,7 +251,7 @@ public class Student extends User {
 			for (InternshipOpportunity internship : internshipList) {
 				if (internshipID.equals(internship.getInternshipID())) {
 					if (internship.getNumSlots()==0 ||
-						internship.getStatus()==InternshipStatus.FILLED) {
+						internship.getStatus()==InternshipOpportunityStatus.FILLED) {
 						System.out.println("Sorry, the internship you've tried to apply for is full. Please fill in another internship.");
 						break;
 					}
@@ -221,15 +288,16 @@ public class Student extends User {
 		System.out.println("Welcome, " + super.getName() + " (" + super.getUserID() + ")");
 		
 		int choice = 0;
-		while (choice != 6) {
+		while (choice != 7) {
 			System.out.println("=====================================================");
 			System.out.println("Choose an option: ");
 			System.out.println("1. View Available Internships  ");
 			System.out.println("2. Apply for Internship  ");
 			System.out.println("3. View Your Internship Opportunities ");
-			System.out.println("4. View Profile");
-			System.out.println("5. Change Password ");
-			System.out.println("6. Logout ");
+			System.out.println("4. Submit Withdrawal Request");
+			System.out.println("5. View Profile");
+			System.out.println("6. Change Password ");
+			System.out.println("7. Logout ");
 			System.out.println("=====================================================");
 			
 			System.out.print("Enter a choice: ");
@@ -241,19 +309,79 @@ public class Student extends User {
 			} else if (choice==3) {
 				viewInternshipOpportunities(sc);
 			} else if (choice==4) {
-				viewProfile(sc);
+				withdraw(sc);
 			} else if (choice==5) {
-				changePassword(sc);
+				viewProfile(sc);
 			} else if (choice==6) {
+				changePassword(sc);
+			} else if (choice==7) {
 				System.out.println("See you later!");
 			}
 		}
 	}
 
+//	@Override
+//	public void refreshData(Scanner sc) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+
 	@Override
-	public void refreshData(Scanner sc) {
+	public void print() {
 		// TODO Auto-generated method stub
+		System.out.println("Student ID : " + getUserID());
+		System.out.println("Name       : " + getName());
+		System.out.println("Major      : " + getMajor());
+		System.out.println("Year       : " + getYear());
+		System.out.println("Email      : " + getEmail());
+	}
+
+	@Override
+	public void changePassword(Scanner sc) {
+		// TODO Auto-generated method stub
+		String newPassword = "";
+		while (newPassword.length()<8) {
+			System.out.print("Enter new password: ");
+			newPassword = sc.next();
+			if (newPassword.length()<8)
+				System.out.println("Password must be at least 8 chars.");
+		}
 		
+		String repeatNewPassword = "";
+		while (!repeatNewPassword.equals(newPassword)) {
+			System.out.print("Re-enter password: ");
+			repeatNewPassword = sc.next();
+			if (!repeatNewPassword.equals(newPassword))
+				System.out.println("Passwords do not match!");
+		}
+		
+		String hashedPassword = PasswordManager.hashPassword(newPassword);
+		ArrayList<Student> students = getStudents();
+		for (Student student : students) {
+			if (student.getUserID().equals(this.getUserID())) {
+				student.setPassword(hashedPassword);
+				super.setPassword(hashedPassword);
+				break;
+			}
+		}
+		
+		String contents = "StudentID,Name,Major,Year,Email,Password\n";
+		for (Student student : students) {
+			
+			String passwordToSave = (student.getUserID().equals(this.getUserID())) 
+                    ? hashedPassword 
+                    : student.getPassword();
+			contents += student.getUserID()+Constants.DELIMITER;
+			contents += student.getName()+Constants.DELIMITER;
+			contents += student.getMajor()+Constants.DELIMITER;
+			contents += student.getYear()+Constants.DELIMITER;
+			contents += student.getEmail()+Constants.DELIMITER;
+			contents += passwordToSave+Constants.NEW_LINE;
+		}
+		
+		FileIOHandler.writeFileContents(Constants.STUDENT_FILE, contents);
+
+		System.out.println("Your password has been successfully changed!");
 	}
 	
 	

@@ -6,10 +6,12 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import sc2002OOP.main.Constants;
 import sc2002OOP.main.FileIOHandler;
+import sc2002OOP.main.PasswordManager;
 
 public abstract class User {
-	private String userID, name, email, password = "password";
+	private String userID, name, email, password;
 	
 	public User() {}
 	
@@ -28,7 +30,7 @@ public abstract class User {
 		while (uID.isEmpty() || pwd.isEmpty() || !userFound) {
 			System.out.print("Enter your user ID: ");
 			uID = sc.next();
-			if (uID.length()>0) {
+			if (!uID.isEmpty()) {
 				for (User user : users) {
 					if (user.getUserID().equals(uID)) {
 						userFound = true;
@@ -40,17 +42,25 @@ public abstract class User {
 								continue;
 							}
 						}
-						while (pwd.isEmpty() || !user.getPassword().equals(pwd)) {
+						while (pwd.isEmpty() || !PasswordManager.verifyPassword(pwd, user.getPassword())) {
 							System.out.print("Enter your password: ");
 							pwd = sc.next();
-							if (pwd.length()<=0) System.out.println();
-							if (!user.getPassword().equals(pwd)) {
-								System.out.println("Wrong password, please try again!");
-								continue;
-							} else {
+							
+							if (PasswordManager.verifyPassword(pwd, user.getPassword())) {
 								System.out.println("Logged in successfully!");
 								return user;
-							}
+							} else
+								System.out.println("Wrong password, please try again!");
+//								
+							
+//							if (pwd.isEmpty()) System.out.println();
+//							if (!user.getPassword().equals(pwd)) {
+//								System.out.println("Wrong password, please try again!");
+//								continue;
+//							} else {
+//								System.out.println("Logged in successfully!");
+//								return user;
+//							}
 						}
 					}
 				}
@@ -61,25 +71,7 @@ public abstract class User {
 
 	}
 	
-	public void changePassword(Scanner sc) {
-		String newPassword = "";
-		while (newPassword.length()<8) {
-			System.out.print("Enter new password: ");
-			newPassword = sc.next();
-			if (newPassword.length()<8)
-				System.out.println("Password must be at least 8 chars.");
-		}
-		
-		String repeatNewPassword = "";
-		while (!repeatNewPassword.equals(newPassword)) {
-			System.out.print("Re-enter password: ");
-			repeatNewPassword = sc.next();
-			if (!repeatNewPassword.equals(newPassword))
-				System.out.println("Passwords do not match!");
-		}
-		
-		System.out.println("Your password has been successfully changed!");
-	}
+	public abstract void changePassword(Scanner sc);
 	
 	public void forgotPassword(Scanner sc) {
 		String uID = null;
@@ -100,7 +92,8 @@ public abstract class User {
 	// ABSTRACT METHODS
 	public abstract void displayHome(Scanner sc);
 	public abstract void viewProfile(Scanner sc);
-	public abstract void refreshData(Scanner sc);
+//	public abstract void refreshData(Scanner sc);
+	public abstract void print();
 	
 	// GETTERS & SETTERS
 

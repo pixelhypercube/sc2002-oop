@@ -1,8 +1,9 @@
 package sc2002OOP.obj;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.stream.Collectors;
 
 import sc2002OOP.main.Constants;
@@ -14,10 +15,10 @@ public class InternshipOpportunity {
 	 * */
 	private String internshipID, title, description, companyName, preferredMajor;
 	private ArrayList<String> companyRepsInCharge;
-	private Date applicationOpeningDate, applicationClosingDate;
+	private LocalDate openingDate, closingDate;
 	private int numSlots;
-	private InternshipLevel level;
-	private InternshipStatus status;
+	private InternshipOpportunityLevel level;
+	private InternshipOpportunityStatus status;
 	private boolean visibility;
 	
 	public InternshipOpportunity(
@@ -28,8 +29,10 @@ public class InternshipOpportunity {
 			String preferredMajor, 
 			ArrayList<String> companyRepsInCharge,
 			int numSlots,
-			InternshipLevel level,
-			InternshipStatus status,
+			InternshipOpportunityLevel level,
+			InternshipOpportunityStatus status,
+			LocalDate openingDate,
+			LocalDate closingDate,
 			boolean visibility
 	) {
 		this.internshipID = internshipID;
@@ -40,6 +43,8 @@ public class InternshipOpportunity {
 		this.companyRepsInCharge = companyRepsInCharge;
 		this.numSlots = numSlots;
 		this.level = level;
+		this.openingDate = openingDate;
+		this.closingDate = closingDate;
 		this.visibility = visibility;
 	}
 
@@ -88,24 +93,28 @@ public class InternshipOpportunity {
 						newInternship.setNumSlots(Integer.parseInt(data[i]));
 					else if (headers.get(i).equals("Level")) {
 						if (data[i].equals("Basic"))
-							newInternship.setLevel(InternshipLevel.BASIC);
+							newInternship.setLevel(InternshipOpportunityLevel.BASIC);
 						if (data[i].equals("Intermediate"))
-							newInternship.setLevel(InternshipLevel.INTERMEDIATE);
+							newInternship.setLevel(InternshipOpportunityLevel.INTERMEDIATE);
 						if (data[i].equals("Advanced"))
-							newInternship.setLevel(InternshipLevel.ADVANCED);
+							newInternship.setLevel(InternshipOpportunityLevel.ADVANCED);
 					}
 					else if (headers.get(i).equals("Status")) {
 						if (data[i].equals("Pending"))
-							newInternship.setStatus(InternshipStatus.PENDING);
+							newInternship.setStatus(InternshipOpportunityStatus.PENDING);
 						else if (data[i].equals("Approved"))
-							newInternship.setStatus(InternshipStatus.APPROVED);
+							newInternship.setStatus(InternshipOpportunityStatus.APPROVED);
 						else if (data[i].equals("Rejected"))
-							newInternship.setStatus(InternshipStatus.REJECTED);
+							newInternship.setStatus(InternshipOpportunityStatus.REJECTED);
 						else if (data[i].equals("Filled"))
-							newInternship.setStatus(InternshipStatus.FILLED);
+							newInternship.setStatus(InternshipOpportunityStatus.FILLED);
 					}
 					else if (headers.get(i).equals("Visibility"))
 						newInternship.setVisibility(data[i].equals("on"));
+					else if (headers.get(i).equals("OpeningDate"))
+						newInternship.setOpeningDate(LocalDate.parse(data[i]));
+					else if (headers.get(i).equals("ClosingDate"))
+						newInternship.setClosingDate(LocalDate.parse(data[i]));
 				}
 			}
 			if (index++ > 0) internships.add(newInternship);
@@ -120,20 +129,25 @@ public class InternshipOpportunity {
 		String companyName,
 		String preferredMajors,
 		ArrayList<String> companyRepsInCharge,
-		InternshipLevel[] level,
-		boolean visibility
+		InternshipOpportunityLevel[] level,
+		InternshipOpportunityStatus[] status,
+		Boolean visibility
 	) {
 		return (ArrayList<InternshipOpportunity>) getAllInternshipOpportunities()
 				.stream()
-				.filter(obj -> obj.visibility==visibility) // check visibility
+				.filter(obj -> (visibility==null || obj.visibility==visibility)) // check visibility
 				.filter(obj -> (
 						(internshipID.isEmpty() || obj.getInternshipID().equals(internshipID)) &&
 						(title.isEmpty() || obj.getTitle().equals(title)) &&
 						(description.isEmpty() || obj.getDescription().equals(description)) &&
 						(companyName.isEmpty() || obj.getCompanyName().equals(companyName)) &&
 						(preferredMajors.isEmpty() || obj.getPreferredMajor().equals(preferredMajors)) &&
-						(companyRepsInCharge==null || obj.getCompanyRepsInCharge() != null || obj.getCompanyRepsInCharge().stream().anyMatch(companyRepsInCharge::contains)) &&
-						(level==null || Arrays.asList(level).contains(obj.getLevel()))
+						(companyRepsInCharge==null || companyRepsInCharge.isEmpty() || 
+								 (obj.getCompanyRepsInCharge() != null && 
+								  obj.getCompanyRepsInCharge().stream().anyMatch(companyRepsInCharge::contains)
+								 )) &&
+						(level==null || Arrays.asList(level).contains(obj.getLevel())) &&
+						(status==null || Arrays.asList(status).contains(obj.getStatus()))
 				))
 				.collect(Collectors.toList());
 	}
@@ -155,6 +169,8 @@ public class InternshipOpportunity {
 				case ADVANCED -> levelStr = "Advanced";
 			}
 			System.out.println("Level:                    "+levelStr);
+			System.out.println("Opening Date:             "+openingDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+			System.out.println("Closing Date:             "+closingDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
 		}
 	}
 
@@ -198,22 +214,6 @@ public class InternshipOpportunity {
 		this.companyRepsInCharge = companyRepInCharge;
 	}
 
-	public Date getApplicationOpeningDate() {
-		return applicationOpeningDate;
-	}
-
-	public void setApplicationOpeningDate(Date applicationOpeningDate) {
-		this.applicationOpeningDate = applicationOpeningDate;
-	}
-
-	public Date getApplicationClosingDate() {
-		return applicationClosingDate;
-	}
-
-	public void setApplicationClosingDate(Date applicationClosingDate) {
-		this.applicationClosingDate = applicationClosingDate;
-	}
-
 	public int getNumSlots() {
 		return numSlots;
 	}
@@ -222,19 +222,19 @@ public class InternshipOpportunity {
 		this.numSlots = numSlots;
 	}
 
-	public InternshipLevel getLevel() {
+	public InternshipOpportunityLevel getLevel() {
 		return level;
 	}
 
-	public void setLevel(InternshipLevel level) {
+	public void setLevel(InternshipOpportunityLevel level) {
 		this.level = level;
 	}
 
-	public InternshipStatus getStatus() {
+	public InternshipOpportunityStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(InternshipStatus status) {
+	public void setStatus(InternshipOpportunityStatus status) {
 		this.status = status;
 	}
 
@@ -252,6 +252,22 @@ public class InternshipOpportunity {
 
 	public void setVisibility(boolean visibility) {
 		this.visibility = visibility;
+	}
+
+	public LocalDate getOpeningDate() {
+		return openingDate;
+	}
+
+	public void setOpeningDate(LocalDate openingDate) {
+		this.openingDate = openingDate;
+	}
+
+	public LocalDate getClosingDate() {
+		return closingDate;
+	}
+
+	public void setClosingDate(LocalDate closingDate) {
+		this.closingDate = closingDate;
 	}
 
 	

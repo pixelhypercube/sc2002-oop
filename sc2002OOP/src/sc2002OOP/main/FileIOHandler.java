@@ -11,10 +11,6 @@ import java.util.function.Function;
 import sc2002OOP.obj.*;
 
 public class FileIOHandler {
-//	private static final String Constants.FILE_PATH = "/data/";
-//	private static final String Constants.DELIMITER = ",";
-//	private static final String SECOND_Constants.DELIMITER = ";"; // used for nested Constants.DELIMITERs inside cells
-	
 	public static void readFile(String path) {
 		String line;
 		try (
@@ -59,9 +55,23 @@ public class FileIOHandler {
 	}
 	
 	// CAUTION: this will change the entire record of the file!
+	// assuming default file location is Constants.FILE_PATH
 	public static void writeFileContents(String path, String amendedContent) {
 		try (
 				FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\src\\" + Constants.FILE_PATH + path);
+				BufferedWriter bw = new BufferedWriter(fw);
+		) {
+			bw.write(amendedContent);
+		} catch (IOException e) {
+			System.err.println("File + " + path + " could not be read.");
+			e.printStackTrace();
+		}
+	}
+	
+	// overloaded method with additional dir param
+	public static void writeFileContents(String path, String dir, String amendedContent) {
+		try (
+				FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\src\\" + dir + path);
 				BufferedWriter bw = new BufferedWriter(fw);
 		) {
 			bw.write(amendedContent);

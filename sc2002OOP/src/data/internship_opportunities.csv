@@ -1,5 +1,5 @@
-InternshipID,Title,Description,CompanyName,PreferredMajors,CompanyRepsInCharge,NumSlots,Level,Status,Visibility
-S121,Software Engineer,Good fundamentals of coding languages,Some Engineering Pte. Ltd,Computer Science,S102329,10,Basic,Approved,on
-S122,Software Engineer,Good fundamentals of coding languages,Some Engineering Pte. Ltd,Computer Science,"S102329;S102330",3,Intermediate,Approved,off
-S123,Data Engineer,Good fundamentals of coding languages,Some Engineering Pte. Ltd,Computer Science,"S102330;S102331",2,Basic,Approved,on
-S124,AI Engineer,Good fundamentals of coding languages,Some Engineering Pte. Ltd,Data Science & AI,S102332,4,Advanced,Approved,on
+InternshipID,Title,Description,CompanyName,PreferredMajors,CompanyRepsInCharge,NumSlots,Level,Status,OpeningDate,ClosingDate,Visibility
+S121,Software Engineer,Good fundamentals of coding languages,Some Engineering Pte. Ltd,Computer Science,S102329,10,Basic,Approved,2025-10-30,2025-11-05,on
+S122,Software Engineer,Good fundamentals of coding languages,Some Engineering Pte. Ltd,Computer Science,"S102329;S102330",3,Intermediate,Approved,2025-10-30,2025-11-05,off
+S123,Data Engineer,Good fundamentals of coding languages,Some Engineering Pte. Ltd,Computer Science,"S102330;S102331",2,Basic,Approved,2025-10-30,2025-11-05,on
+S124,AI Engineer,Good fundamentals of coding languages,Some Engineering Pte. Ltd,Data Science & AI,S102332,4,Advanced,Approved,2025-10-30,2025-11-05,on

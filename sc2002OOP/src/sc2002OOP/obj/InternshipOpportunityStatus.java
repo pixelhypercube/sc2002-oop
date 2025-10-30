@@ -1,6 +1,6 @@
 package sc2002OOP.obj;
 
-public enum InternshipStatus {
+public enum InternshipOpportunityStatus {
 	PENDING,
 	APPROVED,
 	REJECTED,

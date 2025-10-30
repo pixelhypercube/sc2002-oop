@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/data/applications.csv</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/src/exports/applications.csv</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

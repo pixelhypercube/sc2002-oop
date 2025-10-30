@@ -42,8 +42,8 @@ public class Main {
 				System.out.println("Please select a choice to continue:");
 				System.out.println("1. Login");
 				System.out.println("2. Register (Company Representative)");
-				System.out.println("3. Forgot Password");
-				System.out.println("4. Exit");
+//				System.out.println("3. Forgot Password");
+				System.out.println("3. Exit");
 				System.out.println("========================================================");
 				System.out.print("Your Choice: ");
 				if (sc.hasNextInt()) {
@@ -53,10 +53,12 @@ public class Main {
 						if (user != null) user.displayHome(sc);
 					} else if (choice==2) {
 						CompanyRepresentative.register(sc);
-					} else if (choice==3) {
-//						user.forgotPassword();
-						
-					} else if (choice==4) {
+					}
+//					} else if (choice==3) {
+////						user.forgotPassword();
+//						
+//					} 
+					else if (choice==3) {
 						System.out.println("Bon Voyage");
 						break;
 					}

@@ -1,6 +1,6 @@
 package sc2002OOP.obj;
 
-public enum InternshipLevel {
+public enum InternshipOpportunityLevel {
 	BASIC,
 	INTERMEDIATE,
 	ADVANCED

@@ -20,6 +20,13 @@ public class InternshipApplication {
 		this.status = status;
 	}
 	
+	public void print() {
+		System.out.println("Application ID: " + applicationID);
+		System.out.println("Student ID:     " + studentID);
+		System.out.println("Internship ID:  " + internshipID);
+		System.out.println("Status:         " + status);
+	}
+	
 	public static ArrayList<InternshipApplication> getAllInternshipApplications() {
 		String contents = FileIOHandler.getFileContents(Constants.INTERNSHIP_APPLICATIONS_FILE);
 		
@@ -43,7 +50,7 @@ public class InternshipApplication {
 						internshipApp.setApplicationID(cell);
 					else if (headers.get(i).equals("StudentID"))
 						internshipApp.setStudentID(cell);
-					else if (headers.get(i).equals("CompanyID"))
+					else if (headers.get(i).equals("InternshipID"))
 						internshipApp.setInternshipID(cell);
 					else if (headers.get(i).equals("Status")) {
 						if (cell.toLowerCase().equals("pending"))
@@ -63,14 +70,14 @@ public class InternshipApplication {
 	}
 	
 	public static ArrayList<InternshipApplication> getFilteredInternshipApplications(
-		String applicationID, String studentID, String companyID, InternshipApplicationStatus status
+		String applicationID, String studentID, String internshipID, InternshipApplicationStatus status
 	) {
 		return (ArrayList<InternshipApplication>) getAllInternshipApplications()
 				.stream()
 				.filter(obj -> (
 						(applicationID.isEmpty() || obj.getApplicationID().equals(applicationID)) &&
 						(studentID.isEmpty() || Objects.equals(obj.getStudentID(), studentID)) &&
-						(companyID.isEmpty() || Objects.equals(obj.getInternshipID(), companyID)) &&
+						(internshipID.isEmpty() || Objects.equals(obj.getInternshipID(), internshipID)) &&
 						(status==null || Objects.equals(obj.getStatus(), status))
 					))
 				.collect(Collectors.toList());

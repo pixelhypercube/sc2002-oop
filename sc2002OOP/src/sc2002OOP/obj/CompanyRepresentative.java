@@ -3,9 +3,12 @@ package sc2002OOP.obj;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import sc2002OOP.main.*;
@@ -22,6 +25,17 @@ public class CompanyRepresentative extends User {
 		this.position = position;
 		this.email = email;
 		this.status = status;
+	}
+	
+	public void print() {
+		System.out.println("Company Rep ID: "+getUserID());
+		System.out.println("Name:           "+getName());
+		System.out.println("Email:          "+getEmail());
+		System.out.println("Company Name:   "+companyName);
+		System.out.println("Department:     "+department);
+		System.out.println("Position:       "+position);
+		System.out.println("Email:          "+email);
+		System.out.println("Status:         "+status);
 	}
 	
 	public static ArrayList<CompanyRepresentative> getCompanyReps() {
@@ -54,6 +68,8 @@ public class CompanyRepresentative extends User {
 						newCompRep.setEmail(field);
 					else if (headers.get(i).equals("Status"))
 						newCompRep.setStatus(field);
+					else if (headers.get(i).equals("Password"))
+						newCompRep.setPassword(field);
 				}
 			}
 			if (index++>0) companyReps.add(newCompRep);
@@ -71,7 +87,8 @@ public class CompanyRepresentative extends User {
 						(companyRepID.isEmpty() || obj.getUserID().equals(companyRepID)) &&
 						(companyName.isEmpty() || Objects.equals(obj.getCompanyName(), companyName)) &&
 						(department.isEmpty() || Objects.equals(obj.getDepartment(), department)) &&
-						(position.isEmpty() || Objects.equals(obj.getStatus(), status)) &&
+						(position.isEmpty() || Objects.equals(obj.getPosition(), position)) &&
+						(status.isEmpty() || Objects.equals(obj.getStatus(), status)) &&
 						(email.isEmpty() || Objects.equals(obj.getEmail(), email))
 					))
 				.collect(Collectors.toList());
@@ -272,6 +289,47 @@ public class CompanyRepresentative extends User {
 		FileIOHandler.writeFileContents(Constants.INTERNSHIP_OPPORTUNITIES_FILE, amendedContents);
 	}
 	
+	public void exportApplicationsReport() {
+		ArrayList<InternshipApplication> applications = 
+		InternshipApplication.getAllInternshipApplications();
+		
+		
+		ArrayList<InternshipOpportunity> companyRepList = 
+		InternshipOpportunity.getFilteredInternshipOpportunities(
+				"",
+				"",
+				"",
+				"",
+				"",
+				new ArrayList<>(Arrays.asList(getUserID())),
+				null,
+				null,
+				null
+		);
+		
+		Set<String> managedInternshipIDs = companyRepList
+				.stream()
+				.map(InternshipOpportunity::getInternshipID)
+				.collect(Collectors.toSet());
+		
+		ArrayList<InternshipApplication> filteredApplications = applications.stream().filter(obj->
+					managedInternshipIDs.contains(obj.getInternshipID())
+				)
+				.collect(Collectors.toCollection(ArrayList::new));
+		
+		
+		// include headers first
+		String contents = "ApplicationID,StudentID,InternshipID,Status\n";
+		for (InternshipApplication internshipApp : filteredApplications) {
+			contents += internshipApp.getApplicationID() + Constants.DELIMITER;
+			contents += internshipApp.getStudentID() + Constants.DELIMITER;
+			contents += internshipApp.getInternshipID() + Constants.DELIMITER;
+			contents += internshipApp.getStatus() + Constants.NEW_LINE;
+		}
+		FileIOHandler.writeFileContents(Constants.EXPORTED_INTERNSHIP_APP_FILE, Constants.EXPORT_REPORTS_PATH, contents);
+		
+	}
+	
 	public String getCompanyName() {
 		return companyName;
 	}
@@ -318,14 +376,15 @@ public class CompanyRepresentative extends User {
 		System.out.println("Welcome, " + super.getName() + " (" + super.getUserID() + ")");
 		
 		int choice = 0;
-		while (choice != 4) {
+		while (choice != 6) {
 			System.out.println("=====================================================");
 			System.out.println("Choose an option: ");
 			System.out.println("1. View All Internships");
 			System.out.println("2. Create Internship Opportunity");
 			System.out.println("3. Toggle Visibility of Internship Oppurtunity");
-			System.out.println("4. Change Password") 	;
-			System.out.println("5. Log Out");
+			System.out.println("4. Print/Export Applications Report");
+			System.out.println("5. Change Password") 	;
+			System.out.println("6. Log Out");
 			System.out.println("=====================================================");
 			System.out.print("Select a choice: ");
 			choice = sc.nextInt();
@@ -353,9 +412,12 @@ public class CompanyRepresentative extends User {
 					toggleInternshipOpportunity(sc);
 				}
 				case 4 -> {
-					changePassword(sc);
+					exportApplicationsReport();
 				}
 				case 5 -> {
+					changePassword(sc);
+				}
+				case 6 -> {
 					System.out.println("Logged out!");
 					break;
 				}
@@ -370,9 +432,59 @@ public class CompanyRepresentative extends User {
 	}
 
 	@Override
-	public void refreshData(Scanner sc) {
+	public void changePassword(Scanner sc) {
 		// TODO Auto-generated method stub
+		String newPassword = "";
+		while (newPassword.length()<8) {
+			System.out.print("Enter new password: ");
+			newPassword = sc.next();
+			if (newPassword.length()<8)
+				System.out.println("Password must be at least 8 chars.");
+		}
 		
+		String repeatNewPassword = "";
+		while (!repeatNewPassword.equals(newPassword)) {
+			System.out.print("Re-enter password: ");
+			repeatNewPassword = sc.next();
+			if (!repeatNewPassword.equals(newPassword))
+				System.out.println("Passwords do not match!");
+		}
+		
+		String hashedPassword = PasswordManager.hashPassword(newPassword);
+		ArrayList<CompanyRepresentative> companyReps = getCompanyReps();
+		for (CompanyRepresentative companyRep : companyReps) {
+			if (companyRep.getUserID().equals(getUserID())) {
+				companyRep.setPassword(hashedPassword);
+				super.setPassword(hashedPassword);
+				break;
+			}
+		}
+		
+		String contents = "CompanyRepID,Name,CompanyName,Department,Position,Email,Status,Password\n";
+		for (CompanyRepresentative companyRep : companyReps) {
+			String passwordToSave = (companyRep.getUserID().equals(this.getUserID())) 
+                    ? hashedPassword 
+                    : companyRep.getPassword();
+			
+			contents += companyRep.getUserID()+Constants.DELIMITER;
+			contents += companyRep.getName()+Constants.DELIMITER;
+			contents += companyRep.getCompanyName()+Constants.DELIMITER;
+			contents += companyRep.getDepartment()+Constants.DELIMITER;
+			contents += companyRep.getPosition()+Constants.DELIMITER;
+			contents += companyRep.getEmail()+Constants.DELIMITER;
+			contents += companyRep.getStatus()+Constants.DELIMITER;
+			contents += passwordToSave+Constants.NEW_LINE;
+		}
+		
+		FileIOHandler.writeFileContents(Constants.COMPANY_REPS_FILE, contents);
+
+		System.out.println("Your password has been successfully changed!");
 	}
+
+//	@Override
+//	public void refreshData(Scanner sc) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 	
 }

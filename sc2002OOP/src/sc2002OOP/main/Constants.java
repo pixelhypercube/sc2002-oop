@@ -4,6 +4,7 @@ public final class Constants {
 	
 	// FILE PATH
 	public static final String FILE_PATH = "/data/";
+	public static final String EXPORT_REPORTS_PATH = "/exports/";
 	
 	// FILE NAMES
 	public static final String INTERNSHIP_OPPORTUNITIES_FILE = "internship_opportunities.csv";
@@ -12,6 +13,7 @@ public final class Constants {
 	public static final String STAFF_FILE = "sample_staff_list.csv";
 	public static final String STUDENT_FILE = "sample_student_list.csv";
 	public static final String WITHDRAWAL_REQS_FILE = "withdrawal_requests.csv";
+	public static final String EXPORTED_INTERNSHIP_APP_FILE = "applications.csv";
 	
 	// DELIMITERS
 	public static final String DELIMITER = ",";
