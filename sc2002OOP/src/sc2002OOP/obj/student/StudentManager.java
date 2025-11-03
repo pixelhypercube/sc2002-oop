@@ -138,15 +138,15 @@ public class StudentManager {
 	public static ArrayList<Student> getStudents(
 		String studentID, String name, String major, int year, String email
 	) {
-		return (ArrayList<Student>) students
+		return students
 				.stream()
 				.filter(obj->(
-					(studentID==null || studentID.isEmpty() || obj.getUserID().equals(studentID)) &&
-					(name==null || name.isEmpty() || obj.getName().equals(name)) &&
-					(major==null || major.isEmpty() || obj.getMajor().equals(major)) &&
+					(studentID==null || studentID.isEmpty() || obj.getUserID().toLowerCase().contains(studentID.toLowerCase())) &&
+					(name==null || name.isEmpty() || obj.getName().toLowerCase().contains(name.toLowerCase())) &&
+					(major==null || major.isEmpty() || obj.getMajor().toLowerCase().contains(major.toLowerCase())) &&
 					(year==0 || year==obj.getYear()) &&
-					(major==null || major.isEmpty() || obj.getMajor().equals(major))
+					(email==null || email.isEmpty() || obj.getEmail().toLowerCase().contains(email.toLowerCase()))
 				))
-				.collect(Collectors.toList());
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 }

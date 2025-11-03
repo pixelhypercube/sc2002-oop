@@ -181,15 +181,15 @@ public class InternshipApplicationManager {
 	public static ArrayList<InternshipApplication> getInternshipApps(
 		String applicationID, String studentID, String internshipID, InternshipApplicationStatus status
 	) {
-		return (ArrayList<InternshipApplication>) internshipApps
+		return internshipApps
 				.stream()
 				.filter(obj -> (
-						(applicationID==null || applicationID.isEmpty() || obj.getApplicationID().equals(applicationID)) &&
-						(studentID==null || studentID.isEmpty() || Objects.equals(obj.getStudentID(), studentID)) &&
-						(internshipID==null || internshipID.isEmpty() || Objects.equals(obj.getInternshipID(), internshipID)) &&
+						(applicationID==null || applicationID.isEmpty() || obj.getApplicationID().toLowerCase().contains(applicationID.toLowerCase())) &&
+						(studentID==null || studentID.isEmpty() || obj.getStudentID().toLowerCase().contains(studentID.toLowerCase())) &&
+						(internshipID==null || internshipID.isEmpty() || obj.getInternshipID().toLowerCase().contains(internshipID.toLowerCase())) &&
 						(status==null || Objects.equals(obj.getStatus(), status))
 					))
-				.collect(Collectors.toList());
+				.collect(Collectors.toCollection(ArrayList::new));
 		
 	}
 }

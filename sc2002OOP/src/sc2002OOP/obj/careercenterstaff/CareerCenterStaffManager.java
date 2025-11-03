@@ -126,16 +126,16 @@ public class CareerCenterStaffManager {
 			String department,
 			String email
 		) {
-			return (ArrayList<CareerCenterStaff>) careerCenterStaff
+			return careerCenterStaff
 					.stream()
 					.filter(obj -> (
-							(staffID==null || staffID.isEmpty() || obj.getUserID().equals(staffID)) &&
-							(name==null || name.isEmpty() || obj.getUserID().equals(name)) &&
-							(role==null || role.isEmpty() || obj.getUserID().equals(role)) &&
-							(department==null || department.isEmpty() || obj.getUserID().equals(department)) &&
-							(email==null || email.isEmpty() || obj.getUserID().equals(email))
+							(staffID==null || staffID.isEmpty() || obj.getUserID().toLowerCase().contains(staffID.toLowerCase())) &&
+							(name==null || name.isEmpty() || obj.getName().toLowerCase().contains(name.toLowerCase())) &&
+							(role==null || role.isEmpty() || obj.getRole().toLowerCase().contains(role.toLowerCase())) &&
+							(department==null || department.isEmpty() || obj.getDepartment().toLowerCase().contains(department.toLowerCase())) &&
+							(email==null || email.isEmpty() || obj.getEmail().toLowerCase().contains(email.toLowerCase()))
 					))
-					.collect(Collectors.toList());
+					.collect(Collectors.toCollection(ArrayList::new));
 		}
 
 	public static ArrayList<CareerCenterStaff> getStaff() {

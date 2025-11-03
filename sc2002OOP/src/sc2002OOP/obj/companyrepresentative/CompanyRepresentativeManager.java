@@ -90,17 +90,17 @@ public class CompanyRepresentativeManager {
 	public static ArrayList<CompanyRepresentative> getCompanyReps(
 		String companyRepID, String companyID, String department, String position, String email, CompanyRepresentativeStatus status
 	) {
-		return (ArrayList<CompanyRepresentative>) companyRepresentatives
+		return companyRepresentatives
 				.stream()
 				.filter(obj -> (
-						(companyRepID==null || companyRepID.isEmpty() || obj.getUserID().equals(companyRepID)) &&
-						(companyID==null || companyID.isEmpty() || obj.getCompanyID().equals(companyID)) &&
-						(department==null || department.isEmpty() || obj.getDepartment().equals(department)) &&
-						(position==null || position.isEmpty() || obj.getPosition().equals(position)) &&
-						(status==null || status==obj.getStatus()) &&
-						(email==null || email.isEmpty() || obj.getEmail().equals(email))
+						(companyRepID==null || companyRepID.isEmpty() || obj.getUserID().toLowerCase().contains(companyRepID.toLowerCase())) &&
+						(companyID==null || companyID.isEmpty() || obj.getCompanyID().toLowerCase().contains(companyID.toLowerCase())) &&
+						(department==null || department.isEmpty() || obj.getDepartment().toLowerCase().contains(department.toLowerCase())) &&
+						(position==null || position.isEmpty() || obj.getPosition().toLowerCase().contains(position.toLowerCase())) &&
+						(status==null || Objects.equals(status, obj.getStatus())) &&
+						(email==null || email.isEmpty() || obj.getEmail().toLowerCase().contains(email.toLowerCase()))
 					))
-				.collect(Collectors.toList());
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 	
 	public static CompanyRepresentative getCompRepByID(String id) {

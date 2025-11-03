@@ -87,31 +87,31 @@ public class InternshipOpportunityManager {
 		InternshipOpportunityManager.internshipOppManager = null;
 	}
 	
-//	@SuppressWarnings("unchecked")
-//	public static ArrayList<InternshipOpportunity> retrieveInternshipOpps() {
-//		File file = new File(PATH);
-//		if (!file.exists() || file.length()==0)
-//			return new ArrayList<>();
-//		
-//		ArrayList<InternshipOpportunity> iOpps = null;
-//		
-//		try (
-//			FileInputStream fileIn = new FileInputStream(PATH);
-//			ObjectInputStream in = new ObjectInputStream(fileIn);
-//		) {
-//			iOpps = (ArrayList<InternshipOpportunity>) in.readObject();
-//			in.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		if (iOpps==null)
-//			return new ArrayList<>();
-//		
-//		return iOpps;
-//	}
+	@SuppressWarnings("unchecked")
+	public static ArrayList<InternshipOpportunity> retrieveInternshipOpps() {
+		File file = new File(PATH);
+		if (!file.exists() || file.length()==0)
+			return new ArrayList<>();
+		
+		ArrayList<InternshipOpportunity> iOpps = null;
+		
+		try (
+			FileInputStream fileIn = new FileInputStream(PATH);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+		) {
+			iOpps = (ArrayList<InternshipOpportunity>) in.readObject();
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		if (iOpps==null)
+			return new ArrayList<>();
+		
+		return iOpps;
+	}
 	
 	public static void saveInternshipOpps(ArrayList<InternshipOpportunity> iOpps) {
 		try (
@@ -125,66 +125,66 @@ public class InternshipOpportunityManager {
 		}
 	}
 
-	public static ArrayList<InternshipOpportunity> retrieveInternshipOpps() {
-		
-		String contents = FileIOHandler.getFileContents(Constants.INTERNSHIP_OPPORTUNITIES_FILE);
-		ArrayList<InternshipOpportunity> internships = new ArrayList<>();
-		
-		int index = 0;
-		ArrayList<String> headers = new ArrayList<>();
-		
-		for (String line : contents.split(Constants.NEW_LINE)) {
-			if (line.trim().isEmpty()) continue;
-			
-			InternshipOpportunity newInternship = new InternshipOpportunity();
-			String[] data = line.trim().split(Constants.DELIMITER);
-			
-			for (int i = 0;i<data.length;i++) {
-				if (index==0) headers.add(data[i]);
-				else {
-					if (headers.get(i).equals("InternshipID"))
-						newInternship.setInternshipID(data[i]);
-					else if (headers.get(i).equals("Title"))
-						newInternship.setTitle(data[i]);
-					else if (headers.get(i).equals("Description"))
-						newInternship.setDescription(data[i]);
-					else if (headers.get(i).equals("CompanyID")) {
-						newInternship.setCompanyID(data[i]);
-					}
-					else if (headers.get(i).equals("PreferredMajors"))
-						newInternship.setPreferredMajor(data[i]);
-					else if (headers.get(i).equals("NumSlots"))
-						newInternship.setNumSlots(Integer.parseInt(data[i]));
-					else if (headers.get(i).equals("Level")) {
-						if (data[i].equals("Basic"))
-							newInternship.setLevel(InternshipOpportunityLevel.BASIC);
-						if (data[i].equals("Intermediate"))
-							newInternship.setLevel(InternshipOpportunityLevel.INTERMEDIATE);
-						if (data[i].equals("Advanced"))
-							newInternship.setLevel(InternshipOpportunityLevel.ADVANCED);
-					}
-					else if (headers.get(i).equals("Status")) {
-						if (data[i].equals("Pending"))
-							newInternship.setStatus(InternshipOpportunityStatus.PENDING);
-						else if (data[i].equals("Approved"))
-							newInternship.setStatus(InternshipOpportunityStatus.APPROVED);
-						else if (data[i].equals("Rejected"))
-							newInternship.setStatus(InternshipOpportunityStatus.REJECTED);
-						else if (data[i].equals("Filled"))
-							newInternship.setStatus(InternshipOpportunityStatus.FILLED);
-					}
-					else if (headers.get(i).equals("Visibility"))
-						newInternship.setVisibility(data[i].equals("on"));
-					else if (headers.get(i).equals("OpeningDate"))
-						newInternship.setOpeningDate(LocalDate.parse(data[i]));
-					else if (headers.get(i).equals("ClosingDate"))
-						newInternship.setClosingDate(LocalDate.parse(data[i]));
-				}
-			}
-			if (index++ > 0) internships.add(newInternship);
-		}
-		return internships;
-	}
+//	public static ArrayList<InternshipOpportunity> retrieveInternshipOpps() {
+//		
+//		String contents = FileIOHandler.getFileContents(Constants.INTERNSHIP_OPPORTUNITIES_FILE);
+//		ArrayList<InternshipOpportunity> internships = new ArrayList<>();
+//		
+//		int index = 0;
+//		ArrayList<String> headers = new ArrayList<>();
+//		
+//		for (String line : contents.split(Constants.NEW_LINE)) {
+//			if (line.trim().isEmpty()) continue;
+//			
+//			InternshipOpportunity newInternship = new InternshipOpportunity();
+//			String[] data = line.trim().split(Constants.DELIMITER);
+//			
+//			for (int i = 0;i<data.length;i++) {
+//				if (index==0) headers.add(data[i]);
+//				else {
+//					if (headers.get(i).equals("InternshipID"))
+//						newInternship.setInternshipID(data[i]);
+//					else if (headers.get(i).equals("Title"))
+//						newInternship.setTitle(data[i]);
+//					else if (headers.get(i).equals("Description"))
+//						newInternship.setDescription(data[i]);
+//					else if (headers.get(i).equals("CompanyID")) {
+//						newInternship.setCompanyID(data[i]);
+//					}
+//					else if (headers.get(i).equals("PreferredMajors"))
+//						newInternship.setPreferredMajor(data[i]);
+//					else if (headers.get(i).equals("NumSlots"))
+//						newInternship.setNumSlots(Integer.parseInt(data[i]));
+//					else if (headers.get(i).equals("Level")) {
+//						if (data[i].equals("Basic"))
+//							newInternship.setLevel(InternshipOpportunityLevel.BASIC);
+//						if (data[i].equals("Intermediate"))
+//							newInternship.setLevel(InternshipOpportunityLevel.INTERMEDIATE);
+//						if (data[i].equals("Advanced"))
+//							newInternship.setLevel(InternshipOpportunityLevel.ADVANCED);
+//					}
+//					else if (headers.get(i).equals("Status")) {
+//						if (data[i].equals("Pending"))
+//							newInternship.setStatus(InternshipOpportunityStatus.PENDING);
+//						else if (data[i].equals("Approved"))
+//							newInternship.setStatus(InternshipOpportunityStatus.APPROVED);
+//						else if (data[i].equals("Rejected"))
+//							newInternship.setStatus(InternshipOpportunityStatus.REJECTED);
+//						else if (data[i].equals("Filled"))
+//							newInternship.setStatus(InternshipOpportunityStatus.FILLED);
+//					}
+//					else if (headers.get(i).equals("Visibility"))
+//						newInternship.setVisibility(data[i].equals("on"));
+//					else if (headers.get(i).equals("OpeningDate"))
+//						newInternship.setOpeningDate(LocalDate.parse(data[i]));
+//					else if (headers.get(i).equals("ClosingDate"))
+//						newInternship.setClosingDate(LocalDate.parse(data[i]));
+//				}
+//			}
+//			if (index++ > 0) internships.add(newInternship);
+//		}
+//		return internships;
+//	}
 	
 	// helper function to update the filled places
 	public static Map<String, Integer> countSuccessFreqs() {
@@ -235,11 +235,11 @@ public class InternshipOpportunityManager {
 					.stream()
 					.filter(obj -> (visibility==null || obj.isVisibility()==visibility)) // check visibility
 					.filter(obj -> (
-							(internshipID==null || internshipID.isEmpty() || obj.getInternshipID().equals(internshipID)) &&
-							(title==null || title.isEmpty() || obj.getTitle().equals(title)) &&
-							(description==null || description.isEmpty() || obj.getDescription().equals(description)) &&
-							(companyID==null || companyID.isEmpty() || obj.getCompanyID().equals(companyID)) &&
-							(preferredMajors==null || preferredMajors.isEmpty() || obj.getPreferredMajor().equals(preferredMajors)) &&
+							(internshipID==null || internshipID.isEmpty() || obj.getInternshipID().toLowerCase().contains(internshipID.toLowerCase())) &&
+							(title==null || title.isEmpty() || obj.getTitle().toLowerCase().contains(title.toLowerCase())) &&
+							(description==null || description.isEmpty() || obj.getDescription().toLowerCase().contains(description.toLowerCase())) &&
+							(companyID==null || companyID.isEmpty() || obj.getCompanyID().toLowerCase().contains(companyID.toLowerCase())) &&
+							(preferredMajors==null || preferredMajors.isEmpty() || obj.getPreferredMajor().toLowerCase().contains(preferredMajors.toLowerCase())) &&
 							(level==null || Objects.equals(level, obj.getLevel())) &&
 							(status==null || Objects.equals(status, obj.getStatus())) &&
 							(openingDateFrom == null || !obj.getOpeningDate().isBefore(openingDateFrom)) && 
@@ -268,11 +268,11 @@ public class InternshipOpportunityManager {
 				.stream()
 				.filter(obj -> (visibility==null || obj.isVisibility()==visibility)) // check visibility
 				.filter(obj -> (
-						(internshipID==null || internshipID.isEmpty() || obj.getInternshipID().equals(internshipID)) &&
-						(title==null || title.isEmpty() || obj.getTitle().equals(title)) &&
-						(description==null || description.isEmpty() || obj.getDescription().equals(description)) &&
-						(companyID==null || companyID.isEmpty() || obj.getCompanyID().equals(companyID)) &&
-						(preferredMajors==null || preferredMajors.isEmpty() || obj.getPreferredMajor().equals(preferredMajors)) &&
+						(internshipID==null || internshipID.isEmpty() || obj.getInternshipID().toLowerCase().contains(internshipID.toLowerCase())) &&
+						(title==null || title.isEmpty() || obj.getTitle().toLowerCase().contains(title.toLowerCase())) &&
+						(description==null || description.isEmpty() || obj.getDescription().toLowerCase().contains(description.toLowerCase())) &&
+						(companyID==null || companyID.isEmpty() || obj.getCompanyID().toLowerCase().contains(companyID.toLowerCase())) &&
+						(preferredMajors==null || preferredMajors.isEmpty() || obj.getPreferredMajor().toLowerCase().contains(preferredMajors.toLowerCase())) &&
 						(level==null || Arrays.asList(level).contains(obj.getLevel())) &&
 						(status==null || Arrays.asList(status).contains(obj.getStatus())) &&
 						(openingDateFrom == null || !obj.getOpeningDate().isBefore(openingDateFrom)) && 
