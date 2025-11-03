@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaff;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaffManager;
+import sc2002OOP.obj.company.Company;
+import sc2002OOP.obj.company.CompanyManager;
 import sc2002OOP.obj.companyrepresentative.CompanyRepresentative;
 import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeManager;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
@@ -23,10 +25,17 @@ public class Test {
 		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.retrieveInternshipApps();
 		ArrayList<InternshipOpportunity> iOpps = InternshipOpportunityManager.retrieveInternshipOpps();
 		ArrayList<WithdrawalRequest> wReqs = WithdrawalRequestManager.retrieveWithdrawalReqs();
+		ArrayList<Company> companies = CompanyManager.retrieveCompanies();
 		
 		System.out.println("====== CAREER CENTER STAFF TABLE ======");
 		for (CareerCenterStaff st : staff) {
 			st.print();
+			System.out.println("-".repeat(40));
+		}
+		
+		System.out.println("====== COMPANY TABLE ======");
+		for (Company company : companies) {
+			company.print();
 			System.out.println("-".repeat(40));
 		}
 		

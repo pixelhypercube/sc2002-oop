@@ -18,8 +18,8 @@ public interface IOpportunity {
 		String getDescription();
 		void setDescription(String description);
 		
-		String getCompanyName();
-		void setCompanyName(String companyName);
+		String getCompanyID();
+		void setCompanyID(String companyID);
 		
 		String getPreferredMajor();
 		void setPreferredMajor(String preferredMajor);

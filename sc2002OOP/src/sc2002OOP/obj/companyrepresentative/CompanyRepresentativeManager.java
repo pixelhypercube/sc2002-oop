@@ -16,6 +16,7 @@ import sc2002OOP.main.FileIOHandler;
 import sc2002OOP.main.PasswordManager;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaff;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaffManager;
+import sc2002OOP.obj.company.CompanyManager;
 
 public class CompanyRepresentativeManager {
 	private static final String PATH = 
@@ -25,40 +26,13 @@ public class CompanyRepresentativeManager {
 	
 	private static ArrayList<CompanyRepresentative> companyRepresentatives;
 	private static CompanyRepresentativeManager companyRepresentativeManager = null;
-	private static int lastID;
 	
 	private CompanyRepresentativeManager() {
 		companyRepresentatives = new ArrayList<CompanyRepresentative>();
-		lastID = 1;
 	}
 	
 	private CompanyRepresentativeManager(ArrayList<CompanyRepresentative> companyRepresentatives) {
 		CompanyRepresentativeManager.companyRepresentatives = companyRepresentatives;
-		lastID = getNextID();
-	}
-	
-	private int getNextID() {
-		if (companyRepresentatives==null || companyRepresentatives.isEmpty()) 
-			return 1;
-		
-		return companyRepresentatives
-				.stream()
-				.mapToInt(rep -> {
-					try {
-						String id = rep.getUserID();
-						
-						if (id.length()>1) 
-							return Integer.parseInt(id.substring(1));
-						
-						return 0;
-					} catch (NumberFormatException e) {
-						System.err.println("Warning: Invalid ID format detected: " + rep.getUserID());
-		                return 0;
-					}
-				})
-				.max() // find max value
-				.orElse(0) // handle default
-				+ 1;
 	}
 	
 	public static CompanyRepresentativeManager getInstance() {
@@ -114,17 +88,17 @@ public class CompanyRepresentativeManager {
 	}
 
 	public static ArrayList<CompanyRepresentative> getCompanyReps(
-		String companyRepID, String companyName, String department, String position, String email, CompanyRepresentativeStatus status
+		String companyRepID, String companyID, String department, String position, String email, CompanyRepresentativeStatus status
 	) {
 		return (ArrayList<CompanyRepresentative>) companyRepresentatives
 				.stream()
 				.filter(obj -> (
 						(companyRepID==null || companyRepID.isEmpty() || obj.getUserID().equals(companyRepID)) &&
-						(companyName==null || companyName.isEmpty() || Objects.equals(obj.getCompanyName(), companyName)) &&
-						(department==null || department.isEmpty() || Objects.equals(obj.getDepartment(), department)) &&
-						(position==null || position.isEmpty() || Objects.equals(obj.getPosition(), position)) &&
-						(status==null || Objects.equals(obj.getStatus(), status)) &&
-						(email==null || email.isEmpty() || Objects.equals(obj.getEmail(), email))
+						(companyID==null || companyID.isEmpty() || obj.getCompanyID().equals(companyID)) &&
+						(department==null || department.isEmpty() || obj.getDepartment().equals(department)) &&
+						(position==null || position.isEmpty() || obj.getPosition().equals(position)) &&
+						(status==null || status==obj.getStatus()) &&
+						(email==null || email.isEmpty() || obj.getEmail().equals(email))
 					))
 				.collect(Collectors.toList());
 	}
@@ -156,18 +130,16 @@ public class CompanyRepresentativeManager {
 //				
 //				if (index==0) headers.add(field);
 //				else {
-//					if (headers.get(i).equals("CompanyRepID"))
+//					if (headers.get(i).equals("Email"))
 //						newCompRep.setUserID(field);
 //					else if (headers.get(i).equals("Name"))
 //						newCompRep.setName(field);
-//					else if (headers.get(i).equals("CompanyName"))
-//						newCompRep.setCompanyName(field);
+//					else if (headers.get(i).equals("CompanyID"))
+//						newCompRep.setCompanyID(field);
 //					else if (headers.get(i).equals("Department"))
 //						newCompRep.setDepartment(field);
 //					else if (headers.get(i).equals("Position"))
 //						newCompRep.setPosition(field);
-//					else if (headers.get(i).equals("Email"))
-//						newCompRep.setEmail(field);
 //					else if (headers.get(i).equals("Status")) {
 //						if (field.equals("APPROVED"))
 //							newCompRep.setStatus(CompanyRepresentativeStatus.APPROVED);
@@ -186,6 +158,13 @@ public class CompanyRepresentativeManager {
 //		return companyReps;
 //	}
 	
+	public static void printCompanyReps(ArrayList<CompanyRepresentative> companyReps) {
+		for (CompanyRepresentative companyRep : companyReps) {
+			companyRep.print();
+			System.out.println("-".repeat(40));
+		}
+	}
+	
 	public static void register(Scanner sc) {
 		System.out.print("\033[H\033[2J");
 		System.out.println("==== Register (Company Representative) ====");
@@ -203,13 +182,15 @@ public class CompanyRepresentativeManager {
 				System.out.println("Name not filled!");
 			}
 		}
-				
-		// companyName
-		String companyName = "";
-		while (companyName.isEmpty()) {
-			System.out.print("Enter company name:");
-			companyName = sc.nextLine();
-			if (companyName.isEmpty()) {
+		
+		// companyID
+		String companyID = "";
+		while (companyID.isEmpty()) {
+			System.out.println();
+			CompanyManager.printAllCompanies();
+			System.out.print("Enter company ID:");
+			companyID = sc.nextLine();
+			if (companyID.isEmpty()) {
 				System.out.println("Company Name not filled!");
 			}
 		}
@@ -234,30 +215,32 @@ public class CompanyRepresentativeManager {
 			}
 		}
 		
-		// email
+		// email (UNIQUE IDENTIFER)
 		String email = "";
-		while (email.isEmpty()) {
+		while (email.isEmpty() || CompanyRepresentativeManager.getCompRepByID(email)!=null) {
 			System.out.print("Enter email:");
 			email = sc.nextLine();
+			
+			if (CompanyRepresentativeManager.getCompRepByID(email)!=null) {
+				System.out.println("Sorry, that email has already been taken. Please fill in another email:");
+			}
+			
 			if (email.isEmpty()) {
 				System.out.println("Email not filled!");
 			}
 		}
-		String id = "S"+CompanyRepresentativeManager.getLastID();
 		CompanyRepresentativeManager.companyRepresentatives.add(new CompanyRepresentative(
-				id,
+				email,
 				name,
-				companyName,
+				companyID,
 				department,
 				position,
-				email,
 				CompanyRepresentativeStatus.PENDING,
 				PasswordManager.hashPassword("password")
 		));
 		
 		System.out.print("\033[H\033[2J");
 		System.out.println("Successfully Registered! Please wait for one of our career center staff to approve you!");
-		System.out.println("REMEMBER, your Company Rep ID is: "+id);
 	}
 
 	public static ArrayList<CompanyRepresentative> getCompanyReps() {
@@ -266,13 +249,5 @@ public class CompanyRepresentativeManager {
 
 	public static void setCompanyReps(ArrayList<CompanyRepresentative> companyRepresentatives) {
 		CompanyRepresentativeManager.companyRepresentatives = companyRepresentatives;
-	}
-
-	public static int getLastID() {
-		return lastID;
-	}
-
-	public static void setLastID(int lastID) {
-		CompanyRepresentativeManager.lastID = lastID;
 	}
 }

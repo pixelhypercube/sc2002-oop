@@ -8,7 +8,7 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
 public interface ICompanyRepresentative {
 		void createInternship(Scanner sc);
 		void toggleInternshipOpportunity(Scanner sc);
-		void exportApplicationsReport();
+		void exportApplicationsReport(Scanner sc);
 		void approveRejectApplicant(Scanner sc);
 		
 		void displayHome(Scanner sc);
@@ -16,11 +16,11 @@ public interface ICompanyRepresentative {
 		void changePassword(Scanner sc);
 		
 		void print();
-		void printInternshipOpps();
+//		void printInternshipOpps();
 		void printInternshipApps(ArrayList<InternshipApplication> iApps);
 		
-		String getCompanyName();
-		void setCompanyName(String companyName);
+		String getCompanyID();
+		void setCompanyID(String companyID);
 		String getDepartment();
 		void setDepartment(String department);
 		String getPosition();

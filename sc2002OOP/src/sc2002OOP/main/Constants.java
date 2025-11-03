@@ -23,6 +23,7 @@ public final class Constants {
 	public static final String STAFF_DATA_FILE = "staff.dat";
 	public static final String STUDENT_DATA_FILE = "students.dat";
 	public static final String WITHDRAWAL_REQS_DATA_FILE = "withdrawal_reqs.dat";
+	public static final String COMPANY_DATA_FILE = "companies.dat";
 	
 	// DELIMITERS
 	public static final String DELIMITER = ",";

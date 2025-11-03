@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import sc2002OOP.obj.User;
 import sc2002OOP.obj.careercenterstaff.*;
+import sc2002OOP.obj.company.Company;
+import sc2002OOP.obj.company.CompanyManager;
 import sc2002OOP.obj.companyrepresentative.*;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
@@ -56,10 +58,11 @@ public class IPMS {
 		CompanyRepresentativeManager.getInstance();
 		StudentManager.getInstance();
 		
-		// INTERNSHIP STUFF & WITHDRAWAL REQS
+		// INTERNSHIP STUFF, WITHDRAWAL REQS & COMPANIES
 		InternshipOpportunityManager.getInstance();
 		InternshipApplicationManager.getInstance();
 		WithdrawalRequestManager.getInstance();
+		CompanyManager.getInstance();
 	}
 	
 	private static void close() {
@@ -68,10 +71,11 @@ public class IPMS {
 		CompanyRepresentativeManager.close();
 		StudentManager.close();
 		
-		// INTERNSHIP STUFF & WITHDRAWAL REQS
+		// INTERNSHIP STUFF, WITHDRAWAL REQS & COMPANIES
 		InternshipOpportunityManager.close();
 		InternshipApplicationManager.close();
 		WithdrawalRequestManager.close();
+		CompanyManager.close();
 	}
 	
 	public static void printMenu() {
@@ -88,9 +92,15 @@ public class IPMS {
 //		ArrayList<Student> students = StudentManager.retrieveStudents();
 //		ArrayList<CareerCenterStaff> staff = CareerCenterStaffManager.retrieveStaff();
 //		ArrayList<CompanyRepresentative> companyReps = CompanyRepresentativeManager.retrieveCompanyReps();
-//		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.getAllInternshipApps();
+//		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.retrieveInternshipApps();
 //		ArrayList<InternshipOpportunity> iOpps = InternshipOpportunityManager.retrieveInternshipOpps();
 //		ArrayList<WithdrawalRequest> wReqs = WithdrawalRequestManager.getAllWithdrawalRequests();
+//		ArrayList<Company> companies = new ArrayList<>();
+//		companies.add(new Company("C1","Test Pte. Ltd."));
+//		companies.add(new Company("C2","Robot Pte. Ltd."));
+//		companies.add(new Company("C3","Components Pte. Ltd."));
+//		companies.add(new Company("C4","Testing Inc."));
+//		companies.add(new Company("C5","Choco Ltd."));
 //		
 //		for (InternshipApplication iApp : iApps) iApp.print();
 //		for (InternshipOpportunity iOpp : iOpps) iOpp.print();
@@ -102,6 +112,7 @@ public class IPMS {
 //		InternshipApplicationManager.saveInternshipApps(iApps);
 //		InternshipOpportunityManager.saveInternshipOpps(iOpps);
 //		WithdrawalRequestManager.saveWithdrawalRequests(wReqs);
+//		CompanyManager.saveCompanies(companies);
 		
 		try (
 				Scanner sc = new Scanner(System.in);

@@ -10,6 +10,7 @@ import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeStatus;
 public abstract class User implements Serializable {
 	private static final long serialVersionUID = 5930574854473287191L;
 	private String userID, name, email, password;
+	private InternshipFilterSettings internshipFilterSettings;
 	
 	public User() {}
 	
@@ -18,6 +19,15 @@ public abstract class User implements Serializable {
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.internshipFilterSettings = new InternshipFilterSettings();
+	}
+
+	// for company reps
+	public User(String userID, String name, String email) {
+		this.userID = userID;
+		this.name = name;
+		this.email = email;
+		this.internshipFilterSettings = new InternshipFilterSettings();
 	}
 	
 	public static User login(Scanner sc, ArrayList<User> users) {
@@ -72,9 +82,18 @@ public abstract class User implements Serializable {
 	public abstract void changePassword(Scanner sc);
 	public abstract void displayHome(Scanner sc);
 	public abstract void viewProfile(Scanner sc);
-	public abstract void print();
+	public abstract void viewInternshipOpps(Scanner sc);
 	
 	// GETTERS & SETTERS
+	
+	public InternshipFilterSettings getInternshipFilterSettings() {
+		return internshipFilterSettings;
+	}
+
+	public void setInternshipFilterSettings(InternshipFilterSettings internshipFilterSettings) {
+		this.internshipFilterSettings = internshipFilterSettings;
+	}
+	
 	public String getName() {
 		return name;
 	}

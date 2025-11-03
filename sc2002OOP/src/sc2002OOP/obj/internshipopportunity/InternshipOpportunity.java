@@ -9,11 +9,12 @@ import java.util.stream.Collectors;
 
 import sc2002OOP.main.Constants;
 import sc2002OOP.main.FileIOHandler;
+import sc2002OOP.obj.company.CompanyManager;
 import sc2002OOP.obj.companyrepresentative.*;
 
 public class InternshipOpportunity implements IOpportunity, Serializable  {
 	private static final long serialVersionUID = 7909012667627397752L;
-	private String internshipID, title, description, companyName, preferredMajor;
+	private String internshipID, title, description, companyID, preferredMajor;
 	private ArrayList<CompanyRepresentative> companyRepsInCharge;
 	private LocalDate openingDate, closingDate;
 	private int numSlots;
@@ -25,7 +26,7 @@ public class InternshipOpportunity implements IOpportunity, Serializable  {
 			String internshipID,
 			String title, 
 			String description, 
-			String companyName,
+			String companyID,
 			String preferredMajor, 
 			ArrayList<CompanyRepresentative> companyRepsInCharge,
 			int numSlots,
@@ -38,9 +39,35 @@ public class InternshipOpportunity implements IOpportunity, Serializable  {
 		this.internshipID = internshipID;
 		this.title = title;
 		this.description = description;
-		this.companyName = companyName;
+		this.companyID = companyID;
 		this.preferredMajor = preferredMajor;
 		this.companyRepsInCharge = companyRepsInCharge;
+		this.numSlots = numSlots;
+		this.level = level;
+		this.status = status;
+		this.openingDate = openingDate;
+		this.closingDate = closingDate;
+		this.visibility = visibility;
+	}
+	
+	public InternshipOpportunity(
+			String internshipID,
+			String title, 
+			String description, 
+			String companyID,
+			String preferredMajor, 
+			int numSlots,
+			InternshipOpportunityLevel level,
+			InternshipOpportunityStatus status,
+			LocalDate openingDate,
+			LocalDate closingDate,
+			boolean visibility
+	) {
+		this.internshipID = internshipID;
+		this.title = title;
+		this.description = description;
+		this.companyID = companyID;
+		this.preferredMajor = preferredMajor;
 		this.numSlots = numSlots;
 		this.level = level;
 		this.status = status;
@@ -55,9 +82,14 @@ public class InternshipOpportunity implements IOpportunity, Serializable  {
 		System.out.println("Internship ID:            "+internshipID);
 		System.out.println("Title:                    "+title);
 		System.out.println("Description:              "+description);
-		System.out.println("Company Name:             "+companyName);
+		System.out.println("Company Name:             "+CompanyManager.getCompanyByID(companyID).getCompanyName());
 		System.out.println("Preferred Major(s):       "+preferredMajor);
-		System.out.println("Company Rep(s) in Charge: "+companyRepsInCharge.stream().map(rep->rep.getName() + " (" + rep.getUserID() +")").collect(Collectors.joining(", ")));
+		System.out.println("Company Rep(s) in Charge: "+CompanyRepresentativeManager
+				.getCompanyReps(null, companyID, null, null, null, null)
+				.stream()
+				.map(rep->rep.getName() + " ("+rep.getUserID()+")")
+				.collect(Collectors.joining(", ")));
+//		System.out.println("Company Rep(s) in Charge: "+companyRepsInCharge.stream().map(rep->rep.getName() + " (" + rep.getUserID() +")").collect(Collectors.joining(", ")));
 		System.out.println("Number of Slots:          "+numSlots);
 		String levelStr = "";
 		switch (level) {
@@ -76,9 +108,9 @@ public class InternshipOpportunity implements IOpportunity, Serializable  {
 			System.out.println("Internship ID:            "+internshipID);
 			System.out.println("Title:                    "+title);
 			System.out.println("Description:              "+description);
-			System.out.println("Company Name:             "+companyName);
+			System.out.println("Company Name:             "+CompanyManager.getCompanyByID(companyID).getCompanyName());
 			System.out.println("Preferred Major(s):       "+preferredMajor);
-			System.out.println("Company Rep(s) in Charge: "+companyRepsInCharge.stream().map(rep->rep.getName() + " (" + rep.getUserID() +")").collect(Collectors.joining(", ")));
+//			System.out.println("Company Rep(s) in Charge: "+companyRepsInCharge.stream().map(rep->rep.getName() + " (" + rep.getUserID() +")").collect(Collectors.joining(", ")));
 			System.out.println("Number of Slots:          "+numSlots);
 			String levelStr = "";
 			switch (level) {
@@ -108,12 +140,12 @@ public class InternshipOpportunity implements IOpportunity, Serializable  {
 		this.description = description;
 	}
 
-	public String getCompanyName() {
-		return companyName;
+	public String getCompanyID() {
+		return companyID;
 	}
 
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
+	public void setCompanyID(String companyID) {
+		this.companyID = companyID;
 	}
 
 	public String getPreferredMajor() {
@@ -187,6 +219,4 @@ public class InternshipOpportunity implements IOpportunity, Serializable  {
 	public void setClosingDate(LocalDate closingDate) {
 		this.closingDate = closingDate;
 	}
-
-	
 }
