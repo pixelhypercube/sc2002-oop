@@ -1,7 +1,7 @@
 CompanyRepID,Name,CompanyName,Department,Position,Email,Status,Password
-S102329,Jason,Bright,Software,Principle Recruiter,testing@gmail.com,Approved,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
-S102330,John,Alex,Software,Principle Recruiter,testing@gmail.com,Pending,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d9
-S102331,John,Doe,Software,Principle Recruiter,testing@gmail.com,Pending,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d10
-S102332,Jane,Alex,Software,Principle Recruiter,testing@gmail.com,Pending,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d11
-S102333,Jane,Doe,Software,Principle Recruiter,testing@gmail.com,Approved,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d12
-S36,Kent,COmp,dept,pos,email@testing.com,Approved,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d13
+S102329,Jason Lim,Bright Pte Ltd.,Software,Principle Recruiter,testing@gmail.com,APPROVED,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+S102330,John Tan,Test Pte. Ltd.,Software,Principle Recruiter,testing@gmail.com,APPROVED,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+S102331,Ken Ng,Radtrix Pte. Ltd.,Software,Principle Recruiter,testing@gmail.com,PENDING,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+S102332,Jane Doe,Arce Inc.,Software,Principle Recruiter,testing@gmail.com,APPROVED,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+S102333,Sean Chua,Test Pte. Ltd.,Software,Principle Recruiter,testing@gmail.com,APPROVED,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+S36,David Koh,company pte/ ltd.,dept,pos,email@testing.com,APPROVED,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
