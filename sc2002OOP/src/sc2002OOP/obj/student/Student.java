@@ -19,6 +19,31 @@ import sc2002OOP.obj.internshipapplicaton.*;
 import sc2002OOP.obj.internshipopportunity.*;
 import sc2002OOP.obj.withdrawalrequest.*;
 
+
+/**
+ * <h1>Student User Entity</h1>
+ * <p>
+ * This class represents a **concrete student user** within the IPMS. It extends the 
+ * <code>User</code> base class and implements the <code>IStudent</code> contract, 
+ * encapsulating all personal (major, year) and operational logic specific to a 
+ * student user role.
+ * </p>
+ * @apiNote This class is a **persistent entity**, implementing <code>Serializable</code> * to allow its state to be saved and loaded by the <code>StudentManager</code>. It contains 
+ * the core business logic for all student actions, including **viewing and filtering** * internships, **applying** for positions (with a 3-application limit check), 
+ * **managing withdrawal requests**, and formally **accepting/rejecting placements**.
+ * <br>
+ * **Note on Internship Viewing:** Internship visibility is filtered based on the student's 
+ * academic year (e.g., Year 1/2 students cannot see ADVANCED opportunities).
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.User
+ * @see sc2002OOP.obj.student.IStudent
+ * @see sc2002OOP.obj.student.StudentManager
+ */
 public class Student extends User implements IStudent, Serializable {
 	private static final long serialVersionUID = 6023352849918114309L;
 	private String major;
@@ -429,11 +454,14 @@ public class Student extends User implements IStudent, Serializable {
 		}
 		
 		String applicationID = "";
-		while (applicationID.isEmpty()) {
+		boolean found = false;
+		while (applicationID.isEmpty() || !found) {
 			System.out.print("Enter an Application ID: ");
 			applicationID = sc.next();
 			for (InternshipApplication studentIApp : iApps) {
 				if (studentIApp.getApplicationID().equals(applicationID)) {
+					found = true;
+					
 					int choice = 0;
 					while (choice<=0 || choice>2) {
 						System.out.println("Enter a choice:");
@@ -463,6 +491,7 @@ public class Student extends User implements IStudent, Serializable {
 					}
 				}
 			}
+			if (!found) System.out.println("Internship ID not found. Please try again.");
 		}
 		
 	}

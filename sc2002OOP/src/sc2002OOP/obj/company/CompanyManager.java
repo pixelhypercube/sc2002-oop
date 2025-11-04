@@ -10,6 +10,26 @@ import java.util.ArrayList;
 
 import sc2002OOP.main.Constants;
 
+/**
+ * <h1>Company Data Manager</h1>
+ * <p>
+ * This class serves as the <b>dedicated manager</b> for all <code>Company</code> objects within the IPMS. 
+ * It is responsible for handling the initialization, persistence, and retrieval of the entire 
+ * collection of company records.
+ * </p>
+ * @apiNote This class utilizes the <b>Singleton design pattern</b> to ensure only a single instance 
+ * globally manages the company data. Persistence is handled by serializing the list of <code>Company</code> 
+ * objects to a DAT file (<code>Constants.COMPANY_DATA_FILE</code>) using Java's object serialization 
+ * mechanisms. It also manages and calculates the auto-incrementing <b>next available Company ID</b>.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.company.Company
+ * @see sc2002OOP.main.Constants
+ */
 public class CompanyManager {
 	private static final String PATH = 
 			Constants.BASE_DIR + 

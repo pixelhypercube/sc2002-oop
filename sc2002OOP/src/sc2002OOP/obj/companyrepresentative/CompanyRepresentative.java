@@ -20,6 +20,28 @@ import sc2002OOP.obj.internshipopportunity.*;
 import sc2002OOP.obj.student.Student;
 import sc2002OOP.obj.student.StudentManager;
 
+
+/**
+ * <h1>Company Representative (User Role)</h1>
+ * <p>
+ * This class represents a user with the <b>Company Representative</b> role in the IPMS. 
+ * It extends the <code>User</code> base class and implements the <code>ICompanyRepresentative</code> 
+ * interface, giving it the specific privileges needed to manage internships for their associated company.
+ * </p>
+ * @apiNote This specialized user class is responsible for the <b>full lifecycle management</b> of internship opportunities, 
+ * including creation (<code>createInternship</code>), visibility toggling, applicant approval/rejection (<code>approveRejectApplicant</code>), 
+ * and exporting application reports. It is uniquely linked to one company via <code>companyID</code> 
+ * and its access is controlled by its <code>status</code> (e.g., PENDING, APPROVED).
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.User
+ * @see sc2002OOP.obj.companyrepresentative.ICompanyRepresentative
+ * @see sc2002OOP.obj.company.Company
+ */
 public class CompanyRepresentative extends User implements ICompanyRepresentative, Serializable  {
 	private static final long serialVersionUID = 1849883218046981980L;
 	private String companyID, department, position, email;

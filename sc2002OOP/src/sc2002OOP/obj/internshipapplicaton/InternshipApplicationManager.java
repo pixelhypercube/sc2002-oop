@@ -14,6 +14,27 @@ import java.util.stream.Collectors;
 import sc2002OOP.main.Constants;
 import sc2002OOP.main.FileIOHandler;
 
+/**
+ * <h1>Internship Application Data Manager</h1>
+ * <p>
+ * This class serves as the **dedicated manager** for all <code>InternshipApplication</code> objects 
+ * within the IPMS. It is responsible for initializing the application data store, handling the 
+ * persistence (saving and loading) of applications, and managing unique application IDs.
+ * </p>
+ * @apiNote This class utilizes the **Singleton design pattern** to ensure only a single instance 
+ * globally manages the application data. It implements **persistence** by serializing the list 
+ * of <code>InternshipApplication</code> objects to a DAT file (<code>Constants.INTERNSHIP_APPLICATIONS_DATA_FILE</code>). 
+ * The manager also handles the **auto-incrementing** of the application ID and provides methods for 
+ * retrieving and performing multi-criteria filtering on existing applications.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.internshipapplicaton.InternshipApplication
+ * @see sc2002OOP.main.Constants
+ */
 public class InternshipApplicationManager {
 	private final static String PATH = 
 			Constants.BASE_DIR + 
@@ -119,48 +140,6 @@ public class InternshipApplicationManager {
 		if (iApp==null) InternshipApplicationManager.getInstance();
 		internshipApps.add(iApp);
 	}
-	
-//	public static ArrayList<InternshipApplication> retrieveInternshipApps() {
-//		String contents = FileIOHandler.getFileContents(Constants.INTERNSHIP_APPLICATIONS_FILE);
-//		
-//		ArrayList<String> headers = new ArrayList<>();
-//		int index = 0;
-//		
-//		ArrayList<InternshipApplication> internshipApplications = new ArrayList<>();
-//		for (String line : contents.split(Constants.NEW_LINE)) {
-//			if (line.trim().isEmpty()) continue;
-//			
-//			InternshipApplication internshipApp = new InternshipApplication();
-//			
-//			String[] data = line.split(Constants.DELIMITER);
-//			
-//			for (int i = 0;i<data.length;i++) {
-//				String cell = data[i];
-//				
-//				if (index==0) headers.add(cell);
-//				else {
-//					if (headers.get(i).equals("ApplicationID"))
-//						internshipApp.setApplicationID(cell);
-//					else if (headers.get(i).equals("StudentID"))
-//						internshipApp.setStudentID(cell);
-//					else if (headers.get(i).equals("InternshipID"))
-//						internshipApp.setInternshipID(cell);
-//					else if (headers.get(i).equals("Status")) {
-//						if (cell.toLowerCase().equals("pending"))
-//							internshipApp.setStatus(InternshipApplicationStatus.PENDING);
-//						else if (cell.toLowerCase().equals("accepted"))
-//							internshipApp.setStatus(InternshipApplicationStatus.ACCEPTED);
-//						else if (cell.toLowerCase().equals("rejected"))
-//							internshipApp.setStatus(InternshipApplicationStatus.REJECTED);
-////						else if (cell.toLowerCase().equals("filled"))
-////							internshipApp.setStatus(InternshipApplicationStatus.FILLED);
-//					}
-//				}
-//			}
-//			if (index++>0) internshipApplications.add(internshipApp);
-//		}
-//		return internshipApplications;
-//	}
 	
 	public static ArrayList<InternshipApplication> getInternshipApps() {
 		return internshipApps;

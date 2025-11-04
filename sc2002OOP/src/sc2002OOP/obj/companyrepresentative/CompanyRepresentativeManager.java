@@ -18,6 +18,27 @@ import sc2002OOP.obj.careercenterstaff.CareerCenterStaff;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaffManager;
 import sc2002OOP.obj.company.CompanyManager;
 
+/**
+ * <h1>Company Representative Data Manager</h1>
+ * <p>
+ * This class serves as the **dedicated manager** for all <code>CompanyRepresentative</code> objects 
+ * within the IPMS. It is responsible for initializing the data store, handling persistence 
+ * (saving and loading), and providing robust methods for retrieving and filtering the accounts.
+ * </p>
+ * @apiNote This class utilizes the **Singleton design pattern** to ensure only one instance 
+ * manages the representative data globally. It implements **persistence** by serializing the list 
+ * of accounts to a DAT file (<code>Constants.COMPANY_REPS_DATA_FILE</code>). The manager also includes 
+ * the logic for **registering new representatives** and performing complex, multi-criteria filtering 
+ * of existing accounts.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.companyrepresentative.CompanyRepresentative
+ * @see sc2002OOP.main.Constants
+ */
 public class CompanyRepresentativeManager {
 	private static final String PATH = 
 			Constants.BASE_DIR + 
@@ -111,52 +132,6 @@ public class CompanyRepresentativeManager {
 		}
 		return null;
 	}
-	
-//	public static ArrayList<CompanyRepresentative> retrieveCompanyReps() {
-//		ArrayList<CompanyRepresentative> companyReps = new ArrayList<>();
-//		
-//		String contents = FileIOHandler.getFileContents(Constants.COMPANY_REPS_FILE);
-//		
-//		int index = 0;
-//		ArrayList<String> headers = new ArrayList<>();
-//		for (String line : contents.split(Constants.NEW_LINE)) {
-//			if (line.trim().isEmpty()) continue;
-//			
-//			String[] data = line.split(Constants.DELIMITER);
-//			
-//			CompanyRepresentative newCompRep = new CompanyRepresentative();
-//			for (int i = 0;i<data.length;i++) {
-//				String field = data[i];
-//				
-//				if (index==0) headers.add(field);
-//				else {
-//					if (headers.get(i).equals("Email"))
-//						newCompRep.setUserID(field);
-//					else if (headers.get(i).equals("Name"))
-//						newCompRep.setName(field);
-//					else if (headers.get(i).equals("CompanyID"))
-//						newCompRep.setCompanyID(field);
-//					else if (headers.get(i).equals("Department"))
-//						newCompRep.setDepartment(field);
-//					else if (headers.get(i).equals("Position"))
-//						newCompRep.setPosition(field);
-//					else if (headers.get(i).equals("Status")) {
-//						if (field.equals("APPROVED"))
-//							newCompRep.setStatus(CompanyRepresentativeStatus.APPROVED);
-//						else if (field.equals("PENDING"))
-//							newCompRep.setStatus(CompanyRepresentativeStatus.PENDING);
-//						else if (field.equals("REJECTED"))
-//							newCompRep.setStatus(CompanyRepresentativeStatus.REJECTED);
-//					}
-//					else if (headers.get(i).equals("Password"))
-//						newCompRep.setPassword(field);
-//				}
-//			}
-//			if (index++>0) companyReps.add(newCompRep);
-//		}
-//		
-//		return companyReps;
-//	}
 	
 	public static void printCompanyReps(ArrayList<CompanyRepresentative> companyReps) {
 		for (CompanyRepresentative companyRep : companyReps) {

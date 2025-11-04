@@ -21,6 +21,31 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
 import sc2002OOP.obj.internshipopportunity.*;
 import sc2002OOP.obj.withdrawalrequest.*;
 
+
+/**
+ * <h1>Career Center Staff (User Role)</h1>
+ * <p>
+ * This class represents a user with the <b>Career Center Staff</b> role in the IPMS. 
+ * It inherits core functionalities from the <code>User</code> base class and implements the 
+ * <code>ICareerCenterStaff</code> interface to provide administrative and approval functionalities.
+ * </p>
+ * <p>
+ * Staff members are primarily responsible for **approving and rejecting** user registrations 
+ * (Company Representatives), internship opportunities, and student withdrawal requests.
+ * </p>
+ * @apiNote This specialized class is responsible for the **administrative oversight** of the system. 
+ * Its core methods focus on state transitions (e.g., PENDING to APPROVED/REJECTED) for key entities 
+ * like <code>CompanyRepresentative</code>, <code>InternshipOpportunity</code>, and <code>WithdrawalRequest</code>. 
+ * It inherits persistence logic (<code>Serializable</code>) from the base <code>User</code> class.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.User
+ * @see sc2002OOP.obj.careercenterstaff.ICareerCenterStaff
+ */
 public class CareerCenterStaff extends User implements ICareerCenterStaff, Serializable {
 	private static final long serialVersionUID = 7112025133049517797L;
 	private String role, department;

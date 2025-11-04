@@ -12,6 +12,28 @@ import sc2002OOP.main.FileIOHandler;
 import sc2002OOP.obj.company.CompanyManager;
 import sc2002OOP.obj.companyrepresentative.*;
 
+/**
+ * <h1>Internship Opportunity Data Entity</h1>
+ * <p>
+ * This class represents a **concrete data entity** for an internship opportunity posted by a company. 
+ * It encapsulates all the details of the opening, including its unique ID, title, description, 
+ * requirements (level, preferred major), slot availability, and administrative status.
+ * </p>
+ * @apiNote This class implements the <code>IOpportunity</code> contract and <code>Serializable</code> 
+ * for data **persistence** via the <code>InternshipOpportunityManager</code>. Key administrative 
+ * fields include the <b>status</b> (e.g., PENDING, APPROVED) managed by Career Center Staff, 
+ * the <b>visibility</b> toggle managed by Company Representatives, and the defined 
+ * <code>openingDate</code>/<code>closingDate</code>.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.internshipopportunity.IOpportunity
+ * @see sc2002OOP.obj.internshipopportunity.InternshipOpportunityManager
+ * @see sc2002OOP.obj.internshipopportunity.InternshipOpportunityStatus
+ */
 public class InternshipOpportunity implements IOpportunity, Serializable  {
 	private static final long serialVersionUID = 7909012667627397752L;
 	private String internshipID, title, description, companyID, preferredMajor;

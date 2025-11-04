@@ -14,6 +14,27 @@ import sc2002OOP.main.FileIOHandler;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
 
+/**
+ * <h1>Student User Data Manager</h1>
+ * <p>
+ * This class serves as the **dedicated manager** for all <code>Student</code> objects 
+ * within the IPMS. It is responsible for initializing the data store, handling persistence 
+ * (saving and loading), and providing methods for retrieving and filtering student accounts.
+ * </p>
+ * @apiNote This class utilizes the **Singleton design pattern** to ensure only one instance 
+ * manages the student data globally. It implements **persistence** by serializing the list 
+ * of accounts to a DAT file (<code>Constants.STUDENT_DATA_FILE</code>). The manager provides 
+ * robust, multi-criteria filtering for student accounts based on attributes like ID, name, 
+ * major, and academic year.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.student.Student
+ * @see sc2002OOP.main.Constants
+ */
 public class StudentManager {
 	private final static String PATH = 
 			Constants.BASE_DIR + 
@@ -89,47 +110,6 @@ public class StudentManager {
 		
 		return null;
 	}
-	
-//	public static ArrayList<Student> retrieveStudents() {
-//		ArrayList<Student> students = new ArrayList<>();
-//		
-//		String contents = FileIOHandler.getFileContents(Constants.STUDENT_FILE);
-//		
-//		int index = 0;
-//		ArrayList<String> headers = new ArrayList<>();
-//		for (String line : contents.split(Constants.NEW_LINE)) {
-//			if (line.trim().isEmpty()) continue;
-//			
-//			String[] data = line.split(Constants.DELIMITER);
-//			
-//			Student newStudent = new Student();
-//			for (int i = 0;i<data.length;i++) {
-//				String field = data[i];
-//				
-//				
-//				if (index==0) headers.add(field);
-//				else {
-//					if (headers.get(i).equals("StudentID")) {
-//						newStudent.setUserID(field);
-//					}
-//					else if (headers.get(i).equals("Name"))
-//						newStudent.setName(field);
-//					else if (headers.get(i).equals("Major"))
-//						newStudent.setMajor(field);
-//					else if (headers.get(i).equals("Year"))
-//						newStudent.setYear(Integer.parseInt(field));
-//					else if (headers.get(i).equals("Email"))
-//						newStudent.setEmail(field);
-//					else if (headers.get(i).equals("Password"))
-//						newStudent.setPassword(field);
-//					
-//				}
-//			}
-//			if (index++>0) students.add(newStudent);
-//		}
-//		
-//		return students;
-//	}
 	
 	public static ArrayList<Student> getStudents() {
 		return students;

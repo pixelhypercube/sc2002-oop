@@ -24,6 +24,30 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplicationStatus;
 
+
+/**
+ * <h1>Internship Opportunity Data Manager</h1>
+ * <p>
+ * This class serves as the **dedicated manager** for all <code>InternshipOpportunity</code> 
+ * objects within the IPMS. It is responsible for initializing the data store, handling 
+ * persistence (saving and loading), and managing unique opportunity IDs.
+ * </p>
+ * @apiNote This class utilizes the **Singleton design pattern** to ensure only a single instance 
+ * manages the internship data globally. It implements **persistence** by serializing the list 
+ * of opportunities to a DAT file (<code>Constants.INTERNSHIP_OPPORTUNITIES_DATA_FILE</code>). 
+ * Key responsibilities include managing the **auto-incrementing** of the internship ID, 
+ * providing **highly flexible, multi-criteria filtering** (based on status, level, dates, etc.), 
+ * and critical business logic for automatically updating an opportunity's status to **FILLED** * once the number of accepted applications meets the maximum available slots.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.internshipopportunity.InternshipOpportunity
+ * @see sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager
+ * @see sc2002OOP.main.Constants
+ */
 public class InternshipOpportunityManager {
 	private static final String PATH = 
 			Constants.BASE_DIR + 
@@ -124,67 +148,6 @@ public class InternshipOpportunityManager {
 			e.printStackTrace();
 		}
 	}
-
-//	public static ArrayList<InternshipOpportunity> retrieveInternshipOpps() {
-//		
-//		String contents = FileIOHandler.getFileContents(Constants.INTERNSHIP_OPPORTUNITIES_FILE);
-//		ArrayList<InternshipOpportunity> internships = new ArrayList<>();
-//		
-//		int index = 0;
-//		ArrayList<String> headers = new ArrayList<>();
-//		
-//		for (String line : contents.split(Constants.NEW_LINE)) {
-//			if (line.trim().isEmpty()) continue;
-//			
-//			InternshipOpportunity newInternship = new InternshipOpportunity();
-//			String[] data = line.trim().split(Constants.DELIMITER);
-//			
-//			for (int i = 0;i<data.length;i++) {
-//				if (index==0) headers.add(data[i]);
-//				else {
-//					if (headers.get(i).equals("InternshipID"))
-//						newInternship.setInternshipID(data[i]);
-//					else if (headers.get(i).equals("Title"))
-//						newInternship.setTitle(data[i]);
-//					else if (headers.get(i).equals("Description"))
-//						newInternship.setDescription(data[i]);
-//					else if (headers.get(i).equals("CompanyID")) {
-//						newInternship.setCompanyID(data[i]);
-//					}
-//					else if (headers.get(i).equals("PreferredMajors"))
-//						newInternship.setPreferredMajor(data[i]);
-//					else if (headers.get(i).equals("NumSlots"))
-//						newInternship.setNumSlots(Integer.parseInt(data[i]));
-//					else if (headers.get(i).equals("Level")) {
-//						if (data[i].equals("Basic"))
-//							newInternship.setLevel(InternshipOpportunityLevel.BASIC);
-//						if (data[i].equals("Intermediate"))
-//							newInternship.setLevel(InternshipOpportunityLevel.INTERMEDIATE);
-//						if (data[i].equals("Advanced"))
-//							newInternship.setLevel(InternshipOpportunityLevel.ADVANCED);
-//					}
-//					else if (headers.get(i).equals("Status")) {
-//						if (data[i].equals("Pending"))
-//							newInternship.setStatus(InternshipOpportunityStatus.PENDING);
-//						else if (data[i].equals("Approved"))
-//							newInternship.setStatus(InternshipOpportunityStatus.APPROVED);
-//						else if (data[i].equals("Rejected"))
-//							newInternship.setStatus(InternshipOpportunityStatus.REJECTED);
-//						else if (data[i].equals("Filled"))
-//							newInternship.setStatus(InternshipOpportunityStatus.FILLED);
-//					}
-//					else if (headers.get(i).equals("Visibility"))
-//						newInternship.setVisibility(data[i].equals("on"));
-//					else if (headers.get(i).equals("OpeningDate"))
-//						newInternship.setOpeningDate(LocalDate.parse(data[i]));
-//					else if (headers.get(i).equals("ClosingDate"))
-//						newInternship.setClosingDate(LocalDate.parse(data[i]));
-//				}
-//			}
-//			if (index++ > 0) internships.add(newInternship);
-//		}
-//		return internships;
-//	}
 	
 	// helper function to update the filled places
 	public static Map<String, Integer> countSuccessFreqs() {

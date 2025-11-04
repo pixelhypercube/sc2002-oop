@@ -12,6 +12,27 @@ import java.util.stream.Collectors;
 
 import sc2002OOP.main.Constants;
 
+/**
+ * <h1>Internship Withdrawal Request Data Manager</h1>
+ * <p>
+ * This class serves as the **dedicated manager** for all <code>WithdrawalRequest</code> 
+ * objects within the IPMS. It is responsible for initializing the data store, handling 
+ * persistence (saving and loading) of requests, and managing unique request IDs.
+ * </p>
+ * @apiNote This class utilizes the **Singleton design pattern** to ensure only one instance 
+ * manages the request data globally. It implements **persistence** by serializing the list 
+ * of requests to a DAT file (<code>Constants.WITHDRAWAL_REQS_DATA_FILE</code>). The manager 
+ * provides methods for retrieval and filtering requests, which are primarily managed and 
+ * acted upon by the <code>CareerCenterStaff</code>.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.withdrawalrequest.WithdrawalRequest
+ * @see sc2002OOP.main.Constants
+ */
 public class WithdrawalRequestManager {
 	private final static String PATH = 
 			Constants.BASE_DIR + 
@@ -139,36 +160,4 @@ public class WithdrawalRequestManager {
 	public static void setLastID(int lastID) {
 		WithdrawalRequestManager.lastID = lastID;
 	}
-	
-//	public static ArrayList<WithdrawalRequest> retrieveWithdrawalReqs() {
-//		ArrayList<WithdrawalRequest> withdrawalReqs = new ArrayList<>();
-//		
-//		int index = 0;
-//		ArrayList<String> headers = new ArrayList<>();
-//		WithdrawalRequest withdrawalReq = new WithdrawalRequest();
-//		for (String line : FileIOHandler.getFileContents(Constants.WITHDRAWAL_REQS_FILE).split(Constants.NEW_LINE)) {
-//			if (line.trim().isEmpty()) continue;
-//			
-//			String[] data = line.split(Constants.DELIMITER);
-//			for (int i = 0;i<data.length;i++) {
-//				String cell = data[i];
-//				if (index==0) headers.add(cell);
-//				else {
-//					if (headers.get(i).equals("ApplicationID"))
-//						withdrawalReq.setApplicationID(cell);
-//					else if (headers.get(i).equals("Status")) {
-//						if (cell.equals("PENDING"))
-//							withdrawalReq.setStatus(WithdrawalRequestStatus.PENDING);
-//						else if (cell.equals("SUCCESSFUL"))
-//							withdrawalReq.setStatus(WithdrawalRequestStatus.SUCCESSFUL);
-//						else if (cell.equals("UNSUCCESSFUL"))
-//							withdrawalReq.setStatus(WithdrawalRequestStatus.UNSUCCESSFUL);
-//					}
-//				}
-//			}
-//			
-//			if (index++>0) withdrawalReqs.add(withdrawalReq);
-//		}
-//		return withdrawalReqs;
-//	}
 }

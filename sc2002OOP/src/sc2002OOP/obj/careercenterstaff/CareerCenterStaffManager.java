@@ -12,6 +12,28 @@ import java.util.stream.Collectors;
 import sc2002OOP.main.Constants;
 import sc2002OOP.main.FileIOHandler;
 
+
+/**
+ * <h1>Career Center Staff Manager</h1>
+ * <p>
+ * This class is the dedicated **manager** for all <code>CareerCenterStaff</code> objects within the IPMS. 
+ * It is responsible for handling the initialization, persistence (saving and loading), and retrieval 
+ * of the entire collection of staff records.
+ * </p>
+ * @apiNote This class utilizes the **Singleton design pattern** to ensure only a single instance 
+ * manages the staff data globally. It handles **persistence** by serializing the list of 
+ * <code>CareerCenterStaff</code> objects to a DAT file (specified by <code>Constants.STAFF_DATA_FILE</code>) 
+ * using Java's object serialization mechanisms (<code>ObjectOutputStream</code>/<code>ObjectInputStream</code>). 
+ * Methods also include complex filtering for staff retrieval.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.careercenterstaff.CareerCenterStaff
+ * @see sc2002OOP.main.Constants
+ */
 public class CareerCenterStaffManager {
 	private final static String PATH = 
 			Constants.BASE_DIR + 
@@ -79,45 +101,6 @@ public class CareerCenterStaffManager {
 			e.printStackTrace();
 		}
 	}
-	
-	
-//	public static ArrayList<CareerCenterStaff> retrieveStaff() {
-//		ArrayList<CareerCenterStaff> staff = new ArrayList<>();
-//		
-//		String contents = FileIOHandler.getFileContents(Constants.STAFF_FILE);
-//		
-//		int index = 0;
-//		ArrayList<String> headers = new ArrayList<>();
-//		for (String line : contents.split(Constants.NEW_LINE)) {
-//			if (line.trim().isEmpty()) continue;
-//			
-//			String[] data = line.split(Constants.DELIMITER);
-//			
-//			CareerCenterStaff newStaff = new CareerCenterStaff();
-//			for (int i = 0;i<data.length;i++) {
-//				String field = data[i];
-//				
-//				if (index==0) headers.add(field);
-//				else {
-//					if (headers.get(i).equals("StaffID"))
-//						newStaff.setUserID(field);
-//					else if (headers.get(i).equals("Name"))
-//						newStaff.setName(field);
-//					else if (headers.get(i).equals("Role"))
-//						newStaff.setRole(field);
-//					else if (headers.get(i).equals("Department"))
-//						newStaff.setDepartment(field);
-//					else if (headers.get(i).equals("Email"))
-//						newStaff.setEmail(field);
-//					else if (headers.get(i).equals("Password"))
-//						newStaff.setPassword(field);
-//				}
-//			}
-//			if (index++>0) staff.add(newStaff);
-//		}
-//		
-//		return staff;
-//	}
 	
 	public static ArrayList<CareerCenterStaff> getStaff(
 			String staffID,

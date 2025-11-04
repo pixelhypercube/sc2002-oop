@@ -2,7 +2,26 @@ package sc2002OOP.obj.company;
 
 import java.io.Serializable;
 
-public class Company implements Serializable, ICompany{
+/**
+ * <h1>Company Data Entity</h1>
+ * <p>
+ * This class represents a **basic data entity** for a company within the IPMS. 
+ * It stores fundamental attributes such as the company's unique ID and its registered name.
+ * </p>
+ * @apiNote This class is a **Plain Old Java Object (POJO)** that acts as a simple container for company details. 
+ * It implements <code>Serializable</code> to allow its data state to be <b>persisted</b> 
+ * (saved) to file storage by the <code>CompanyManager</code>. The <code>ICompany</code> interface 
+ * ensures adherence to any required contract methods.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ * @see sc2002OOP.obj.company.CompanyManager
+ * @see sc2002OOP.obj.company.ICompany
+ */
+public class Company implements Serializable, ICompany {
 	private static final long serialVersionUID = -4028494579721857457L;
 	private String companyID, companyName;
 	

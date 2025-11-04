@@ -10,7 +10,31 @@ import java.util.function.Function;
 
 import sc2002OOP.obj.*;
 
+/**
+ * <h1>File Input/Output Handler</h1>
+ * <p>
+ * This class serves as the <b>input/output handler</b> that handles the read and write operations to CSV files.
+ * It is mainly used to export internship applications done by company representatives, as well as for the initial 
+ * loading of system data from CSV files.
+ * </p>
+ * @apiNote This handler uses <code>Class.getResourceAsStream()</code> to read data files from the <b>classpath</b> 
+ * (e.g., resources folder) to ensure <strong>portability</strong> in packaged JAR files. Write operations, however, 
+ * are performed directly to the file system path relative to the project directory. It includes a generic 
+ * <code>readFile</code> method that accepts a <b>parser function</b> for object deserialization.
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ */
 public class FileIOHandler {
+	/**
+     * Reads a specified CSV file from the classpath, prints its contents line by line to the console, 
+     * and splits the fields using the primary system delimiter (<code>Constants.DELIMITER</code>).
+     *
+     * @param path The filename (e.g., "students.csv") relative to <code>Constants.FILE_PATH</code>.
+     */
 	public static void readFile(String path) {
 		String line;
 		try (
@@ -33,6 +57,13 @@ public class FileIOHandler {
 		}
 	}
 	
+	/**
+     * Reads a specified file from the classpath and returns its entire content as a single 
+     * <code>String</code>, with lines separated by the newline character.
+     *
+     * @param path The filename (e.g., "students.csv") relative to <code>Constants.FILE_PATH</code>.
+     * @return The entire content of the file as a <code>String</code>, or <code>null</code> if an error occurs.
+     */
 	public static String getFileContents(String path) {
 		String line;
 		String res = "";
@@ -54,8 +85,14 @@ public class FileIOHandler {
 		return null;
 	}
 	
-	// CAUTION: this will change the entire record of the file!
-	// assuming default file location is Constants.FILE_PATH
+	/**
+     * Writes the given content to a file, **overwriting** all previous contents. The file is assumed 
+     * to be located in the default data directory (<code>Constants.FILE_PATH</code>).
+     *
+     * @implNote **CAUTION:** This operation overwrites the entire record of the file.
+     * @param path The filename to write to (e.g., "students.csv").
+     * @param amendedContent The new content to write to the file as a single <code>String</code>.
+     */
 	public static void writeFileContents(String path, String amendedContent) {
 		try (
 				FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\src\\" + Constants.FILE_PATH + path);
@@ -68,7 +105,14 @@ public class FileIOHandler {
 		}
 	}
 	
-	// overloaded method with additional dir param
+	/**
+     * Writes the given content to a file, **overwriting** all previous contents. This is an overloaded 
+     * method that allows specifying a custom directory path relative to the project source (`/src/`).
+     *
+     * @param path The filename to write to (e.g., "report.csv").
+     * @param dir The directory path (e.g., <code>Constants.EXPORT_REPORTS_PATH</code>).
+     * @param amendedContent The new content to write to the file as a single <code>String</code>.
+     */
 	public static void writeFileContents(String path, String dir, String amendedContent) {
 		try (
 				FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\src\\" + dir + path);
@@ -81,6 +125,16 @@ public class FileIOHandler {
 		}
 	}
 	
+	/**
+     * Reads a specified file from the classpath, parses each line into a generic object type (T), 
+     * and returns a list of these objects.
+     *
+     * @param <T> The type of object the parser function will return (e.g., <code>Student</code>).
+     * @param path The filename (e.g., "students.csv") relative to <code>Constants.FILE_PATH</code>.
+     * @param parser A <code>Function</code> that takes a <code>String[]</code> (the line split by delimiter) 
+     * and returns an object of type <code>T</code>.
+     * @return An <code>ArrayList</code> of objects of type <code>T</code>, or an empty list if an error occurs.
+     */
 	public static <T> ArrayList<T> readFile(String path, Function<String[], T> parser) {
 		String line;
 		ArrayList<T> list = new ArrayList<>();
