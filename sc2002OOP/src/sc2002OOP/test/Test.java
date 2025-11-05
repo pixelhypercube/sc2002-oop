@@ -1,8 +1,11 @@
-package sc2002OOP.main;
+package sc2002OOP.test;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import sc2002OOP.main.Constants;
+import sc2002OOP.main.FileIOHandler;
+import sc2002OOP.main.Viewer;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaff;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaffManager;
 import sc2002OOP.obj.company.Company;
@@ -29,6 +32,53 @@ import sc2002OOP.obj.withdrawalrequest.WithdrawalRequestStatus;
  * 
  * */
 public class Test {
+	public static void printTestTables() {
+		ArrayList<String> headers = new ArrayList<>();
+	    headers.add("A");
+	    headers.add("This Header Is Intentionally Much Longer Than Twenty-Five Characters");
+	    headers.add("Perfect Fit 25 Characters");
+	    
+	    ArrayList<ArrayList<String>> data = new ArrayList<>();
+	    
+	    ArrayList<String> row1 = new ArrayList<>();
+	    row1.add("");
+	    row1.add("1");
+	    row1.add("XX");
+	    data.add(row1);
+
+	    ArrayList<String> row2 = new ArrayList<>();
+	    row2.add("1234567890");
+	    row2.add("This data is exactly 26 long.");
+	    row2.add("This cell data is too long to fit in the column width.");
+	    data.add(row2);
+
+	    ArrayList<String> row3 = new ArrayList<>();
+	    row3.add("Max Col1");
+	    row3.add("This String Is Exactly 25");
+	    row3.add("This content is 22 ch");
+	    data.add(row3);
+	    
+	    ArrayList<String> row4 = new ArrayList<>();
+	    row4.add("End");
+	    row4.add("Short");
+	    row4.add("Medium Length Test");
+	    data.add(row4);
+	    Viewer.printTable(headers, data);
+//		ArrayList<String> headers = new ArrayList<>();
+//		headers.add("Header1");
+//		headers.add("Headerrrrrrrrrrrrrfrrrrrr2");
+//		headers.add("Header3");
+//		
+//		ArrayList<ArrayList<String>> data = new ArrayList<>();
+//		for (int i = 0;i<3;i++) {
+//			ArrayList<String> cells = new ArrayList<>();
+//			for (int j = 0;j<3;j++) {
+//				cells.add("Dataaaaaaaaaaaaaaaa"+(j+1));
+//			}
+//			data.add(cells);
+//		}
+//		Viewer.printTable(headers,data);
+	}
 	public static void getFromCSVFiles() {
 		ArrayList<Student> students = retrieveStudentsFromCSV();
 		ArrayList<CareerCenterStaff> staff = retrieveStaffFromCSV();

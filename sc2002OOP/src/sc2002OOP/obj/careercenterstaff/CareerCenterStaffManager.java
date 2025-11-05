@@ -121,6 +121,8 @@ public class CareerCenterStaffManager {
 					.collect(Collectors.toCollection(ArrayList::new));
 		}
 
+	// GETTERS & SETTERS
+	
 	public static ArrayList<CareerCenterStaff> getStaff() {
 		return careerCenterStaff;
 	}

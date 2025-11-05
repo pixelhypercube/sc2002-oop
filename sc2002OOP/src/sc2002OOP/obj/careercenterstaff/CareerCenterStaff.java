@@ -14,6 +14,7 @@ import sc2002OOP.main.PasswordManager;
 import sc2002OOP.obj.InternshipFilterSettings;
 import sc2002OOP.obj.User;
 import sc2002OOP.obj.company.CompanyManager;
+import sc2002OOP.obj.company.CompanyView;
 // IMPORTS 
 import sc2002OOP.obj.companyrepresentative.*;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
@@ -47,10 +48,37 @@ import sc2002OOP.obj.withdrawalrequest.*;
  * @see sc2002OOP.obj.careercenterstaff.ICareerCenterStaff
  */
 public class CareerCenterStaff extends User implements ICareerCenterStaff, Serializable {
+	/**
+	 * Unique identifier for serialization, used to verify the sender and receiver 
+	 * of a serialized object have loaded classes for that object that are compatible.
+	 */
 	private static final long serialVersionUID = 7112025133049517797L;
-	private String role, department;
 	
+	/**
+	 * The specific role of the staff member (e.g., "Career Center Staff").
+	 */
+	private String role;
+	
+	/**
+	 * The department the staff member belongs to.
+	 */
+	private String department;
+	
+	/**
+	 * Default constructor for the CareerCenterStaff class.
+	 */
 	public CareerCenterStaff() {};
+	
+	/**
+	 * Constructs a new CareerCenterStaff object, initializing user details 
+	 * and staff-specific attributes.
+	 * * @param userID The unique identification number for the staff member (aka staffID).
+	 * @param name The full name of the staff member.
+	 * @param role The specific role of the staff member.
+	 * @param department The department the staff member belongs to.
+	 * @param email The email address of the staff member.
+	 * @param password The hashed password of the staff member.
+	 */
 	public CareerCenterStaff(String userID, String name, String role, String department, String email, String password) {
 		super(userID, name, email, password);
 		this.role = role;
@@ -65,29 +93,29 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		System.out.println("Department:    "+department);
 	}
 	
-	public void printCompanyReps(ArrayList<CompanyRepresentative> companyReps) {
-		System.out.println("===== Company Representatives List =====");
-		for (CompanyRepresentative companyRep : companyReps) {
-			companyRep.print();
-			System.out.println("-".repeat(40));
-		}
-	}
+//	public void printCompanyReps(ArrayList<CompanyRepresentative> companyReps) {
+//		System.out.println("===== Company Representatives List =====");
+//		for (CompanyRepresentative companyRep : companyReps) {
+//			companyRep.print();
+//			System.out.println("-".repeat(40));
+//		}
+//	}
 	
-	public void printInternshipOpps(ArrayList<InternshipOpportunity> internshipOpps) {
-		System.out.println("===== Internship Opportunities List =====");
-		for (InternshipOpportunity internshipOpp : internshipOpps) {
-			internshipOpp.print();
-			System.out.println("-".repeat(40));
-		}
-	}
+//	public void printInternshipOpps(ArrayList<InternshipOpportunity> internshipOpps) {
+//		System.out.println("===== Internship Opportunities List =====");
+//		for (InternshipOpportunity internshipOpp : internshipOpps) {
+//			internshipOpp.print();
+//			System.out.println("-".repeat(40));
+//		}
+//	}
 	
-	public void printWithdrawalReqs(ArrayList<WithdrawalRequest> withdrawalReqs) {
-		System.out.println("===== Withdrawal Request List =====");
-		for (WithdrawalRequest withdrawalReq : withdrawalReqs) {
-			withdrawalReq.print();
-			System.out.println("-".repeat(40));
-		}
-	}
+//	public void printWithdrawalReqs(ArrayList<WithdrawalRequest> withdrawalReqs) {
+//		System.out.println("===== Withdrawal Request List =====");
+//		for (WithdrawalRequest withdrawalReq : withdrawalReqs) {
+//			withdrawalReq.print();
+//			System.out.println("-".repeat(40));
+//		}
+//	}
 	
 	public void approveRejectCompRep(Scanner sc) {
 		System.out.print("\033[H\033[2J");
@@ -104,7 +132,8 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 			System.out.println("Sorry, there are no pending company represenatives at the moment.");
 			return;
 		}
-		printCompanyReps(companyReps);
+		CompanyRepresentativeView.printCompanyRepTable(companyReps);
+//		printCompanyReps(companyReps);
 		
 		String compRepID = "";
 		boolean found = false;
@@ -158,7 +187,8 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 			return;
 		}
 		
-		printWithdrawalReqs(withdrawalReqs);
+		WithdrawalRequestView.printWithdrawalReqTable();
+//		printWithdrawalReqs(withdrawalReqs);
 		
 		String appilcationID = "";
 		boolean found = false;
@@ -221,7 +251,7 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 						null
 				);
 		
-		printInternshipOpps(internshipOpportunities);
+		InternshipOpportunityView.printInternshipOppList(internshipOpportunities);
 		if (internshipOpportunities.isEmpty()) {
 			System.out.println("Sorry, there are no pending internship opportunities at the moment. Please try again later.");
 			return;
@@ -260,19 +290,6 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 			}
 			if (!found) System.out.println("Sorry, Internship ID not found. Please try again.");
 		}
-	}
-	
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
-	public String getDepartment() {
-		return department;
-	}
-	public void setDepartment(String department) {
-		this.department = department;
 	}
 
 	@Override
@@ -391,7 +408,7 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 	    description = description.isEmpty() ? null : description;
 	    
 	    System.out.println();
-	    CompanyManager.printAllCompanies();
+	    CompanyView.printCompanyTable();
 	    System.out.print("Enter Company ID" + 
 	    	    ((settings.getCompanyID()==null || settings.getCompanyID().isEmpty()) 
 	    	    		? "" : 
@@ -529,5 +546,20 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		} else {
 			System.out.println("Sorry, the list of internships are not available at the moment. Please try again later.");
 		}
+	}
+	
+	// GETTERS & SETTERS
+
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
+	public String getDepartment() {
+		return department;
+	}
+	public void setDepartment(String department) {
+		this.department = department;
 	}
 }

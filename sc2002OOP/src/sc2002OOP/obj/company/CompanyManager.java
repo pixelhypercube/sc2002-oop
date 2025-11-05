@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import sc2002OOP.main.Constants;
+import sc2002OOP.main.Viewer;
 
 /**
  * <h1>Company Data Manager</h1>
@@ -121,15 +123,6 @@ public class CompanyManager {
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	}
-	
-	public static void printAllCompanies() {
-		System.out.println("===== COMPANY LIST =====");
-		System.out.println("-".repeat(40));
-		for (Company company : companies) {
-			company.print();
-			System.out.println("-".repeat(40));
 		}
 	}
 	

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import sc2002OOP.main.Constants;
 import sc2002OOP.main.FileIOHandler;
+import sc2002OOP.main.Viewer;
 
 /**
  * <h1>Internship Application Data Manager</h1>

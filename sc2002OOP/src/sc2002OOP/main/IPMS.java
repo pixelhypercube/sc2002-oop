@@ -143,6 +143,7 @@ public class IPMS {
 				
 				
 //				Test.printAllRecords();
+//				Test.printTestTables();
 				System.out.print("Your Choice: ");
 				if (sc.hasNextInt()) {
 					choice = sc.nextInt();

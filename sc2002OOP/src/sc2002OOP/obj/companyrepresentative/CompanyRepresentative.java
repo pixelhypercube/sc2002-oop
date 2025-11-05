@@ -563,40 +563,40 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		while (choice != 8) {
 			System.out.println("=====================================================");
 			System.out.println("Choose an option: ");
-//			System.out.println("1. View All Internships");
-			System.out.println("1. Approve/Reject Applicants");
-			System.out.println("2. Create Internship Opportunity");
-			System.out.println("3. Toggle Visibility of Internship Oppurtunity");
-			System.out.println("4. Print/Export Applications Report");
-			System.out.println("5. View Profile");
-			System.out.println("6. Change Password");
-			System.out.println("7. Log Out");
+			System.out.println("(1) View All Internship Opportunities");
+			System.out.println("(2) Approve/Reject Applicants");
+			System.out.println("(3) Create Internship Opportunity");
+			System.out.println("(4) Toggle Visibility of Internship Oppurtunity");
+			System.out.println("(5) Print/Export Applications Report");
+			System.out.println("(6) View Profile");
+			System.out.println("(7) Change Password");
+			System.out.println("(8) Log Out");
 			System.out.println("=====================================================");
 			System.out.print("Select a choice: ");
 			choice = sc.nextInt();
 			switch (choice) {
-//				case 1 -> {
-//					printInternshipOpps();
-//				}
 				case 1 -> {
-					approveRejectApplicant(sc);
+					viewInternshipOpps(sc);
 				}
 				case 2 -> {
-					createInternship(sc);
+					approveRejectApplicant(sc);
 				}
 				case 3 -> {
-					toggleInternshipOpportunity(sc);
+					createInternship(sc);
 				}
 				case 4 -> {
-					exportApplicationsReport(sc);
+					toggleInternshipOpportunity(sc);
 				}
 				case 5 -> {
-					viewProfile(sc);
+					exportApplicationsReport(sc);
 				}
 				case 6 -> {
-					changePassword(sc);
+					viewProfile(sc);
 				}
 				case 7 -> {
+					changePassword(sc);
+				}
+				case 8 -> {
 					System.out.print("\033[H\033[2J");
 					System.out.println("Logged out!");
 					break;

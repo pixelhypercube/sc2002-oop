@@ -17,6 +17,7 @@ import sc2002OOP.main.PasswordManager;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaff;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaffManager;
 import sc2002OOP.obj.company.CompanyManager;
+import sc2002OOP.obj.company.CompanyView;
 
 /**
  * <h1>Company Representative Data Manager</h1>
@@ -133,12 +134,12 @@ public class CompanyRepresentativeManager {
 		return null;
 	}
 	
-	public static void printCompanyReps(ArrayList<CompanyRepresentative> companyReps) {
-		for (CompanyRepresentative companyRep : companyReps) {
-			companyRep.print();
-			System.out.println("-".repeat(40));
-		}
-	}
+//	public static void printCompanyReps(ArrayList<CompanyRepresentative> companyReps) {
+//		for (CompanyRepresentative companyRep : companyReps) {
+//			companyRep.print();
+//			System.out.println("-".repeat(40));
+//		}
+//	}
 	
 	public static void register(Scanner sc) {
 		System.out.print("\033[H\033[2J");
@@ -162,7 +163,7 @@ public class CompanyRepresentativeManager {
 		String companyID = "";
 		while (companyID.isEmpty()) {
 			System.out.println();
-			CompanyManager.printAllCompanies();
+			CompanyView.printCompanyTable();
 			System.out.print("Enter company ID:");
 			companyID = sc.nextLine();
 			if (companyID.isEmpty()) {

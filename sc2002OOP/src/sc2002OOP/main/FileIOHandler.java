@@ -124,41 +124,4 @@ public class FileIOHandler {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-     * Reads a specified file from the classpath, parses each line into a generic object type (T), 
-     * and returns a list of these objects.
-     *
-     * @param <T> The type of object the parser function will return (e.g., <code>Student</code>).
-     * @param path The filename (e.g., "students.csv") relative to <code>Constants.FILE_PATH</code>.
-     * @param parser A <code>Function</code> that takes a <code>String[]</code> (the line split by delimiter) 
-     * and returns an object of type <code>T</code>.
-     * @return An <code>ArrayList</code> of objects of type <code>T</code>, or an empty list if an error occurs.
-     */
-	public static <T> ArrayList<T> readFile(String path, Function<String[], T> parser) {
-		String line;
-		ArrayList<T> list = new ArrayList<>();
-		
-		try (
-				var inputStream = FileIOHandler.class.getResourceAsStream(Constants.FILE_PATH+path);
-				BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-			)
-			{
-				if (inputStream==null)
-					throw new IOException("Resource not found on classpath: " + Constants.FILE_PATH + path);
-				
-				while ((line = br.readLine()) != null) {
-					if (line.trim().isEmpty()) continue;
-					String[] data = line.split(Constants.DELIMITER);
-					
-					T object = parser.apply(data);
-					list.add(object);
-				}
-				return list;
-			} catch (IOException e) {
-				System.err.println("File + " + path + " could not be read.");
-				e.printStackTrace();
-			}
-		return new ArrayList<>();
-	}
 }

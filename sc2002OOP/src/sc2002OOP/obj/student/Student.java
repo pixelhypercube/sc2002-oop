@@ -11,13 +11,14 @@ import java.util.stream.Collectors;
 import sc2002OOP.main.Constants;
 import sc2002OOP.main.FileIOHandler;
 import sc2002OOP.main.PasswordManager;
-import sc2002OOP.main.Test;
 import sc2002OOP.obj.InternshipFilterSettings;
 import sc2002OOP.obj.User;
 import sc2002OOP.obj.company.CompanyManager;
+import sc2002OOP.obj.company.CompanyView;
 import sc2002OOP.obj.internshipapplicaton.*;
 import sc2002OOP.obj.internshipopportunity.*;
 import sc2002OOP.obj.withdrawalrequest.*;
+import sc2002OOP.test.Test;
 
 
 /**
@@ -56,6 +57,7 @@ public class Student extends User implements IStudent, Serializable {
 		this.major = major;
 		this.year = year;
 	}
+	
 	public void viewInternshipApplications(Scanner sc) {
 		System.out.print("\033[H\033[2J");
 		ArrayList<InternshipApplication> internshipAppList = InternshipApplicationManager.getInternshipApps(
@@ -67,10 +69,16 @@ public class Student extends User implements IStudent, Serializable {
 		if (internshipAppList != null) {
 			System.out.println("====== "+super.getName()+"'s list of Internship Applications ======");
 			System.out.println("-".repeat(40));
-			for (InternshipApplication internship : InternshipApplicationManager.getInternshipApps("", super.getUserID(), "", null)) {
-				internship.print();
-				System.out.println("-".repeat(40));
-			}
+			
+			ArrayList<InternshipApplication> internshipApps = 
+					InternshipApplicationManager.getInternshipApps("", super.getUserID(), "", null);
+			
+			InternshipApplicationView.printInternshipAppTable(internshipApps);
+			
+//			for (InternshipApplication internship : InternshipApplicationManager.getInternshipApps("", super.getUserID(), "", null)) {
+//				internship.print();
+//				System.out.println("-".repeat(40));
+//			}
 		} else {
 			System.out.println("You do not have any internship applications!");
 		}
@@ -120,7 +128,7 @@ public class Student extends User implements IStudent, Serializable {
 	    description = description.isEmpty() ? null : description;
 	    
 	    System.out.println();
-	    CompanyManager.printAllCompanies();
+	    CompanyView.printCompanyTable();
 	    System.out.print("Enter Company ID" + 
 	    	    ((settings.getCompanyID()==null || settings.getCompanyID().isEmpty()) 
 	    	    		? "" : 
@@ -334,10 +342,13 @@ public class Student extends User implements IStudent, Serializable {
 		
 		if (internshipAppList.size()>0) {
 			System.out.println("===== SUBMIT WITHDRAWAL REQUEST =====");
-			for (InternshipApplication internshipApp : internshipAppList) {
-				internshipApp.print();
-				System.out.println("-".repeat(40));
-			}
+			
+			InternshipApplicationView.printInternshipAppTable(internshipAppList);
+			
+//			for (InternshipApplication internshipApp : internshipAppList) {
+//				internshipApp.print();
+//				System.out.println("-".repeat(40));
+//			}
 			
 			String applicationID = "";
 			boolean found = false;
@@ -448,10 +459,12 @@ public class Student extends User implements IStudent, Serializable {
 		}
 		System.out.println("Congratulations! You have sucessful internship applications!");
 		System.out.println("==== Your Successful Applications ====");
-		for (InternshipApplication iApp : iApps) {
-			iApp.print();
-			System.out.println("-".repeat(40));
-		}
+		InternshipApplicationView.printInternshipAppTable(iApps);
+		
+//		for (InternshipApplication iApp : iApps) {
+//			iApp.print();
+//			System.out.println("-".repeat(40));
+//		}
 		
 		String applicationID = "";
 		boolean found = false;
@@ -472,14 +485,29 @@ public class Student extends User implements IStudent, Serializable {
 						
 						if (choice==1) {
 							studentIApp.setStatus(InternshipApplicationStatus.ACCEPTED);
-							for (InternshipApplication iApplication : allIApps) {
-								if (iApplication.getApplicationID().equals(studentIApp.getApplicationID())) break;
+							
+							// iterate backwards to safely remove elems
+							for (int i = allIApps.size()-1;i>=0;i--) {
+								InternshipApplication iApp = allIApps.get(i);
+								if (iApp.getApplicationID().equals(studentIApp.getApplicationID())) {
+									continue;
+								}
 								
-								// withdraw others
-								if (iApplication.getStudentID().equals(super.getUserID())) {
-									allIApps.remove(iApplication);
+								if (iApp.getStudentID().equals(super.getUserID())) {
+									if (iApp.getStatus() != InternshipApplicationStatus.ACCEPTED &&
+											iApp.getStatus() != InternshipApplicationStatus.REJECTED &&
+											iApp.getStatus() != InternshipApplicationStatus.SUCCESSFUL)
+										allIApps.remove(i);
 								}
 							}
+//							for (InternshipApplication iApplication : allIApps) {
+//								if (iApplication.getApplicationID().equals(studentIApp.getApplicationID())) break;
+//								
+//								// withdraw others
+//								if (iApplication.getStudentID().equals(super.getUserID())) {
+//									allIApps.remove(iApplication);
+//								}
+//							}
 							InternshipOpportunityManager.updateFilledPlaces(); // update filled status if filled
 							System.out.println("Successfully accepted internship placement");
 						} else if (choice==2) {
@@ -491,7 +519,7 @@ public class Student extends User implements IStudent, Serializable {
 					}
 				}
 			}
-			if (!found) System.out.println("Internship ID not found. Please try again.");
+			if (!found) System.out.println("Application ID not found. Please try again.");
 		}
 		
 	}
