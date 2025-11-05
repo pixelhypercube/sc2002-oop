@@ -99,52 +99,6 @@ public class InternshipOpportunity implements IOpportunity, Serializable  {
 	}
 
 	public InternshipOpportunity() {}
-	
-	public void print() {
-		System.out.println("Internship ID:            "+internshipID);
-		System.out.println("Title:                    "+title);
-		System.out.println("Description:              "+description);
-		System.out.println("Company Name:             "+CompanyManager.getCompanyByID(companyID).getCompanyName());
-		System.out.println("Preferred Major(s):       "+preferredMajor);
-		System.out.println("Company Rep(s) in Charge: "+CompanyRepresentativeManager
-				.getCompanyReps(null, companyID, null, null, null, null)
-				.stream()
-				.map(rep->rep.getName() + " ("+rep.getUserID()+")")
-				.collect(Collectors.joining(", ")));
-//		System.out.println("Company Rep(s) in Charge: "+companyRepsInCharge.stream().map(rep->rep.getName() + " (" + rep.getUserID() +")").collect(Collectors.joining(", ")));
-		System.out.println("Number of Slots:          "+numSlots);
-		String levelStr = "";
-		switch (level) {
-			case BASIC -> levelStr = "Basic";
-			case INTERMEDIATE -> levelStr = "Intermediate";
-			case ADVANCED -> levelStr = "Advanced";
-		}
-		System.out.println("Level:                    "+levelStr);
-		System.out.println("Opening Date:             "+openingDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-		System.out.println("Closing Date:             "+closingDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-		System.out.println("Visible to students:      "+(visibility ? "on" : "off"));
-	}
-	
-	public void printForStudent() {
-		if (visibility) {
-			System.out.println("Internship ID:            "+internshipID);
-			System.out.println("Title:                    "+title);
-			System.out.println("Description:              "+description);
-			System.out.println("Company Name:             "+CompanyManager.getCompanyByID(companyID).getCompanyName());
-			System.out.println("Preferred Major(s):       "+preferredMajor);
-//			System.out.println("Company Rep(s) in Charge: "+companyRepsInCharge.stream().map(rep->rep.getName() + " (" + rep.getUserID() +")").collect(Collectors.joining(", ")));
-			System.out.println("Number of Slots:          "+numSlots);
-			String levelStr = "";
-			switch (level) {
-				case BASIC -> levelStr = "Basic";
-				case INTERMEDIATE -> levelStr = "Intermediate";
-				case ADVANCED -> levelStr = "Advanced";
-			}
-			System.out.println("Level:                    "+levelStr);
-			System.out.println("Opening Date:             "+openingDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-			System.out.println("Closing Date:             "+closingDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-		}
-	}
 
 	public String getTitle() {
 		return title;

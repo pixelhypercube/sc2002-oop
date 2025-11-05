@@ -27,12 +27,6 @@ import sc2002OOP.obj.withdrawalrequest.WithdrawalRequest;
  * @see sc2002OOP.obj.company.CompanyManager
  */
 public interface ICompany {
-
-    /**
-     * Prints the details of the company (ID and Name) to the standard output.
-     */
-    void print();
-
     /**
      * Retrieves the unique identifier for the company.
      * @return The company's ID as a <code>String</code>.

@@ -15,13 +15,22 @@ import sc2002OOP.main.Viewer;
  * relies on the {@code Viewer} class to handle the formatting and printing of the tables.
  * </p>
  *
- * @author (Assumed Authors from Project)
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
  * @version 1.0
  * @see sc2002OOP.main.Viewer
  * @see sc2002OOP.obj.withdrawalrequest.WithdrawalRequest
  * @see sc2002OOP.obj.withdrawalrequest.WithdrawalRequestManager
  */
 public class WithdrawalRequestView {
+	public static void print(WithdrawalRequest wr) {
+		System.out.println("Application ID: " + wr.getApplicationID());
+		System.out.println("Status:         "+wr.getStatus());
+	}
+	
 	/**
      * Prints a formatted table listing **all Withdrawal Requests** currently managed by 
      * the {@code WithdrawalRequestManager}.
@@ -36,7 +45,7 @@ public class WithdrawalRequestView {
      *
      * @see #printWithdrawalReqTable(ArrayList)
      */
-	public static void printWithdrawalReqTable() {
+	public static void printTable() {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
 		headers.add("Status: ");
@@ -61,7 +70,7 @@ public class WithdrawalRequestView {
      * @param wReqs An {@code ArrayList} of {@code WithdrawalRequest} objects to be displayed.
      * @see #printWithdrawalReqTable()
      */
-	public static void printWithdrawalReqTable(ArrayList<WithdrawalRequest> wReqs) {
+	public static void printTable(ArrayList<WithdrawalRequest> wReqs) {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
 		headers.add("Status: ");

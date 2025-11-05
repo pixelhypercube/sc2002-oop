@@ -35,13 +35,6 @@ public class InternshipApplication implements IApplication, Serializable  {
 		this.internshipID = internshipID;
 		this.status = status;
 	}
-	
-	public void print() {
-		System.out.println("Application ID: " + applicationID);
-		System.out.println("Student ID:     " + studentID);
-		System.out.println("Internship ID:  " + internshipID);
-		System.out.println("Status:         " + status);
-	}
 
 	public String getStudentID() {
 		return studentID;

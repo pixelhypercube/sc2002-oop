@@ -38,7 +38,6 @@ import sc2002OOP.main.Viewer;
  */
 public class InternshipApplicationManager {
 	private final static String PATH = 
-			Constants.BASE_DIR + 
 			Constants.FILE_SERIALIZED_DIR + 
 			Constants.INTERNSHIP_APPLICATIONS_DATA_FILE;
 	private static ArrayList<InternshipApplication> internshipApps;
@@ -139,7 +138,13 @@ public class InternshipApplicationManager {
 	
 	public static void addInternshipApp(InternshipApplication iApp) {
 		if (iApp==null) InternshipApplicationManager.getInstance();
-		internshipApps.add(iApp);
+	    internshipApps.add(iApp);
+	}
+	
+	public static void removeInternshipApp(int index) {
+		if (internshipApps != null && index >= 0 && index < internshipApps.size()) {
+	        internshipApps.remove(index);
+	    }
 	}
 	
 	public static ArrayList<InternshipApplication> getInternshipApps() {

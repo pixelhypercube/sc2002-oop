@@ -34,7 +34,6 @@ import sc2002OOP.main.Viewer;
  */
 public class CompanyManager {
 	private static final String PATH = 
-			Constants.BASE_DIR + 
 			Constants.FILE_SERIALIZED_DIR + 
 			Constants.COMPANY_DATA_FILE;
 	private static CompanyManager companyManager = null;

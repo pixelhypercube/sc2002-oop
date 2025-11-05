@@ -3,6 +3,7 @@ package sc2002OOP.obj.companyrepresentative;
 import java.util.ArrayList;
 
 import sc2002OOP.main.Viewer;
+import sc2002OOP.obj.company.Company;
 import sc2002OOP.obj.company.CompanyManager;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
@@ -19,7 +20,11 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
  * It uses the {@code Viewer} class for final table rendering.
  * </p>
  *
- * @author (Assumed Authors from Project)
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
  * @version 1.0
  * @see sc2002OOP.main.Viewer
  * @see sc2002OOP.obj.companyrepresentative.CompanyRepresentative
@@ -27,6 +32,15 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
  * @see sc2002OOP.obj.company.CompanyManager
  */
 public class CompanyRepresentativeView {
+	public static void print(CompanyRepresentative cr) {
+		System.out.println("Email:          "+cr.getUserID());
+		System.out.println("Name:           "+cr.getName());
+		System.out.println("Company Name:   "+CompanyManager.getCompanyByID(cr.getCompanyID()).getCompanyName());
+		System.out.println("Department:     "+cr.getDepartment());
+		System.out.println("Position:       "+cr.getPosition());
+		System.out.println("Status:         "+cr.getStatus());
+	}
+	
 	/**
      * Prints a formatted table listing **all Company Representatives** currently managed by 
      * the {@code CompanyRepresentativeManager}.
@@ -40,7 +54,7 @@ public class CompanyRepresentativeView {
      *
      * @see #printCompanyRepTable(ArrayList)
      */
-	public static void printCompanyRepTable() {
+	public static void printTable() {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Email");
 		headers.add("Name");
@@ -51,10 +65,17 @@ public class CompanyRepresentativeView {
 
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 		for (CompanyRepresentative companyRep : CompanyRepresentativeManager.getCompanyReps()) {
-			ArrayList<String> rec = new ArrayList<String>();
-			rec.add(companyRep.getEmail());
-			rec.add(CompanyManager.getCompanyByID(companyRep.getCompanyID()).getCompanyName());
+			ArrayList<String> rec = new ArrayList<>();
+			rec.add(companyRep.getUserID());
 			rec.add(companyRep.getName());
+			String companyName;
+	        Company company = CompanyManager.getCompanyByID(companyRep.getCompanyID());
+	        if (company != null) {
+	            companyName = company.getCompanyName() != null ? company.getCompanyName() : "N/A";
+	        } else {
+	            companyName = "Company Not Found";
+	        }
+            rec.add(companyName);
 			rec.add(companyRep.getDepartment());
 			rec.add(companyRep.getPosition());
 			rec.add(companyRep.getStatus().toString());
@@ -62,7 +83,6 @@ public class CompanyRepresentativeView {
 		}
 		
 		Viewer.printTable(headers, data);
-		
 	}
 	
 	/**
@@ -79,7 +99,7 @@ public class CompanyRepresentativeView {
      * @param companyReps An {@code ArrayList} of {@code CompanyRepresentative} objects to be displayed.
      * @see #printCompanyRepTable()
      */
-	public static void printCompanyRepTable(ArrayList<CompanyRepresentative> companyReps) {
+	public static void printTable(ArrayList<CompanyRepresentative> companyReps) {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Email");
 		headers.add("Name");
@@ -90,17 +110,22 @@ public class CompanyRepresentativeView {
 
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 		for (CompanyRepresentative companyRep : companyReps) {
-			ArrayList<String> rec = new ArrayList<String>();
-			rec.add(companyRep.getEmail());
-			rec.add(CompanyManager.getCompanyByID(companyRep.getCompanyID()).getCompanyName());
+			ArrayList<String> rec = new ArrayList<>();
+			rec.add(companyRep.getUserID());
 			rec.add(companyRep.getName());
+			String companyName;
+	        Company company = CompanyManager.getCompanyByID(companyRep.getCompanyID());
+	        if (company != null) {
+	            companyName = company.getCompanyName() != null ? company.getCompanyName() : "N/A";
+	        } else {
+	            companyName = "Company Not Found";
+	        }
+            rec.add(companyName);
 			rec.add(companyRep.getDepartment());
 			rec.add(companyRep.getPosition());
 			rec.add(companyRep.getStatus().toString());
 			data.add(rec);
 		}
-		
 		Viewer.printTable(headers, data);
-		
 	}
 }

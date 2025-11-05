@@ -81,11 +81,6 @@ public interface ICareerCenterStaff {
      * @param sc The {@code Scanner} object used for console input.
      */
 	void changePassword(Scanner sc);
-
-    /**
-     * Defines the method to print the staff member's core details (usually to the console).
-     */
-	void print();
 	
     /**
      * Defines the method to retrieve the specific role of the Career Center Staff.

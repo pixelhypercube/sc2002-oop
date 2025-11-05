@@ -37,7 +37,6 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
  */
 public class StudentManager {
 	private final static String PATH = 
-			Constants.BASE_DIR + 
 			Constants.FILE_SERIALIZED_DIR + 
 			Constants.STUDENT_DATA_FILE;
 	

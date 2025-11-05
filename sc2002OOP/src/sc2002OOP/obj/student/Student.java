@@ -3,6 +3,7 @@ package sc2002OOP.obj.student;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
@@ -15,6 +16,7 @@ import sc2002OOP.obj.InternshipFilterSettings;
 import sc2002OOP.obj.User;
 import sc2002OOP.obj.company.CompanyManager;
 import sc2002OOP.obj.company.CompanyView;
+import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeManager;
 import sc2002OOP.obj.internshipapplicaton.*;
 import sc2002OOP.obj.internshipopportunity.*;
 import sc2002OOP.obj.withdrawalrequest.*;
@@ -68,12 +70,11 @@ public class Student extends User implements IStudent, Serializable {
 			);
 		if (internshipAppList != null) {
 			System.out.println("====== "+super.getName()+"'s list of Internship Applications ======");
-			System.out.println("-".repeat(40));
-			
+
 			ArrayList<InternshipApplication> internshipApps = 
 					InternshipApplicationManager.getInternshipApps("", super.getUserID(), "", null);
 			
-			InternshipApplicationView.printInternshipAppTable(internshipApps);
+			InternshipApplicationView.printTable(internshipApps);
 			
 //			for (InternshipApplication internship : InternshipApplicationManager.getInternshipApps("", super.getUserID(), "", null)) {
 //				internship.print();
@@ -88,7 +89,7 @@ public class Student extends User implements IStudent, Serializable {
 	public void viewProfile(Scanner sc) {
 		System.out.print("\033[H\033[2J");
 		System.out.println("========= STUDENT PROFILE =========");
-		print();
+		StudentView.print(this);
 		System.out.println("===================================");
 	}
 	
@@ -127,8 +128,8 @@ public class Student extends User implements IStudent, Serializable {
 	    String description = sc.nextLine().trim();
 	    description = description.isEmpty() ? null : description;
 	    
-	    System.out.println();
-	    CompanyView.printCompanyTable();
+	    System.out.println("Company Table:");
+	    CompanyView.printTable();
 	    System.out.print("Enter Company ID" + 
 	    	    ((settings.getCompanyID()==null || settings.getCompanyID().isEmpty()) 
 	    	    		? "" : 
@@ -197,33 +198,62 @@ public class Student extends User implements IStudent, Serializable {
 //	        else System.out.println("Invalid input. Ignored visibility filter.");
 //	    }
 		
+	    // DATES
 		System.out.print("Enter Opening Date From (YYYY-MM-DD) " + 
 	    	    ((settings.getOpeningDateFrom()==null) 
 	    	    		? "" : 
 	    	    			" (Prev: "+settings.getOpeningDateFrom().format(DateTimeFormatter.ISO_DATE)+")") + ": ");
 		String openingFromInput = sc.nextLine().trim();
-		LocalDate openingFrom = openingFromInput.isEmpty() ? null : LocalDate.parse(openingFromInput, DateTimeFormatter.ISO_DATE);
-
+		LocalDate openingFrom = null;
+		if (!openingFromInput.isEmpty()) {
+			try {
+				openingFrom = LocalDate.parse(openingFromInput, DateTimeFormatter.ISO_DATE);
+			} catch (DateTimeParseException e) {
+				System.out.println("Invalid date format. Please use YYYY-MM-DD. Opening Date From filter ignored.");
+			}
+		}
+		
 		System.out.print("Enter Opening Date To (YYYY-MM-DD) " + 
 	    	    ((settings.getOpeningDateTo()==null) 
 	    	    		? "" : 
 	    	    			" (Prev: "+settings.getOpeningDateTo().format(DateTimeFormatter.ISO_DATE)+")") + ": ");
 		String openingToInput = sc.nextLine().trim();
-		LocalDate openingTo = openingToInput.isEmpty() ? null : LocalDate.parse(openingToInput, DateTimeFormatter.ISO_DATE);
-
+		LocalDate openingTo = null;
+		if (!openingToInput.isEmpty()) {
+			try {
+				openingTo = LocalDate.parse(openingToInput, DateTimeFormatter.ISO_DATE);
+			} catch (DateTimeParseException e) {
+				System.out.println("Invalid date format. Please use YYYY-MM-DD. Opening Date To filter ignored.");
+			}
+		}
+		
 		System.out.print("Enter Closing Date From (YYYY-MM-DD) " + 
 	    	    ((settings.getClosingDateFrom()==null) 
 	    	    		? "" : 
 	    	    			" (Prev: "+settings.getClosingDateFrom().format(DateTimeFormatter.ISO_DATE)+")") + ": ");
 		String closingFromInput = sc.nextLine().trim();
-		LocalDate closingFrom = closingFromInput.isEmpty() ? null : LocalDate.parse(closingFromInput, DateTimeFormatter.ISO_DATE);
-
+		LocalDate closingFrom = null;
+		if (!closingFromInput.isEmpty()) {
+			try {
+				closingFrom = LocalDate.parse(closingFromInput, DateTimeFormatter.ISO_DATE);
+			} catch (DateTimeParseException e) {
+				System.out.println("Invalid date format. Please use YYYY-MM-DD. Closing Date From filter ignored.");
+			}
+		}
+		
 		System.out.print("Enter Closing Date To (YYYY-MM-DD) " + 
 	    	    ((settings.getClosingDateTo()==null) 
 	    	    		? "" : 
 	    	    			" (Prev: "+settings.getClosingDateTo().format(DateTimeFormatter.ISO_DATE)+")") + ": ");
 		String closingToInput = sc.nextLine().trim();
-		LocalDate closingTo = closingToInput.isEmpty() ? null : LocalDate.parse(closingToInput, DateTimeFormatter.ISO_DATE);
+		LocalDate closingTo = null;
+		if (!closingToInput.isEmpty()) {
+			try {
+				closingTo = LocalDate.parse(closingToInput, DateTimeFormatter.ISO_DATE);
+			} catch (DateTimeParseException e) {
+				System.out.println("Invalid date format. Please use YYYY-MM-DD. Closing Date To filter ignored.");
+			}
+		}
 		
 		ArrayList<InternshipOpportunity> internshipList = 
 				InternshipOpportunityManager.getInternshipOpps(
@@ -257,14 +287,12 @@ public class Student extends User implements IStudent, Serializable {
 				
 		super.setInternshipFilterSettings(settings);
 		
-		if (internshipList != null) {
+		System.out.print("\033[H\033[2J");
+		if (internshipList != null && !internshipList.isEmpty()) {
 			System.out.println("===== LIST OF INTERNSHIPS =====");
-			for (InternshipOpportunity iOps : internshipList) {
-				iOps.printForStudent();
-				System.out.println("-".repeat(40));
-			}
+			InternshipOpportunityView.printList(internshipList);
 		} else {
-			System.out.println("Sorry, the list of internships are not available at the moment. Please try again later.");
+			System.out.println("Sorry, no internship opportunities are available at the moment. Please check back later.");
 		}
 	}
 	
@@ -293,35 +321,12 @@ public class Student extends User implements IStudent, Serializable {
 		
 		if (internshipList != null) {
 			System.out.println("===== LIST OF INTERNSHIPS =====");
-			for (InternshipOpportunity internship : internshipList) {
-				internship.printForStudent();
-				System.out.println("-".repeat(40));
-			}
+			InternshipOpportunityView.printInternshipOppForStudentList(internshipList);
 		} else {
 			System.out.println("Sorry, the list of internships are not available at the moment. Please try again later.");
 		}
 	}
 
-	public String getMajor() {
-		return major;
-	}
-
-	public void setMajor(String major) {
-		this.major = major;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-	
-	public void acceptInternshipPlacement(Scanner sc) {
-		
-	}
-	
 //	 WITHDRAW INTERNSHIP APPLICATION
 	public void withdrawApp(Scanner sc) {
 		System.out.print("\033[H\033[2J");
@@ -343,12 +348,7 @@ public class Student extends User implements IStudent, Serializable {
 		if (internshipAppList.size()>0) {
 			System.out.println("===== SUBMIT WITHDRAWAL REQUEST =====");
 			
-			InternshipApplicationView.printInternshipAppTable(internshipAppList);
-			
-//			for (InternshipApplication internshipApp : internshipAppList) {
-//				internshipApp.print();
-//				System.out.println("-".repeat(40));
-//			}
+			InternshipApplicationView.printTable(internshipAppList);
 			
 			String applicationID = "";
 			boolean found = false;
@@ -409,25 +409,37 @@ public class Student extends User implements IStudent, Serializable {
 			if (internshipID.isEmpty()) continue;
 			
 			final String currInternshipID = internshipID; // for lambda fn
+			boolean invalidated = false;
+			
+			if (internshipApps
+					.stream()
+					.anyMatch(its -> 
+					its.getInternshipID().equals(currInternshipID) &&
+					its.getStudentID().equals(super.getUserID()))) {
+		        System.out.println("You have already submitted an application for this Internship ID. Please select another Internship ID.");
+		        internshipID = ""; 
+		        continue;
+		    }
 			
 			for (InternshipOpportunity internship : internshipList) {
 				if (internshipID.equals(internship.getInternshipID())) {
 					if (internship.getStatus()==InternshipOpportunityStatus.FILLED) {
+						invalidated = true;
 						System.out.println("Sorry, the internship you've tried to apply is full. Please select another Internship ID.");
 						break;
 					}
 					else if (LocalDate.now().isBefore(internship.getClosingDate())) {
+						invalidated = true;
 						System.out.println("Sorry, the internship you've tried to apply is past its closing date. Please select another Internship ID.");
+						break;
 					}
 					else if (internship.getStatus()==InternshipOpportunityStatus.PENDING) {
+						invalidated = true;
 						System.out.println("Sorry, the internship you've tried to apply is currently awaiting approval from one of our career center staff. Please select another Internship ID.");
 						break;
 					}
-					else if (internshipApps.stream().map(its->its.getInternshipID()).anyMatch(id->id.equals(currInternshipID))) {
-						System.out.println("You have already subimitted this Internship ID. Please select another Internship ID.");
-						break;
-					}
 					else if (internship.getLevel()==InternshipOpportunityLevel.ADVANCED && year<=2) {
+						invalidated = true;
 						System.out.println("Sorry, this internship is not available for you as it's only available for year 3 students and above. Please select another Internship ID.");
 						break;
 					}
@@ -440,11 +452,13 @@ public class Student extends User implements IStudent, Serializable {
 							InternshipApplicationStatus.PENDING
 					);
 					InternshipApplicationManager.addInternshipApp(internshipApp);
+					
+					System.out.print("\033[H\033[2J");
 					System.out.println("Successfully submitted internship application! Good luck with your application!");
 					break;
 				}
 			}
-			if (!found) System.out.println("Sorry, internship ID not found. Please try again.");
+			if (!found && !invalidated) System.out.println("Sorry, internship ID not found. Please try again.");
 		}
 	}
 	
@@ -459,12 +473,7 @@ public class Student extends User implements IStudent, Serializable {
 		}
 		System.out.println("Congratulations! You have sucessful internship applications!");
 		System.out.println("==== Your Successful Applications ====");
-		InternshipApplicationView.printInternshipAppTable(iApps);
-		
-//		for (InternshipApplication iApp : iApps) {
-//			iApp.print();
-//			System.out.println("-".repeat(40));
-//		}
+		InternshipApplicationView.printTable(iApps);
 		
 		String applicationID = "";
 		boolean found = false;
@@ -489,29 +498,19 @@ public class Student extends User implements IStudent, Serializable {
 							// iterate backwards to safely remove elems
 							for (int i = allIApps.size()-1;i>=0;i--) {
 								InternshipApplication iApp = allIApps.get(i);
-								if (iApp.getApplicationID().equals(studentIApp.getApplicationID())) {
-									continue;
-								}
-								
 								if (iApp.getStudentID().equals(super.getUserID())) {
-									if (iApp.getStatus() != InternshipApplicationStatus.ACCEPTED &&
-											iApp.getStatus() != InternshipApplicationStatus.REJECTED &&
-											iApp.getStatus() != InternshipApplicationStatus.SUCCESSFUL)
-										allIApps.remove(i);
-								}
+							        if (iApp.getStatus() != InternshipApplicationStatus.ACCEPTED) {
+							        	allIApps.remove(i);
+							        }
+							    }
 							}
-//							for (InternshipApplication iApplication : allIApps) {
-//								if (iApplication.getApplicationID().equals(studentIApp.getApplicationID())) break;
-//								
-//								// withdraw others
-//								if (iApplication.getStudentID().equals(super.getUserID())) {
-//									allIApps.remove(iApplication);
-//								}
-//							}
+							InternshipApplicationManager.saveInternshipApps(allIApps);
 							InternshipOpportunityManager.updateFilledPlaces(); // update filled status if filled
+							System.out.print("\033[H\033[2J");
 							System.out.println("Successfully accepted internship placement");
 						} else if (choice==2) {
 							studentIApp.setStatus(InternshipApplicationStatus.REJECTED);
+							System.out.print("\033[H\033[2J");
 							System.out.println("Successfully rejected internship placement");
 						} else {
 							System.out.println("Please select either 1 or 2.");
@@ -545,44 +544,40 @@ public class Student extends User implements IStudent, Serializable {
 			System.out.println("=====================================================");
 			
 			System.out.print("Enter a choice: ");
-			choice = sc.nextInt();
-			if (choice==1) {
-				viewInternshipOpps(sc);
-			} else if (choice==2) {
-				viewInternshipApplications(sc);
-			} else if (choice==3) {
-				applyInternship(sc);
-			} else if (choice==4) {
-				acceptRejectInternshipPlacement(sc);
-			} else if (choice==5) {
-				withdrawApp(sc);
-			} else if (choice==6) {
-				viewProfile(sc);
-			} else if (choice==7) {
-				changePassword(sc);
-			} else if (choice==8) {
-				System.out.print("\033[H\033[2J");
-				System.out.println("Logged out!");
-			}
+			
+			String input = sc.next();	
+			try {
+                choice = Integer.parseInt(input.trim()); 
+                
+    			if (choice==1) {
+    				viewInternshipOpps(sc);
+    			} else if (choice==2) {
+    				viewInternshipApplications(sc);
+    			} else if (choice==3) {
+    				applyInternship(sc);
+    			} else if (choice==4) {
+    				acceptRejectInternshipPlacement(sc);
+    			} else if (choice==5) {
+    				withdrawApp(sc);
+    			} else if (choice==6) {
+    				viewProfile(sc);
+    			} else if (choice==7) {
+    				changePassword(sc);
+    			} else if (choice==8) {
+    				System.out.print("\033[H\033[2J");
+    				System.out.println("Logged out!");
+    			} else {
+    				System.out.print("\033[H\033[2J");
+                    System.out.println("Invalid choice. Please enter a valid number (1-8).");
+                    choice = 0;
+    			}
+            } catch (NumberFormatException e) {
+            	System.out.print("\033[H\033[2J");
+                System.out.println("Invalid choice. Please enter a valid number (1-8).");
+                choice = 0;
+            }
+			
 		}
-	}
-
-	@Override
-	public void print() {
-		ArrayList<InternshipApplication> internshipApps = InternshipApplicationManager.getInternshipApps(
-				"",
-				getUserID(),
-				"",
-				InternshipApplicationStatus.PENDING
-			);
-		
-		System.out.println("Student ID         : " + getUserID());
-		System.out.println("Name               : " + getName());
-		System.out.println("Major              : " + major);
-		System.out.println("Year               : " + year);
-		System.out.println("Email              : " + getEmail());
-		String internshipsApplied = internshipApps.stream().map(its->its.getInternshipID()).collect(Collectors.joining(", "));
-		System.out.println("Internhips Applied : " + (!internshipsApplied.isEmpty() ? internshipsApplied : "None"));
 	}
 
 	@Override
@@ -615,5 +610,23 @@ public class Student extends User implements IStudent, Serializable {
 			}
 		}
 		System.out.println("Your password has been successfully changed!");
+	}
+	
+	// GETTERS & SETTERS
+	
+	public String getMajor() {
+		return major;
+	}
+
+	public void setMajor(String major) {
+		this.major = major;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
 	}
 }

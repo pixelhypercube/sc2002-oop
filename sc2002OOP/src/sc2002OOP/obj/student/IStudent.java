@@ -80,11 +80,6 @@ public interface IStudent {
     void printAllInternships();
     
     // --- Utility and Academic Attributes ---
-
-    /**
-     * Prints the concise details (ID, Name, Major, Year) of the current Student object to the console.
-     */
-    void print();
    
     /**
      * Retrieves the student's primary major.

@@ -124,7 +124,6 @@ public class Viewer {
 		// HEADERS
 		
 		ArrayList<Integer> maxColWidths = getIndivColWidths(headers,data);
-		
 		printHeaders(maxColWidths,headers);
 		printData(maxColWidths,data);
 	}

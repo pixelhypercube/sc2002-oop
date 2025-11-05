@@ -8,23 +8,30 @@ import sc2002OOP.main.FileIOHandler;
 import sc2002OOP.main.Viewer;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaff;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaffManager;
+import sc2002OOP.obj.careercenterstaff.CareerCenterStaffView;
 import sc2002OOP.obj.company.Company;
 import sc2002OOP.obj.company.CompanyManager;
+import sc2002OOP.obj.company.CompanyView;
 import sc2002OOP.obj.companyrepresentative.CompanyRepresentative;
 import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeManager;
 import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeStatus;
+import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeView;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplicationStatus;
+import sc2002OOP.obj.internshipapplicaton.InternshipApplicationView;
 import sc2002OOP.obj.internshipopportunity.InternshipOpportunity;
 import sc2002OOP.obj.internshipopportunity.InternshipOpportunityLevel;
 import sc2002OOP.obj.internshipopportunity.InternshipOpportunityManager;
 import sc2002OOP.obj.internshipopportunity.InternshipOpportunityStatus;
+import sc2002OOP.obj.internshipopportunity.InternshipOpportunityView;
 import sc2002OOP.obj.student.Student;
 import sc2002OOP.obj.student.StudentManager;
+import sc2002OOP.obj.student.StudentView;
 import sc2002OOP.obj.withdrawalrequest.WithdrawalRequest;
 import sc2002OOP.obj.withdrawalrequest.WithdrawalRequestManager;
 import sc2002OOP.obj.withdrawalrequest.WithdrawalRequestStatus;
+import sc2002OOP.obj.withdrawalrequest.WithdrawalRequestView;
 
 
 /*
@@ -32,6 +39,27 @@ import sc2002OOP.obj.withdrawalrequest.WithdrawalRequestStatus;
  * 
  * */
 public class Test {
+	public static void printCsvData() {
+		ArrayList<Student> students = retrieveStudentsFromCSV();
+		ArrayList<CareerCenterStaff> staff = retrieveStaffFromCSV();
+		ArrayList<CompanyRepresentative> companyReps = retrieveCompanyRepsFromCSV();
+		ArrayList<InternshipApplication> iApps = retrieveInternshipAppsFromCSV();
+		ArrayList<InternshipOpportunity> iOpps = retrieveInternshipOppsFromCSV();
+		ArrayList<WithdrawalRequest> wReqs = retrieveWithdrawalReqsFromCSV();
+		
+		System.out.println("====== CAREER CENTER STAFF TABLE ======");
+		CareerCenterStaffView.printTable(staff);
+		System.out.println("====== COMPANY REPRESENTATIVES TABLE ======");
+		CompanyRepresentativeView.printTable(companyReps);
+		System.out.println("====== INTERNSHIP APPLICATIONS TABLE ======");
+		InternshipApplicationView.printTable(iApps);
+		System.out.println("====== INTERNSHIP OPPORTUNITIES TABLE ======");
+		InternshipOpportunityView.printList(iOpps);
+		System.out.println("====== STUDENTS TABLE ======");
+		StudentView.printTable(students);
+		System.out.println("====== WITHDRAWAL REQUESTS TABLE ======");
+		WithdrawalRequestView.printTable(wReqs);
+	}
 	public static void printTestTables() {
 		ArrayList<String> headers = new ArrayList<>();
 	    headers.add("A");
@@ -112,46 +140,54 @@ public class Test {
 		ArrayList<Company> companies = CompanyManager.retrieveCompanies();
 		
 		System.out.println("====== CAREER CENTER STAFF TABLE ======");
-		for (CareerCenterStaff st : staff) {
-			st.print();
-			System.out.println("-".repeat(40));
-		}
+		CareerCenterStaffView.printTable();
+//		for (CareerCenterStaff st : staff) {
+//			st.
+//			System.out.println("-".repeat(40));
+//		}
 		
 		System.out.println("====== COMPANY TABLE ======");
-		for (Company company : companies) {
-			company.print();
-			System.out.println("-".repeat(40));
-		}
+		CompanyView.printTable();
+//		for (Company company : companies) {
+//			company.print();
+//			System.out.println("-".repeat(40));
+//		}
 		
 		System.out.println("====== COMPANY REPRESENTATIVES TABLE ======");
-		for (CompanyRepresentative companyRep : companyReps) {
-			companyRep.print();
-			System.out.println("-".repeat(40));
-		}
+		CompanyRepresentativeView.printTable();
+		
+//		for (CompanyRepresentative companyRep : companyReps) {
+//			CompanyRepresentativeView.print(companyRep);
+//			System.out.println("-".repeat(40));
+//		}
 		
 		System.out.println("====== INTERNSHIP APPLICATIONS TABLE ======");
-		for (InternshipApplication iApp : iApps) {
-			iApp.print();
-			System.out.println("-".repeat(40));
-		}
+		InternshipApplicationView.printTable();
+//		for (InternshipApplication iApp : iApps) {
+//			iApp.print();
+//			System.out.println("-".repeat(40));
+//		}
 		
 		System.out.println("====== INTERNSHIP OPPORTUNITIES TABLE ======");
-		for (InternshipOpportunity iOpp : iOpps) {
-			iOpp.print();
-			System.out.println("-".repeat(40));
-		}
+		InternshipOpportunityView.printList();
+//		for (InternshipOpportunity iOpp : iOpps) {
+//			iOpp.print();
+//			System.out.println("-".repeat(40));
+//		}
 		
 		System.out.println("====== STUDENTS TABLE ======");
-		for (Student student : students) {
-			student.print();
-			System.out.println("-".repeat(40));
-		}
+		StudentView.printTable();
+//		for (Student student : students) {
+//			student.print();
+//			System.out.println("-".repeat(40));
+//		}
 		
 		System.out.println("===== WITHDRAWAL REQUESTS TABLE ======");
-		for (WithdrawalRequest wr : wReqs) {
-			wr.print();
-			System.out.println("-".repeat(40));
-		}
+		WithdrawalRequestView.printTable();
+//		for (WithdrawalRequest wr : wReqs) {
+//			wr.print();
+//			System.out.println("-".repeat(40));
+//		}
 	}
 	
 	public static ArrayList<CareerCenterStaff> retrieveStaffFromCSV() {
@@ -387,10 +423,11 @@ public class Test {
 		
 		int index = 0;
 		ArrayList<String> headers = new ArrayList<>();
-		WithdrawalRequest withdrawalReq = new WithdrawalRequest();
 		for (String line : FileIOHandler.getFileContents(Constants.WITHDRAWAL_REQS_FILE).split(Constants.NEW_LINE)) {
+			System.out.println(line);
 			if (line.trim().isEmpty()) continue;
 			
+			WithdrawalRequest withdrawalReq = new WithdrawalRequest();
 			String[] data = line.split(Constants.DELIMITER);
 			for (int i = 0;i<data.length;i++) {
 				String cell = data[i];

@@ -31,11 +31,6 @@ public class Company implements Serializable, ICompany {
 		this.companyName = companyName;
 	}
 	
-	public void print() {
-		System.out.println("Company ID: "+companyID);
-		System.out.println("Company Name: "+companyName);
-	}
-	
 	// GETTERS AND SETTERS
 	public String getCompanyID() {
 		return companyID;

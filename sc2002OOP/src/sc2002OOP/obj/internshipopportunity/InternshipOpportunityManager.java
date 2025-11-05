@@ -50,7 +50,6 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationStatus;
  */
 public class InternshipOpportunityManager {
 	private static final String PATH = 
-			Constants.BASE_DIR + 
 			Constants.FILE_SERIALIZED_DIR + 
 			Constants.INTERNSHIP_OPPORTUNITIES_DATA_FILE;
 	private static ArrayList<InternshipOpportunity> internshipOpps;

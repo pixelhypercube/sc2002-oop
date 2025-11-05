@@ -16,6 +16,7 @@ import sc2002OOP.main.FileIOHandler;
 import sc2002OOP.main.PasswordManager;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaff;
 import sc2002OOP.obj.careercenterstaff.CareerCenterStaffManager;
+import sc2002OOP.obj.company.Company;
 import sc2002OOP.obj.company.CompanyManager;
 import sc2002OOP.obj.company.CompanyView;
 
@@ -42,7 +43,6 @@ import sc2002OOP.obj.company.CompanyView;
  */
 public class CompanyRepresentativeManager {
 	private static final String PATH = 
-			Constants.BASE_DIR + 
 			Constants.FILE_SERIALIZED_DIR + 
 			Constants.COMPANY_REPS_DATA_FILE;
 	
@@ -161,13 +161,19 @@ public class CompanyRepresentativeManager {
 		
 		// companyID
 		String companyID = "";
-		while (companyID.isEmpty()) {
-			System.out.println();
-			CompanyView.printCompanyTable();
+		boolean found = false;
+		while (companyID.isEmpty() || !found) {
+			System.out.println("Company Table:");
+			CompanyView.printTable();
 			System.out.print("Enter company ID:");
 			companyID = sc.nextLine();
 			if (companyID.isEmpty()) {
 				System.out.println("Company Name not filled!");
+			} else {
+				Company company = CompanyManager.getCompanyByID(companyID);
+				if (company==null) {
+					System.out.println("Company ID not found!");
+				} else found = true;
 			}
 		}
 		

@@ -16,13 +16,23 @@ import sc2002OOP.main.Viewer;
  * and utilizes the {@code Viewer} class to handle the formatting and printing of tables.
  * </p>
  *
- * @author (Assumed Authors from Project)
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
  * @version 1.0
  * @see sc2002OOP.main.Viewer
  * @see sc2002OOP.obj.internshipapplicaton.InternshipApplication
  * @see sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager
  */
 public class InternshipApplicationView {
+	public void print(InternshipApplication iApp) {
+		System.out.println("Application ID: " + iApp.getApplicationID());
+		System.out.println("Student ID:     " + iApp.getStudentID());
+		System.out.println("Internship ID:  " + iApp.getInternshipID());
+		System.out.println("Status:         " + iApp.getStatus());
+	}
 	
 	/**
      * Prints a formatted table listing **all Internship Applications** currently managed by 
@@ -37,7 +47,7 @@ public class InternshipApplicationView {
      *
      * @see #printInternshipAppTable(ArrayList)
      */
-	public static void printInternshipAppTable() {
+	public static void printTable() {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
 //		headers.add("Student ID");
@@ -66,7 +76,7 @@ public class InternshipApplicationView {
      * @param iApps An {@code ArrayList} of {@code InternshipApplication} objects to be displayed.
      * @see #printInternshipAppTable()
      */
-	public static void printInternshipAppTable(ArrayList<InternshipApplication> iApps) {
+	public static void printTable(ArrayList<InternshipApplication> iApps) {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
 //		headers.add("Student ID");

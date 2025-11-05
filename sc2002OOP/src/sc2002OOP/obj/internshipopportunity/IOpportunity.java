@@ -27,19 +27,7 @@ import sc2002OOP.obj.companyrepresentative.CompanyRepresentative;
  */
 public interface IOpportunity {
     
-    /**
-     * Prints the full administrative details of the internship opportunity to the console, 
-     * including status, dates, and internal flags.
-     */
-    void print();
-    
-    /**
-     * Prints the details of the internship opportunity in a restricted format suitable for 
-     * student viewing, excluding administrative details like status and internal IDs.
-     */
-    void printForStudent();
-    
-    // --- Getter and Setter Methods for Core Attributes ---
+	// GETTERS & SETTERS
     
     /**
      * Retrieves the unique identifier for this internship opportunity.

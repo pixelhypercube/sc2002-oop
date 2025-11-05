@@ -17,6 +17,7 @@ import sc2002OOP.obj.internshipopportunity.InternshipOpportunityManager;
 import sc2002OOP.obj.student.*;
 import sc2002OOP.obj.withdrawalrequest.WithdrawalRequest;
 import sc2002OOP.obj.withdrawalrequest.WithdrawalRequestManager;
+import sc2002OOP.test.Test;
 
 
 /**
@@ -119,7 +120,7 @@ public class IPMS {
 	 */
 	public static void main(String[] args) {
 		initInstances();
-		
+		System.out.print("\033[H\033[2J");
 		try (
 				Scanner sc = new Scanner(System.in);
 			) {
@@ -141,27 +142,34 @@ public class IPMS {
 					users.add(companyRep);
 				}
 				
-				
-//				Test.printAllRecords();
+//				Test.printCsvData();
+				Test.printAllRecords();
 //				Test.printTestTables();
 				System.out.print("Your Choice: ");
-				if (sc.hasNextInt()) {
-					choice = sc.nextInt();
-					if (choice==1) {
-						User user = User.login(sc,users);
-						if (user != null) user.displayHome(sc);
-					} else if (choice==2) {
-						CompanyRepresentativeManager.register(sc);
-					}
-					else if (choice==3) {
-						System.out.println("Bon Voyage");
-						close();
-						break;
-					}
-				} else {
-					System.out.println("Invalid choice. Please enter either 1, 2 or 3.");
-					sc.next();
-				}
+				
+				
+				String input = sc.next();	
+				try {
+	                choice = Integer.parseInt(input.trim()); 
+	                
+	                if (choice==1) {
+	                    User user = User.login(sc, users);
+	                    if (user != null) user.displayHome(sc);
+	                } else if (choice==2) {
+	                    CompanyRepresentativeManager.register(sc);
+	                } else if (choice==3) {
+	                    System.out.println("Bon Voyage");
+	                    close();
+	                    break;
+	                } else {
+	                	System.out.print("\033[H\033[2J");
+	                    System.out.println("Invalid choice. Please enter a valid number (1, 2 or 3).");
+	                }
+	            } catch (NumberFormatException e) {
+	            	System.out.print("\033[H\033[2J");
+	                System.out.println("Invalid choice. Please enter a valid number (1, 2 or 3).");
+	                choice = 0;
+	            }
 			}
 		} catch (Exception e) {
 			System.err.println("An unexpected error occurred: " + e.getMessage());

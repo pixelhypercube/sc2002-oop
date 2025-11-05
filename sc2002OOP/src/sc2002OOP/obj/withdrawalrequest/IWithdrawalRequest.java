@@ -22,11 +22,6 @@ package sc2002OOP.obj.withdrawalrequest;
 public interface IWithdrawalRequest {
 	
 	/**
-	 * Prints the concise details of the withdrawal request to the standard output.
-	 */
-	void print();
-		
-	/**
 	 * Retrieves the unique identifier of the internship application associated with this request.
 	 * @return The application ID as a <code>String</code>.
 	 */

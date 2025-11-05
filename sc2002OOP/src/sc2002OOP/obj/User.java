@@ -97,12 +97,12 @@ public abstract class User implements Serializable {
      * @return The authenticated <code>User</code> object if login is successful, or <code>null</code> if authentication fails or if a Company Representative is pending/rejected.
      */
 	public static User login(Scanner sc, ArrayList<User> users) {
+		System.out.print("\033[H\033[2J");
 		String uID = "";
 		String pwd = "";
 
 		boolean userFound = false;
 		while (uID.isEmpty() || pwd.isEmpty() || !userFound) {
-			System.out.print("\033[H\033[2J");
 			System.out.println("==== Login ====");
 			System.out.print("Enter Your User ID: ");
 			uID = sc.next();
@@ -137,7 +137,10 @@ public abstract class User implements Serializable {
 						}
 					}
 				}
-				if (!userFound) System.out.println("Sorry, User ID "+uID+" not found. Please try again.");
+				if (!userFound) {
+					System.out.print("\033[H\033[2J");
+					System.out.println("Sorry, User ID "+uID+" not found. Please try again.");
+				}
 			}
 		}
 		return null;

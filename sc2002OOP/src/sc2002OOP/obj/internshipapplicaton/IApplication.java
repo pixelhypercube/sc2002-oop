@@ -22,10 +22,10 @@ package sc2002OOP.obj.internshipapplicaton;
  */
 public interface IApplication {
     
-    /**
-     * Prints the concise details of the internship application to the standard output.
-     */
-    void print();
+//    /**
+//     * Prints the concise details of the internship application to the standard output.
+//     */
+//    void print();
     
     /**
      * Retrieves the unique identifier for this application record.

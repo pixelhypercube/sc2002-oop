@@ -35,7 +35,6 @@ import sc2002OOP.main.Constants;
  */
 public class WithdrawalRequestManager {
 	private final static String PATH = 
-			Constants.BASE_DIR + 
 			Constants.FILE_SERIALIZED_DIR + 
 			Constants.WITHDRAWAL_REQS_DATA_FILE;
 	

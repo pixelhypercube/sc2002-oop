@@ -16,18 +16,17 @@ import sc2002OOP.main.Viewer;
  * handle the actual printing and formatting of the table output.
  * </p>
  *
- * @author Kee Kai Wen (Assumed Author)
- * @author Kelvin Tay Wei Jie (Assumed Author)
- * @author Koay Jun Zhi (Assumed Author)
- * @author Lim Jia Wei Jerald (Assumed Author)
- * @author Teo Kai Jie (Assumed Author)
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
  * @version 1.0
  * @see sc2002OOP.main.Viewer
  * @see sc2002OOP.obj.company.Company
  * @see sc2002OOP.obj.company.CompanyManager
  */
 public class CompanyView {
-	
 	/**
      * Prints a formatted table listing **all companies** currently managed by the {@code CompanyManager}.
      * <p>
@@ -41,8 +40,7 @@ public class CompanyView {
      * @implNote The headers are hardcoded as "Company ID" and "Company Name".
      * @see #printCompanyTable(ArrayList)
      */
-	public static void printCompanyTable() {
-		System.out.println("===== COMPANY LIST =====");
+	public static void printTable() {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Company ID");
 		headers.add("Company Name");
@@ -67,8 +65,7 @@ public class CompanyView {
      * @implNote The headers are hardcoded as "Company ID" and "Company Name".
      * @see #printCompanyTable()
      */
-	public static void printCompanyTable(ArrayList<Company> companies) {
-		System.out.println("===== COMPANY LIST =====");
+	public static void printTable(ArrayList<Company> companies) {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Company ID");
 		headers.add("Company Name");

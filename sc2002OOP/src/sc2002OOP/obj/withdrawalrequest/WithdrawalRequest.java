@@ -45,11 +45,6 @@ public class WithdrawalRequest implements Serializable, IWithdrawalRequest {
 		this.status = status;
 	}
 	
-	public void print() {
-		System.out.println("Application ID: " + applicationID);
-		System.out.println("Status:         " + status);
-	}
-	
 	public WithdrawalRequestStatus getStatus() {
 		return status;
 	}

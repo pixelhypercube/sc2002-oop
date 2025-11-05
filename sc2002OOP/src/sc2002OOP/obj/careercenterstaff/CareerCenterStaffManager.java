@@ -36,7 +36,6 @@ import sc2002OOP.main.FileIOHandler;
  */
 public class CareerCenterStaffManager {
 	private final static String PATH = 
-			Constants.BASE_DIR + 
 			Constants.FILE_SERIALIZED_DIR + 
 			Constants.STAFF_DATA_FILE;
 	private static ArrayList<CareerCenterStaff> careerCenterStaff;

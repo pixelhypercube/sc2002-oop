@@ -33,16 +33,16 @@ public class FileIOHandler {
      * Reads a specified CSV file from the classpath, prints its contents line by line to the console, 
      * and splits the fields using the primary system delimiter (<code>Constants.DELIMITER</code>).
      *
-     * @param path The filename (e.g., "students.csv") relative to <code>Constants.FILE_PATH</code>.
+     * @param path The filename (e.g., "students.csv") relative to <code>Constants.RESOURCE_DATA_FOLDER</code>.
      */
 	public static void readFile(String path) {
 		String line;
 		try (
-				var inputStream = FileIOHandler.class.getResourceAsStream(Constants.FILE_PATH+path);
+				var inputStream = FileIOHandler.class.getResourceAsStream(Constants.RESOURCE_DATA_FOLDER+path);
 				BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 			) {
 			if (inputStream==null)
-				throw new IOException("Resource not found on classpath: " + Constants.FILE_PATH + path);
+				throw new IOException("Resource not found on classpath: " + Constants.RESOURCE_DATA_FOLDER + path);
 			while ((line = br.readLine()) != null) {
 				String[] data = line.split(Constants.DELIMITER);
 				
@@ -61,18 +61,18 @@ public class FileIOHandler {
      * Reads a specified file from the classpath and returns its entire content as a single 
      * <code>String</code>, with lines separated by the newline character.
      *
-     * @param path The filename (e.g., "students.csv") relative to <code>Constants.FILE_PATH</code>.
+     * @param path The filename (e.g., "students.csv") relative to <code>Constants.RESOURCE_DATA_FOLDER</code>.
      * @return The entire content of the file as a <code>String</code>, or <code>null</code> if an error occurs.
      */
 	public static String getFileContents(String path) {
 		String line;
 		String res = "";
 		try (
-				var inputStream = FileIOHandler.class.getResourceAsStream(Constants.FILE_PATH+path);
+				var inputStream = FileIOHandler.class.getResourceAsStream(Constants.RESOURCE_DATA_FOLDER+path);
 				BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 		) {
 			if (inputStream==null)
-				throw new IOException("Resource not found on classpath: " + Constants.FILE_PATH + path);
+				throw new IOException("Resource not found on classpath: " + Constants.RESOURCE_DATA_FOLDER + path);
 			
 			while ((line = br.readLine()) != null) {
 				res += line + "\n";
@@ -87,7 +87,7 @@ public class FileIOHandler {
 	
 	/**
      * Writes the given content to a file, **overwriting** all previous contents. The file is assumed 
-     * to be located in the default data directory (<code>Constants.FILE_PATH</code>).
+     * to be located in the default data directory (<code>Constants.RESOURCE_DATA_FOLDER</code>).
      *
      * @implNote **CAUTION:** This operation overwrites the entire record of the file.
      * @param path The filename to write to (e.g., "students.csv").
@@ -95,7 +95,7 @@ public class FileIOHandler {
      */
 	public static void writeFileContents(String path, String amendedContent) {
 		try (
-				FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\src\\" + Constants.FILE_PATH + path);
+				FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\src\\" + Constants.RESOURCE_DATA_FOLDER + path);
 				BufferedWriter bw = new BufferedWriter(fw);
 		) {
 			bw.write(amendedContent);
@@ -113,15 +113,18 @@ public class FileIOHandler {
      * @param dir The directory path (e.g., <code>Constants.EXPORT_REPORTS_PATH</code>).
      * @param amendedContent The new content to write to the file as a single <code>String</code>.
      */
-	public static void writeFileContents(String path, String dir, String amendedContent) {
+	public static boolean writeFileContents(String path, String dir, String amendedContent) {
 		try (
-				FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\src\\" + dir + path);
+				FileWriter fw = new FileWriter(dir + path);
 				BufferedWriter bw = new BufferedWriter(fw);
 		) {
 			bw.write(amendedContent);
+			return true;
 		} catch (IOException e) {
 			System.err.println("File + " + path + " could not be read.");
 			e.printStackTrace();
+			return false;
 		}
 	}
+
 }
