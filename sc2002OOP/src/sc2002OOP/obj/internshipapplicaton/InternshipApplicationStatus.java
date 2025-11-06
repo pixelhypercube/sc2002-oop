@@ -3,12 +3,9 @@ package sc2002OOP.obj.internshipapplicaton;
 /**
  * <h1>Internship Application Status</h1>
  * <p>
- * This enumeration defines the possible **status** values for an <code>InternshipApplication</code> 
+ * This enumeration defines the possible <b>status</b> values for an {@link sc2002OOP.obj.internshipapplicaton.InternshipApplication InternshipApplication}
  * throughout its lifecycle, from submission by a student to final outcome.
  * </p>
- * @apiNote This status is managed by two primary roles: the <code>CompanyRepresentative</code>, 
- * who sets the initial ACCEPTED/REJECTED status, and the system, which tracks the final 
- * SUCCESSFUL/UNSUCCESSFUL state upon confirmation or withdrawal.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -25,25 +22,23 @@ public enum InternshipApplicationStatus {
 	PENDING,
 	
 	/**
-	 * Status set by the Company Representative when they initially select the applicant. 
-	 * This may precede the final SUCCESSFUL status.
+	 * Status set by the student to confirm their successful application.
 	 */
 	ACCEPTED,
 	
 	/**
-	 * Status set by the Company Representative when the applicant is not selected.
+	 * Status set by the student to reject their successful application.
 	 */
 	REJECTED,
 	
 	/**
-	 * Final status: The application has been fully processed and the student has been 
-	 * officially placed into the internship.
+	 * Status set by the Company Representative that determines that the student's application is successful, 
+	 * where students can choose to either accept or reject the offer (i.e. change to ACCEPTED / REJECTED status)
 	 */
 	SUCCESSFUL,
 	
 	/**
-	 * Final status: The application was unsuccessful, either due to rejection by the company 
-	 * or withdrawal by the student.
+	 * Status set by the Company Representative that determines that the student's application is not successful.
 	 */
 	UNSUCCESSFUL
 }

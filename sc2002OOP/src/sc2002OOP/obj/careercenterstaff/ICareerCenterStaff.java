@@ -15,10 +15,6 @@ import sc2002OOP.obj.withdrawalrequest.WithdrawalRequestStatus;
  * Career Center Staff user within the IPMS. It specifies the core business logic methods related 
  * to system oversight and entity approval management.
  * </p>
- * @apiNote This contract requires methods for <b>state management</b> (<code>approveReject...</code>) 
- * for key entities and basic user functions inherited from the base user model. Implementations 
- * must provide the logic for handling pending items like <b>Company Representative registrations</b>, 
- * <b>Internship Opportunities</b>, and <b>Withdrawal Requests</b>.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

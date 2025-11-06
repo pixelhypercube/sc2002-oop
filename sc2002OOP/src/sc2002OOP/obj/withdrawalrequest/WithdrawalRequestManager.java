@@ -15,15 +15,10 @@ import sc2002OOP.main.Constants;
 /**
  * <h1>Internship Withdrawal Request Data Manager</h1>
  * <p>
- * This class serves as the **dedicated manager** for all <code>WithdrawalRequest</code> 
+ * This class serves as the <b>dedicated manager</b> for all {@link sc2002OOP.obj.withdrawalrequest.WithdrawalRequest WithdrawalRequest}
  * objects within the IPMS. It is responsible for initializing the data store, handling 
  * persistence (saving and loading) of requests, and managing unique request IDs.
  * </p>
- * @apiNote This class utilizes the **Singleton design pattern** to ensure only one instance 
- * manages the request data globally. It implements **persistence** by serializing the list 
- * of requests to a DAT file (<code>Constants.WITHDRAWAL_REQS_DATA_FILE</code>). The manager 
- * provides methods for retrieval and filtering requests, which are primarily managed and 
- * acted upon by the <code>CareerCenterStaff</code>.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -42,16 +37,32 @@ public class WithdrawalRequestManager {
 	private static WithdrawalRequestManager withdrawalReqManager = null;
 	private static int lastID;
 	
+	/**
+     * Private default constructor to enforce the Singleton pattern. 
+     * Initializes the withdrawal request list as empty and sets the starting ID.
+     */
 	private WithdrawalRequestManager() {
 		withdrawalReqs = new ArrayList<WithdrawalRequest>();
 		lastID = 1;
 	}
 	
+	/**
+     * Private constructor used by {@link #getInstance()} to initialize the manager with data loaded from storage.
+     * It calculates the {@code lastID} based on the loaded request list.
+     *
+     * @param withdrawalReqs The {@code ArrayList} of withdrawal requests loaded from the file.
+     */
 	private WithdrawalRequestManager(ArrayList<WithdrawalRequest> withdrawalReqs) {
 		WithdrawalRequestManager.withdrawalReqs = withdrawalReqs;
 		lastID = getNextID();
 	}
 	
+	/**
+     * Calculates the next available sequential ID by finding the maximum numeric ID 
+     * in the system. The ID is based on the application ID within the request (assuming Application ID contains the request ID).
+     *
+     * @return The next available sequential integer ID.
+     */
 	private int getNextID() {
 		if (withdrawalReqs==null || withdrawalReqs.isEmpty()) 
 			return 1;
@@ -76,12 +87,23 @@ public class WithdrawalRequestManager {
 				+ 1;
 	}
 	
+	/**
+     * Retrieves the next available sequential ID and then increments the internal counter.
+     *
+     * @return The current value of {@code lastID} before incrementing.
+     */
 	public static int getNextIDAndIncrement() {
 	    int currentID = lastID;
 	    lastID++;
 	    return currentID;
 	}
 	
+	/**
+     * Retrieves the Singleton instance of the {@code WithdrawalRequestManager}.
+     * If the instance does not exist, it loads request data from the file and creates the instance.
+     *
+     * @return The single instance of the {@code WithdrawalRequestManager}.
+     */
 	public static WithdrawalRequestManager getInstance() {
 		if (withdrawalReqManager==null) {
 			ArrayList<WithdrawalRequest> wReqs = WithdrawalRequestManager.retrieveWithdrawalReqs();
@@ -91,11 +113,20 @@ public class WithdrawalRequestManager {
 		return WithdrawalRequestManager.withdrawalReqManager;
 	}
 	
+	/**
+     * Saves the current list of withdrawal requests to the file and destroys the singleton instance.
+     * This method should be called before the application closes to ensure data persistence.
+     */
 	public static void close() {
 		WithdrawalRequestManager.saveWithdrawalRequests(withdrawalReqs);
 		WithdrawalRequestManager.withdrawalReqManager = null;
 	}
 	
+	/**
+     * Reads and deserializes the {@code WithdrawalRequest} list from the persistent storage file.
+     *
+     * @return An {@code ArrayList} containing all loaded requests, or an empty list if the file is empty or an error occurs.
+     */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<WithdrawalRequest> retrieveWithdrawalReqs() {
 		File file = new File(PATH);
@@ -122,6 +153,11 @@ public class WithdrawalRequestManager {
 		return wReqs;
 	}
 	
+	/**
+     * Serializes and writes the current list of {@code WithdrawalRequest} objects to the persistent storage file.
+     *
+     * @param wReqs The {@code ArrayList} of {@code WithdrawalRequest} objects to be saved.
+     */
 	public static void saveWithdrawalRequests(ArrayList<WithdrawalRequest> wReqs) {
 		try (
 			FileOutputStream fileOut = new FileOutputStream(PATH);
@@ -134,10 +170,23 @@ public class WithdrawalRequestManager {
 		}
 	}
 
+	/**
+     * Retrieves the complete list of all {@code WithdrawalRequest} entities currently managed in memory.
+     *
+     * @return The {@code ArrayList} of all withdrawal requests.
+     */
 	public static ArrayList<WithdrawalRequest> getWithdrawalReqs() {
 		return withdrawalReqs;
 	}
 	
+	/**
+     * Filters the list of Withdrawal Requests based on the associated application ID and/or status.
+     * If a filter parameter is {@code null} or empty, it is ignored.
+     *
+     * @param applicationID Optional filter for the original application ID (exact match).
+     * @param status Optional filter for the current status of the request.
+     * @return An {@code ArrayList} of {@code WithdrawalRequest} objects matching the criteria.
+     */
 	public static ArrayList<WithdrawalRequest> getWithdrawalReqs(String applicationID, WithdrawalRequestStatus status) {
 		return (ArrayList<WithdrawalRequest>) withdrawalReqs
 				.stream()
@@ -148,14 +197,29 @@ public class WithdrawalRequestManager {
 				.collect(Collectors.toList());
 	}
 
+	/**
+     * Replaces the current list of managed requests with a new list.
+     *
+     * @param withdrawalReqs The new {@code ArrayList} of {@code WithdrawalRequest} entities to set.
+     */
 	public static void setWithdrawalReqs(ArrayList<WithdrawalRequest> withdrawalReqs) {
 		WithdrawalRequestManager.withdrawalReqs = withdrawalReqs;
 	}
 
+	/**
+     * Retrieves the last calculated sequential ID (used to determine the next ID).
+     *
+     * @return The last sequential ID number.
+     */
 	public static int getLastID() {
 		return lastID;
 	}
 
+	/**
+     * Sets the last calculated sequential ID.
+     *
+     * @param lastID The new last sequential ID number.
+     */
 	public static void setLastID(int lastID) {
 		WithdrawalRequestManager.lastID = lastID;
 	}

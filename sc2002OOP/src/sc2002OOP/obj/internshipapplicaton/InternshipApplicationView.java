@@ -27,6 +27,12 @@ import sc2002OOP.main.Viewer;
  * @see sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager
  */
 public class InternshipApplicationView {
+	/**
+     * Prints the detailed information of a single {@code InternshipApplication} object 
+     * to the console in a line-by-line format.
+     *
+     * @param iApp The {@code InternshipApplication} object to print.
+     */
 	public void print(InternshipApplication iApp) {
 		System.out.println("Application ID: " + iApp.getApplicationID());
 		System.out.println("Student ID:     " + iApp.getStudentID());

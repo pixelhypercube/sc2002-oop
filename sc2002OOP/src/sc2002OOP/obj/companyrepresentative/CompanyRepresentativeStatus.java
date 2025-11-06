@@ -3,11 +3,9 @@ package sc2002OOP.obj.companyrepresentative;
 /**
  * <h1>Company Representative Account Status</h1>
  * <p>
- * This enumeration defines the possible **account status** values for a <code>CompanyRepresentative</code> * within the IPMS. This status is used to manage their access and onboarding process.
+ * This enumeration defines the possible <b>account status</b> values for a {@link sc2002OOP.obj.companyrepresentative.CompanyRepresentative company representative}
+ * within the IPMS. This status is used to manage their access and onboarding process.
  * </p>
- * @apiNote The status dictates whether a representative can log in and manage internships. 
- * Accounts are initialized in the <b>PENDING</b> state and must be transitioned to 
- * <b>APPROVED</b> or <b>REJECTED</b> by a <code>CareerCenterStaff</code> member.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -32,7 +30,7 @@ public enum CompanyRepresentativeStatus {
 	
 	/**
 	 * Initial status of a newly registered representative account, awaiting review and authorization 
-	 * by one of the career center staff. Access is restricted.
+	 * by one of the career center staff. Access is temporarily blocked until it's been approved (i.e. changed to APPROVED).
 	 */
 	PENDING
 }

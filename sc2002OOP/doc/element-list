@@ -1,2 +1,11 @@
 module:sc2002OOP
+sc2002OOP.main
+sc2002OOP.obj
 sc2002OOP.obj.careercenterstaff
+sc2002OOP.obj.company
+sc2002OOP.obj.companyrepresentative
+sc2002OOP.obj.internshipapplicaton
+sc2002OOP.obj.internshipopportunity
+sc2002OOP.obj.student
+sc2002OOP.obj.withdrawalrequest
+sc2002OOP.test

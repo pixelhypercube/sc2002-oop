@@ -9,14 +9,10 @@ import sc2002OOP.main.FileIOHandler;
 /**
  * <h1>Internship Withdrawal Request Data Entity</h1>
  * <p>
- * This class represents a **concrete data entity** for a formal request submitted by a 
- * <code>Student</code> to withdraw from an accepted or successful internship application. 
+ * This class represents a <b>concrete data entity</b> for a formal request submitted by a 
+ * {@link sc2002OOP.obj.student Student} to withdraw from an accepted or successful internship application. 
  * It encapsulates the necessary information to track and process the withdrawal.
  * </p>
- * @apiNote This class is a **persistent entity**, implementing <code>Serializable</code> * and the <code>IWithdrawalRequest</code> contract. The primary attribute is the 
- * **Application ID**, which links the request to the original internship application. 
- * Requests are automatically initialized with the **PENDING** status and are managed 
- * by the <code>CareerCenterStaff</code>.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -32,30 +28,60 @@ public class WithdrawalRequest implements Serializable, IWithdrawalRequest {
 	private String applicationID;
 	private WithdrawalRequestStatus status;
 	
+	/**
+     * Default constructor for the Withdrawal Request.
+     */
 	public WithdrawalRequest() {}
 	
-	// automatically pending
+	/**
+     * Constructs a Withdrawal Request, automatically setting the status to {@code PENDING}.
+     *
+     * @param applicationID The ID of the original internship application the student wishes to withdraw from.
+     */
 	public WithdrawalRequest(String applicationID) {
 		this.applicationID = applicationID;
 		status = WithdrawalRequestStatus.PENDING;
 	}
 	
+	/**
+     * Constructs a Withdrawal Request with a specified initial status.
+     *
+     * @param applicationID The ID of the original internship application the student wishes to withdraw from.
+     * @param status The initial status of the withdrawal request.
+     */
 	public WithdrawalRequest(String applicationID, WithdrawalRequestStatus status) {
 		this.applicationID = applicationID;
 		this.status = status;
 	}
 	
+	/**
+     * Retrieves the current processing status of the withdrawal request.
+     * @return The {@code WithdrawalRequestStatus} (e.g., PENDING, APPROVED, REJECTED).
+     */
 	public WithdrawalRequestStatus getStatus() {
 		return status;
 	}
+	
+	/**
+     * Sets the current processing status of the withdrawal request.
+     * @param status The new {@code WithdrawalRequestStatus}.
+     */
 	public void setStatus(WithdrawalRequestStatus status) {
 		this.status = status;
 	}
 
+	/**
+     * Retrieves the ID of the original internship application associated with this request.
+     * @return The original application ID as a String.
+     */
 	public String getApplicationID() {
 		return applicationID;
 	}
 
+	/**
+     * Sets the ID of the original internship application associated with this request.
+     * @param applicationID The new application ID.
+     */
 	public void setApplicationID(String applicationID) {
 		this.applicationID = applicationID;
 	}

@@ -8,11 +8,11 @@ import sc2002OOP.main.Viewer;
 /**
  * <h1>Company View Class</h1>
  * <p>
- * This class provides **static utility methods** for displaying company-related information to the user,
+ * This class provides <b>static utility methods</b> for displaying company-related information to the user,
  * primarily in the form of a formatted table view.
  * </p>
  * <p>
- * It utilizes the {@code CompanyManager} to retrieve company data and the {@code Viewer} class to
+ * It utilizes the {@link sc2002OOP.obj.company.CompanyManager CompanyManager} to retrieve company data and the {@link sc2002OOP.obj.Viewer Viewer} class to
  * handle the actual printing and formatting of the table output.
  * </p>
  *

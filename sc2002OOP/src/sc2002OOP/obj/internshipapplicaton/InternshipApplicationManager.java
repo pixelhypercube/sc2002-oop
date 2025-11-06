@@ -18,15 +18,10 @@ import sc2002OOP.main.Viewer;
 /**
  * <h1>Internship Application Data Manager</h1>
  * <p>
- * This class serves as the **dedicated manager** for all <code>InternshipApplication</code> objects 
+ * This class serves as the <b>dedicated manager</b> for all {@link sc2002OOP.obj.internshipapplicaton.InternshipApplication InternshipApplication} objects 
  * within the IPMS. It is responsible for initializing the application data store, handling the 
  * persistence (saving and loading) of applications, and managing unique application IDs.
  * </p>
- * @apiNote This class utilizes the **Singleton design pattern** to ensure only a single instance 
- * globally manages the application data. It implements **persistence** by serializing the list 
- * of <code>InternshipApplication</code> objects to a DAT file (<code>Constants.INTERNSHIP_APPLICATIONS_DATA_FILE</code>). 
- * The manager also handles the **auto-incrementing** of the application ID and provides methods for 
- * retrieving and performing multi-criteria filtering on existing applications.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -44,16 +39,32 @@ public class InternshipApplicationManager {
 	private static InternshipApplicationManager internshipAppsManager = null;
 	private static int lastID;
 	
+	/**
+     * Private default constructor to enforce the Singleton pattern. 
+     * Initializes the application list as empty and sets the starting ID.
+     */
 	private InternshipApplicationManager() {
 		internshipApps = new ArrayList<InternshipApplication>();
 		lastID = 1;
 	}
 
+	/**
+     * Private constructor used by {@link #getInstance()} to initialize the manager with data loaded from storage.
+     * It also calculates the {@code lastID} based on the loaded application list.
+     *
+     * @param internshipApps The {@code ArrayList} of applications loaded from the file.
+     */
 	private InternshipApplicationManager(ArrayList<InternshipApplication> internshipApps) {
 		InternshipApplicationManager.internshipApps = internshipApps;
 		lastID = getNextID();
 	}
 	
+	/**
+     * Calculates the next available sequential Application ID by finding the maximum numeric ID 
+     * currently in the system. The ID is expected to be prefixed (e.g., 'A1', where '1' is the number).
+     *
+     * @return The next available sequential integer ID.
+     */
 	private int getNextID() {
 		if (internshipApps==null || internshipApps.isEmpty()) 
 			return 1;
@@ -78,12 +89,24 @@ public class InternshipApplicationManager {
 				+ 1;
 	}
 	
+	/**
+     * Retrieves the next available sequential application ID and then increments the internal counter.
+     * This is used for generating new unique application IDs upon creation.
+     *
+     * @return The current value of {@code lastID} before incrementing.
+     */
 	public static int getNextIDAndIncrement() {
 	    int currentID = lastID;
 	    lastID++;
 	    return currentID;
 	}
 	
+	/**
+     * Retrieves the singleton instance of the {@code InternshipApplicationManager}.
+     * If the instance does not exist, it loads application data from the file and creates the instance.
+     *
+     * @return The single instance of the {@code InternshipApplicationManager}.
+     */
 	public static InternshipApplicationManager getInstance() {
 		if (internshipAppsManager==null) {
 			ArrayList<InternshipApplication> iApps = InternshipApplicationManager.retrieveInternshipApps();
@@ -93,11 +116,20 @@ public class InternshipApplicationManager {
 		return InternshipApplicationManager.internshipAppsManager;
 	}
 	
+	/**
+     * Saves the current list of internship applications to the file and destroys the singleton instance.
+     * This method should be called before the application closes to ensure data persistence.
+     */
 	public static void close() {
 		InternshipApplicationManager.saveInternshipApps(internshipApps);
 		InternshipApplicationManager.internshipAppsManager = null;
 	}
 	
+	/**
+     * Reads and deserializes the {@code InternshipApplication} list from the persistent storage file.
+     *
+     * @return An {@code ArrayList} containing all loaded {@code InternshipApplication} objects, or an empty list if the file is empty or an error occurs.
+     */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<InternshipApplication> retrieveInternshipApps() {
 		File file = new File(PATH);
@@ -124,6 +156,11 @@ public class InternshipApplicationManager {
 		return iApps;
 	}
 	
+	/**
+     * Serializes and writes the current list of {@code InternshipApplication} objects to the persistent storage file.
+     *
+     * @param iApps The {@code ArrayList} of {@code InternshipApplication} objects to be saved.
+     */
 	public static void saveInternshipApps(ArrayList<InternshipApplication> iApps) {
 		try (
 			FileOutputStream fileOut = new FileOutputStream(PATH);
@@ -136,33 +173,62 @@ public class InternshipApplicationManager {
 		}
 	}
 	
+	/**
+     * Adds a new {@code InternshipApplication} to the list managed by this manager.
+     *
+     * @param iApp The {@code InternshipApplication} object to add.
+     */
 	public static void addInternshipApp(InternshipApplication iApp) {
 		if (iApp==null) InternshipApplicationManager.getInstance();
 	    internshipApps.add(iApp);
 	}
 	
-	public static void removeInternshipApp(int index) {
-		if (internshipApps != null && index >= 0 && index < internshipApps.size()) {
-	        internshipApps.remove(index);
-	    }
-	}
-	
+	/**
+     * Retrieves the complete list of all {@code InternshipApplication} entities currently managed in memory.
+     *
+     * @return The {@code ArrayList} of all internship applications.
+     */
 	public static ArrayList<InternshipApplication> getInternshipApps() {
 		return internshipApps;
 	}
 
+	/**
+     * Replaces the current list of managed applications with a new list.
+     *
+     * @param internshipApps The new {@code ArrayList} of {@code InternshipApplication} entities to set.
+     */
 	public static void setInternshipApps(ArrayList<InternshipApplication> internshipApps) {
 		InternshipApplicationManager.internshipApps = internshipApps;
 	}
 	
+	/**
+     * Retrieves the last calculated sequential ID used for an application.
+     *
+     * @return The last sequential ID number.
+     */
 	public static int getLastID() {
 		return lastID;
 	}
 
+	/**
+     * Sets the last calculated sequential ID used for an application.
+     *
+     * @param lastID The new last sequential ID number.
+     */
 	public static void setLastID(int lastID) {
 		InternshipApplicationManager.lastID = lastID;
 	}
 
+	/**
+     * Filters the entire list of Internship Applications based on multiple optional criteria.
+     * If a filter parameter is {@code null} or empty, it is ignored.
+     *
+     * @param applicationID Optional filter for the application's unique ID (partial match allowed).
+     * @param studentID Optional filter for the submitting student's ID (partial match allowed).
+     * @param internshipID Optional filter for the target internship's ID (partial match allowed).
+     * @param status Optional filter for the application's current status.
+     * @return An {@code ArrayList} of {@code InternshipApplication} objects matching the criteria.
+     */
 	public static ArrayList<InternshipApplication> getInternshipApps(
 		String applicationID, String studentID, String internshipID, InternshipApplicationStatus status
 	) {

@@ -12,12 +12,12 @@ import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeManager;
 /**
  * <h1>Internship Opportunity View Class</h1>
  * <p>
- * This class provides **static utility methods** for displaying lists of 
- * {@code InternshipOpportunity} objects in a user-friendly format on the console.
+ * This class provides <b>static utility methods</b> for displaying lists of 
+ * {@link sc2002OOP.obj.internshipopportunity.InternshipOpportunity InternshipOpportunity} objects in a user-friendly format on the console.
  * </p>
  * <p>
  * Unlike table views, this class iterates through the list and calls the individual 
- * {@code print()} method implemented within the {@code InternshipOpportunity} class 
+ * {@code print()} method implemented within the {@link sc2002OOP.obj.internshipopportunity.InternshipOpportunity InternshipOpportunity} class 
  * for detailed, one-by-one listing.
  * </p>
  *
@@ -32,7 +32,12 @@ import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeManager;
  */
 public class InternshipOpportunityView {
 	
-	// single record
+	/**
+     * Prints the complete, detailed information for a single {@code InternshipOpportunity} 
+     * in a line-by-line format. This method includes administrative details like <b>Visibility</b>.
+     *
+     * @param iOpp The {@code InternshipOpportunity} object to print.
+     */
 	public static void print(InternshipOpportunity iOpp) {
 		System.out.println("Internship ID:            "+iOpp.getInternshipID());
 		System.out.println("Title:                    "+iOpp.getTitle());
@@ -68,7 +73,12 @@ public class InternshipOpportunityView {
 		System.out.println("Visible to students:      "+(iOpp.isVisibility() ? "on" : "off"));
 	}
 	
-	// single record (for student)
+	/**
+     * Prints the detailed information for a single {@code InternshipOpportunity} 
+     * tailored for <b>student viewing</b>. Administrative fields like <b>Visibility</b> are omitted.
+     *
+     * @param iOpp The {@code InternshipOpportunity} object to print.
+     */
 	public static void printForStudent(InternshipOpportunity iOpp) {
 		System.out.println("Internship ID:            "+iOpp.getInternshipID());
 		System.out.println("Title:                    "+iOpp.getTitle());
@@ -103,6 +113,10 @@ public class InternshipOpportunityView {
 		//		System.out.println("Visible to students:      "+(iOpp.isVisibility() ? "on" : "off"));
 	}
 	
+	/**
+     * Prints the detailed information for all internship opportunities managed in the system,
+     * separated by a horizontal line. Uses the administrative {@code print()} method.
+     */
 	public static void printList() {
 		for (InternshipOpportunity iOpp : InternshipOpportunityManager.getInternshipOpps()) {
 			print(iOpp);
@@ -110,6 +124,12 @@ public class InternshipOpportunityView {
 		}
 	}
 	
+	/**
+     * Prints the detailed information for a specific subset of internship opportunities,
+     * separated by a horizontal line. Uses the administrative {@code print()} method.
+     *
+     * @param internshipOpps The {@code ArrayList} of opportunities to display.
+     */
 	public static void printList(ArrayList<InternshipOpportunity> internshipOpps) {
 		for (InternshipOpportunity iOpp : internshipOpps) {
 			print(iOpp);
@@ -117,14 +137,24 @@ public class InternshipOpportunityView {
 		}
 	}
 	
-	public static void printInternshipOppForStudentList() {
+	/**
+     * Prints the detailed, student-friendly information for all internship opportunities managed 
+     * in the system, separated by a horizontal line. Uses the {@code printForStudent()} method.
+     */
+	public static void printForStudentList() {
 		for (InternshipOpportunity iOpp : InternshipOpportunityManager.getInternshipOpps()) {
 			printForStudent(iOpp);
 			System.out.println("-".repeat(40));
 		}
 	}
 	
-	public static void printInternshipOppForStudentList(ArrayList<InternshipOpportunity> internshipOpps) {
+	/**
+     * Prints the detailed, student-friendly information for a specific subset of internship opportunities,
+     * separated by a horizontal line. Uses the {@code printForStudent()} method.
+     *
+     * @param internshipOpps The {@code ArrayList} of opportunities to display.
+     */
+	public static void printForStudentList(ArrayList<InternshipOpportunity> internshipOpps) {
 		for (InternshipOpportunity iOpp : internshipOpps) {
 			printForStudent(iOpp);
 			System.out.println("-".repeat(40));
@@ -132,6 +162,11 @@ public class InternshipOpportunityView {
 	}
 	
 	// TABLES
+	
+	/**
+     * Prints a formatted table listing all internship opportunities, focusing only on the 
+     * <b>ID, Title, and Visibility Status</b>.
+     */
 	public static void printVisibilityTable() {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Internship ID");
@@ -149,6 +184,12 @@ public class InternshipOpportunityView {
 		Viewer.printTable(headers, data);
 	}
 	
+	/**
+     * Prints a formatted table listing a specific subset of internship opportunities, 
+     * focusing only on the <b>ID, Title, and Visibility Status</b>.
+     *
+     * @param iOpps The {@code ArrayList} of opportunities to display.
+     */
 	public static void printVisibilityTable(ArrayList<InternshipOpportunity> iOpps) {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Internship ID");

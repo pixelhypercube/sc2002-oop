@@ -26,17 +26,11 @@ import sc2002OOP.test.Test;
 /**
  * <h1>Student User Entity</h1>
  * <p>
- * This class represents a **concrete student user** within the IPMS. It extends the 
- * <code>User</code> base class and implements the <code>IStudent</code> contract, 
+ * This class represents a <b>concrete student user</b> within the IPMS. It extends the 
+ * {@link sc2002OOP.obj.User User} base class and implements the {@link sc2002OOP.obj.student.IStudent IStudent} contract, 
  * encapsulating all personal (major, year) and operational logic specific to a 
  * student user role.
  * </p>
- * @apiNote This class is a **persistent entity**, implementing <code>Serializable</code> * to allow its state to be saved and loaded by the <code>StudentManager</code>. It contains 
- * the core business logic for all student actions, including **viewing and filtering** * internships, **applying** for positions (with a 3-application limit check), 
- * **managing withdrawal requests**, and formally **accepting/rejecting placements**.
- * <br>
- * **Note on Internship Viewing:** Internship visibility is filtered based on the student's 
- * academic year (e.g., Year 1/2 students cannot see ADVANCED opportunities).
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -321,7 +315,7 @@ public class Student extends User implements IStudent, Serializable {
 		
 		if (internshipList != null) {
 			System.out.println("===== LIST OF INTERNSHIPS =====");
-			InternshipOpportunityView.printInternshipOppForStudentList(internshipList);
+			InternshipOpportunityView.printForStudentList(internshipList);
 		} else {
 			System.out.println("Sorry, the list of internships are not available at the moment. Please try again later.");
 		}

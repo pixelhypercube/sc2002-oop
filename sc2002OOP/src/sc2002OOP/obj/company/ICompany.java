@@ -14,9 +14,6 @@ import sc2002OOP.obj.withdrawalrequest.WithdrawalRequest;
  * It ensures all company objects have the necessary attributes and basic utility methods, 
  * like printing details and accessing core properties.
  * </p>
- * @apiNote This interface specifies the required structure and behavior for company data, 
- * including core attributes (ID and Name) and utility functions. Implementing classes 
- * must also provide persistence capabilities through <code>Serializable</code>.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

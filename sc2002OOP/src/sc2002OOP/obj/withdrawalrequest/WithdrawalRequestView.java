@@ -7,12 +7,12 @@ import sc2002OOP.main.Viewer;
 /**
  * <h1>Withdrawal Request View Class</h1>
  * <p>
- * This class provides **static utility methods** for displaying information regarding 
- * {@code WithdrawalRequest} objects in a structured, table format for the user interface.
+ * This class provides <b>static utility methods</b> for displaying information regarding 
+ * {@link sc2002OOP.obj.withdrawalrequest.WithdrawalRequest WithdrawalRequest} objects in a structured, table format for the user interface.
  * </p>
  * <p>
- * It works with {@code WithdrawalRequestManager} to fetch the necessary data and 
- * relies on the {@code Viewer} class to handle the formatting and printing of the tables.
+ * It works with {@link sc2002OOP.obj.withdrawalrequest.WithdrawalRequestManager WithdrawalRequestManager} to fetch the necessary data and 
+ * relies on the {@link sc2002OOP.main.Viewer Viewer} class to handle the formatting and printing of the tables.
  * </p>
  *
  * @author Kee Kai Wen
@@ -36,7 +36,7 @@ public class WithdrawalRequestView {
      * the {@code WithdrawalRequestManager}.
      * <p>
      * The table includes the following columns: **Application ID** (referencing the internship application) 
-     * and the request's **Status**.
+     * and the request's <b>Status</b>.
      * </p>
      * <p>
      * Data is retrieved using {@code WithdrawalRequestManager.getWithdrawalReqs()} and
@@ -61,10 +61,10 @@ public class WithdrawalRequestView {
 	}
 	
 	/**
-     * Prints a formatted table listing a ** specific subset of Withdrawal Requests** provided 
+     * Prints a formatted table listing a <b>specific subset of Withdrawal Requests</b> provided 
      * in an {@code ArrayList}.
      * <p>
-     * The table includes the following columns: **Application ID** and the request's **Status**.
+     * The table includes the following columns: <b>Application ID</b> and the request's <b>Status</b>.
      * </p>
      *
      * @param wReqs An {@code ArrayList} of {@code WithdrawalRequest} objects to be displayed.

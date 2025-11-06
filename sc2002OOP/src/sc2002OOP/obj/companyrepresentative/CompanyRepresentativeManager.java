@@ -23,15 +23,10 @@ import sc2002OOP.obj.company.CompanyView;
 /**
  * <h1>Company Representative Data Manager</h1>
  * <p>
- * This class serves as the **dedicated manager** for all <code>CompanyRepresentative</code> objects 
+ * This class serves as the <b>dedicated manager</b> for all {@link sc2002OOP.obj.companyrepresentative.CompanyRepresentative CompanyRepresentative} objects 
  * within the IPMS. It is responsible for initializing the data store, handling persistence 
  * (saving and loading), and providing robust methods for retrieving and filtering the accounts.
  * </p>
- * @apiNote This class utilizes the **Singleton design pattern** to ensure only one instance 
- * manages the representative data globally. It implements **persistence** by serializing the list 
- * of accounts to a DAT file (<code>Constants.COMPANY_REPS_DATA_FILE</code>). The manager also includes 
- * the logic for **registering new representatives** and performing complex, multi-criteria filtering 
- * of existing accounts.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -49,14 +44,28 @@ public class CompanyRepresentativeManager {
 	private static ArrayList<CompanyRepresentative> companyRepresentatives;
 	private static CompanyRepresentativeManager companyRepresentativeManager = null;
 	
+	/**
+     * Private constructor to enforce the Singleton pattern. Initializes the company representative list as empty.
+     */
 	private CompanyRepresentativeManager() {
 		companyRepresentatives = new ArrayList<CompanyRepresentative>();
 	}
 	
+	/**
+     * Private constructor used by {@link #getInstance()} to initialize the manager with data loaded from storage.
+     *
+     * @param companyRepresentatives The {@code ArrayList} of company representatives loaded from file.
+     */
 	private CompanyRepresentativeManager(ArrayList<CompanyRepresentative> companyRepresentatives) {
 		CompanyRepresentativeManager.companyRepresentatives = companyRepresentatives;
 	}
 	
+	/**
+     * Retrieves the singleton instance of the {@code CompanyRepresentativeManager}.
+     * If the instance does not exist, it loads representative data from the file and creates the instance.
+     *
+     * @return The single instance of the {@code CompanyRepresentativeManager}.
+     */
 	public static CompanyRepresentativeManager getInstance() {
 		if (companyRepresentativeManager==null) {
 			ArrayList<CompanyRepresentative> companyReps = CompanyRepresentativeManager.retrieveCompanyReps();
@@ -66,11 +75,20 @@ public class CompanyRepresentativeManager {
 		return CompanyRepresentativeManager.companyRepresentativeManager;
 	}
 	
+	/**
+     * Saves the current list of company representatives to the file and destroys the singleton instance.
+     * This method should be called before the application closes to ensure data persistence.
+     */
 	public static void close() {
 		CompanyRepresentativeManager.saveCompanyReps(companyRepresentatives);
 		CompanyRepresentativeManager.companyRepresentativeManager = null;
 	}
 	
+	/**
+     * Reads and deserializes the {@code CompanyRepresentative} list from the persistent storage file.
+     *
+     * @return An {@code ArrayList} containing all loaded {@code CompanyRepresentative} objects, or an empty list if the file is empty or an error occurs.
+     */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<CompanyRepresentative> retrieveCompanyReps() {
 		File file = new File(PATH);
@@ -97,6 +115,11 @@ public class CompanyRepresentativeManager {
 		return staff;
 	}
 	
+	/**
+     * Serializes and writes the current list of {@code CompanyRepresentative} objects to the persistent storage file.
+     *
+     * @param companyReps The {@code ArrayList} of {@code CompanyRepresentative} objects to be saved.
+     */
 	public static void saveCompanyReps(ArrayList<CompanyRepresentative> companyReps) {
 		try (
 			FileOutputStream fileOut = new FileOutputStream(PATH);
@@ -109,6 +132,18 @@ public class CompanyRepresentativeManager {
 		}
 	}
 
+	/**
+     * Filters the entire list of Company Representatives based on multiple optional criteria.
+     * If a filter parameter is {@code null} or empty, it is ignored.
+     *
+     * @param companyRepID Optional filter for the representative's User ID (partial match allowed).
+     * @param companyID Optional filter for the associated company ID (partial match allowed).
+     * @param department Optional filter for the representative's department (partial match allowed).
+     * @param position Optional filter for the representative's position (partial match allowed).
+     * @param email Optional filter for the representative's email (partial match allowed).
+     * @param status Optional filter for the representative's approval status.
+     * @return An {@code ArrayList} of {@code CompanyRepresentative} objects matching the criteria.
+     */
 	public static ArrayList<CompanyRepresentative> getCompanyReps(
 		String companyRepID, String companyID, String department, String position, String email, CompanyRepresentativeStatus status
 	) {
@@ -125,6 +160,12 @@ public class CompanyRepresentativeManager {
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 	
+	/**
+     * Retrieves a specific Company Representative by their unique User ID (email).
+     *
+     * @param id The unique User ID (email) of the representative to find.
+     * @return The matching {@code CompanyRepresentative} object, or {@code null} if no representative with the given ID exists.
+     */
 	public static CompanyRepresentative getCompRepByID(String id) {
 		for (CompanyRepresentative compRep : companyRepresentatives) {
 			if (compRep.getUserID().equals(id)) {
@@ -134,13 +175,13 @@ public class CompanyRepresentativeManager {
 		return null;
 	}
 	
-//	public static void printCompanyReps(ArrayList<CompanyRepresentative> companyReps) {
-//		for (CompanyRepresentative companyRep : companyReps) {
-//			companyRep.print();
-//			System.out.println("-".repeat(40));
-//		}
-//	}
-	
+	/**
+     * Guides a new user through the registration process for a Company Representative account.
+     * This method collects all required details, validates the Company ID and unique email, 
+     * and registers the user with a default password and {@code PENDING} status.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	public static void register(Scanner sc) {
 		System.out.print("\033[H\033[2J");
 		System.out.println("==== Register (Company Representative) ====");
@@ -225,10 +266,20 @@ public class CompanyRepresentativeManager {
 		System.out.println("Successfully Registered! Please wait for one of our career center staff to approve you!");
 	}
 
+	/**
+     * Retrieves the complete list of all {@code CompanyRepresentative} accounts currently managed in memory.
+     *
+     * @return The {@code ArrayList} of all company representatives.
+     */
 	public static ArrayList<CompanyRepresentative> getCompanyReps() {
 		return companyRepresentatives;
 	}
 
+	/**
+     * Replaces the current list of managed company representatives with a new list.
+     *
+     * @param companyRepresentatives The new {@code ArrayList} of {@code CompanyRepresentative} accounts to set.
+     */
 	public static void setCompanyReps(ArrayList<CompanyRepresentative> companyRepresentatives) {
 		CompanyRepresentativeManager.companyRepresentatives = companyRepresentatives;
 	}

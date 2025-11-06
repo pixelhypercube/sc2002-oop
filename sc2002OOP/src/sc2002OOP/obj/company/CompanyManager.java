@@ -15,14 +15,9 @@ import sc2002OOP.main.Viewer;
 /**
  * <h1>Company Data Manager</h1>
  * <p>
- * This class serves as the <b>dedicated manager</b> for all <code>Company</code> objects within the IPMS. 
- * It is responsible for handling the initialization, persistence, and retrieval of the entire 
- * collection of company records.
+ * This class serves as the <b>dedicated manager</b> for all {@link sc2002OOP.obj.company.Company Company} objects within the IPMS. 
+ * It is responsible for handling the initialization, persistence, and retrieval of the entire collection of company records.
  * </p>
- * @apiNote This class utilizes the <b>Singleton design pattern</b> to ensure only a single instance 
- * globally manages the company data. Persistence is handled by serializing the list of <code>Company</code> 
- * objects to a DAT file (<code>Constants.COMPANY_DATA_FILE</code>) using Java's object serialization 
- * mechanisms. It also manages and calculates the auto-incrementing <b>next available Company ID</b>.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -40,15 +35,32 @@ public class CompanyManager {
 	private static ArrayList<Company> companies;
 	private static int lastID;
 	
+	/**
+     * Private default constructor to enforce the Singleton pattern. 
+     * Initializes the list of companies as empty and sets the starting ID.
+     */
 	private CompanyManager() {
 		companies = new ArrayList<Company>();
 		lastID = 1;
 	}
+	
+	/**
+     * Private constructor used by {@link #getInstance()} to initialize the manager with data loaded from storage.
+     * It also calculates the {@code lastID} based on the loaded company list.
+     *
+     * @param companies The {@code ArrayList} of companies loaded from the file.
+     */
 	private CompanyManager(ArrayList<Company> companies) {
 		CompanyManager.companies = companies;
 		lastID = getNextID();
 	}
 	
+	/**
+     * Calculates the next available sequential Company ID by finding the maximum numeric ID 
+     * currently in the system and incrementing it.
+     *
+     * @return The next available sequential integer ID.
+     */
 	private int getNextID() {
 		if (companies==null || companies.isEmpty()) 
 			return 1;
@@ -73,6 +85,12 @@ public class CompanyManager {
 				+ 1;
 	}
 	
+	/**
+     * Retrieves the singleton instance of the {@code CompanyManager}.
+     * If the instance does not exist, it loads company data from the file and creates the instance.
+     *
+     * @return The single instance of the {@code CompanyManager}.
+     */
 	public static CompanyManager getInstance() {
 		if (companyManager==null) {
 			ArrayList<Company> companies = CompanyManager.retrieveCompanies();
@@ -82,11 +100,20 @@ public class CompanyManager {
 		return CompanyManager.companyManager;
 	}
 	
+	/**
+     * Saves the current list of companies to the file and destroys the singleton instance.
+     * This method should be called before the application closes to ensure data persistence.
+     */
 	public static void close() {
 		CompanyManager.saveCompanies(companies);
 		CompanyManager.companyManager = null;
 	}
 	
+	/**
+     * Reads and deserializes the {@code Company} list from the persistent storage file.
+     *
+     * @return An {@code ArrayList} containing all loaded {@code Company} objects, or an empty list if the file is empty or an error occurs.
+     */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<Company> retrieveCompanies() {
 		File file = new File(PATH);
@@ -113,6 +140,11 @@ public class CompanyManager {
 		return staff;
 	}
 	
+	/**
+     * Serializes and writes the current list of {@code Company} objects to the persistent storage file.
+     *
+     * @param companies The {@code ArrayList} of {@code Company} objects to be saved.
+     */
 	public static void saveCompanies(ArrayList<Company> companies) {
 		try (
 			FileOutputStream fileOut = new FileOutputStream(PATH);
@@ -126,15 +158,40 @@ public class CompanyManager {
 	}
 	
 	// GETTERS & SETTERS
+	
+	/**
+     * Retrieves the last calculated sequential ID used for a company.
+     *
+     * @return The last sequential ID number.
+     */
 	public static int getLastID() {
 		return lastID;
 	}
+	
+	/**
+     * Sets the last calculated sequential ID used for a company.
+     *
+     * @param lastID The new last sequential ID number.
+     */
 	public static void setLastID(int lastID) {
 		CompanyManager.lastID = lastID;
 	}
+	
+	/**
+     * Retrieves the complete list of all {@code Company} entities currently managed in memory.
+     *
+     * @return The {@code ArrayList} of all company entities.
+     */
 	public static ArrayList<Company> getCompanies() {
 		return companies;
 	}
+	
+	/**
+     * Retrieves a specific {@code Company} entity by its unique ID.
+     *
+     * @param companyID The unique ID of the company to find.
+     * @return The matching {@code Company} object, or {@code null} if no company with the given ID exists.
+     */
 	public static Company getCompanyByID(String companyID) {
 		for (Company company : companies) {
 			if (companyID.equals(company.getCompanyID()))
@@ -142,6 +199,12 @@ public class CompanyManager {
 		}
 		return null;
 	}
+	
+	/**
+     * Replaces the current list of managed companies with a new list.
+     *
+     * @param companies The new {@code ArrayList} of {@code Company} entities to set.
+     */
 	public static void setCompanies(ArrayList<Company> companies) {
 		CompanyManager.companies = companies;
 	}

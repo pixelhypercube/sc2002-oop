@@ -11,10 +11,11 @@ import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeStatus;
 /**
  * <h1>User Base Class</h1>
  * <p>
- * This is the <b>abstract base class</b> for all user roles within the IPMS (students, company representatives, and career center staff).
+ * This is the <b>abstract base class</b> for all user roles within the IPMS ({@link sc2002OOP.obj.student.Student students}, 
+ * {@link sc2002OOP.obj.companyrepresentative.CompanyRepresentative company representatives}, and 
+ * {@link sc2002OOP.obj.careercenterstaff.CareerCenterStaff career center staff}).
  * It contains all the core user functions, such as login/logout authentication, viewing/filtering internships, and viewing common profile details.
  * </p>
- * @apiNote This class is an <b>abstract</b> class designed to enforce common properties (like user ID and password) and core behaviors (like login) across all specialized user types via inheritance. It implements <code>Serializable</code> to allow user data to be <b>persisted</b> (saved) to the system's files.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

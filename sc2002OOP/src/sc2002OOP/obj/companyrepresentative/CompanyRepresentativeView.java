@@ -11,13 +11,13 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
 /**
  * <h1>Company Representative View Class</h1>
  * <p>
- * This class provides **static utility methods** for displaying information related to
- * {@code CompanyRepresentative} users in a structured, readable format, typically a table.
+ * This class provides <b>static utility methods</b> for displaying information related to
+ * {@link sc2002OOP.obj.companyrepresentative.CompanyRepresentative CompanyRepresentative} users in a structured, readable format, typically a table.
  * </p>
  * <p>
- * It interacts with {@code CompanyRepresentativeManager} to retrieve user data and 
- * {@code CompanyManager} to resolve the representative's company name based on their ID.
- * It uses the {@code Viewer} class for final table rendering.
+ * It interacts with {@link sc2002OOP.obj.companyrepresentative.CompanyRepresentativeManager CompanyRepresentativeManager} to retrieve user data and 
+ * {@link sc2002OOP.obj.company.CompanyManager CompanyManager} to resolve the representative's company name based on their ID.
+ * It uses the {@link sc2002OOP.main.Viewer Viewer} class for final table rendering.
  * </p>
  *
  * @author Kee Kai Wen

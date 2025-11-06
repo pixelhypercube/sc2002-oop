@@ -5,14 +5,10 @@ import java.io.Serializable;
 /**
  * <h1>Internship Application Data Entity</h1>
  * <p>
- * This class represents a **concrete data entity** for an internship application submitted by a student. 
- * It contains all essential details necessary to uniquely identify and track the application's lifecycle, 
+ * This class represents a <b>concrete data entity</b> for an {@link sc2002OOP.obj.internshipapplicaton.InternshipApplication internship application} 
+ * submitted by a student. It contains all essential details necessary to uniquely identify and track the application's lifecycle, 
  * including the student, the target internship, and the current status.
  * </p>
- * @apiNote This class is a **Plain Old Java Object (POJO)** used primarily for data encapsulation. 
- * It implements the <code>IApplication</code> contract and <code>Serializable</code> to allow its state 
- * to be <b>persisted</b> (saved) by the <code>InternshipApplicationManager</code> for data storage. 
- * The **status** field dictates the outcome of the application (e.g., PENDING, SUCCESSFUL).
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -36,30 +32,58 @@ public class InternshipApplication implements IApplication, Serializable  {
 		this.status = status;
 	}
 
+	/**
+     * Retrieves the ID of the student who submitted this application.
+     * @return The student's ID as a String.
+     */
 	public String getStudentID() {
 		return studentID;
 	}
 
+	/**
+     * Sets the ID of the student who submitted this application.
+     * @param studentID The new student ID.
+     */
 	public void setStudentID(String studentID) {
 		this.studentID = studentID;
 	}
 
+	/**
+     * Retrieves the ID of the internship opportunity this application targets.
+     * @return The internship ID as a String.
+     */
 	public String getInternshipID() {
 		return internshipID;
 	}
 
+	/**
+     * Sets the ID of the internship opportunity this application targets.
+     * @param internshipID The new internship ID.
+     */
 	public void setInternshipID(String internshipID) {
 		this.internshipID = internshipID;
 	}
 
+	/**
+     * Retrieves the current processing status of the application.
+     * @return The {@code InternshipApplicationStatus}.
+     */
 	public InternshipApplicationStatus getStatus() {
 		return status;
 	}
 
+	/**
+     * Sets the current processing status of the application.
+     * @param status The new {@code InternshipApplicationStatus}.
+     */
 	public void setStatus(InternshipApplicationStatus status) {
 		this.status = status;
 	}
 
+	/**
+     * Sets the unique identifier for this application record.
+     * @param applicationID The new application ID.
+     */
 	public String getApplicationID() {
 		return applicationID;
 	}

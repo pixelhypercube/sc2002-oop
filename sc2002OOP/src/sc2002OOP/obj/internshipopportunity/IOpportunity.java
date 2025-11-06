@@ -8,14 +8,10 @@ import sc2002OOP.obj.companyrepresentative.CompanyRepresentative;
 /**
  * <h1>Internship Opportunity Contract Interface</h1>
  * <p>
- * This interface defines the complete mandatory contract for an **Internship Opportunity** entity. 
+ * This interface defines the complete mandatory contract for an {@link sc2002OOP.obj.internshipopportunity.InternshipOpportunity InternshipOpportunity} entity. 
  * It ensures all opportunity objects possess the core attributes, administrative flags, 
  * date information, and utility methods required for management and student viewing.
  * </p>
- * @apiNote This contract requires methods for all key attributes, including **ID**, **dates**, 
- * **slot count**, **level**, **status**, and **visibility**. The interface mandates two distinct 
- * display methods: one for staff/reps (<code>print()</code>) and one restricted view for students 
- * (<code>printForStudent()</code>).
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

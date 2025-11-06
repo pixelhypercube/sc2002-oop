@@ -12,12 +12,8 @@ import java.nio.charset.StandardCharsets;
  * as well as verifying if a provided password matches a stored hash (for user login authentication).
  * </p>
  * <p>
- * This utility helps abstract the complexity of cryptographic operations from the main application logic.
+ * This utility also helps abstract the complexity of cryptographic operations from the main application logic.
  * </p>
- * @apiNote This class utilizes the <b>SHA-256</b> standard cryptographic hash function 
- * for one-way password hashing before storage. This ensures passwords are never stored in 
- * plain text, which is a fundamental security practice. The verification process involves 
- * hashing the input and comparing the resulting hash string.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

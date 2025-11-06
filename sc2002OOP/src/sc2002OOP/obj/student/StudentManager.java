@@ -17,15 +17,10 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
 /**
  * <h1>Student User Data Manager</h1>
  * <p>
- * This class serves as the **dedicated manager** for all <code>Student</code> objects 
+ * This class serves as the <b>dedicated manager</b> for all {@link sc2002OOP.obj.student.Student Student} objects 
  * within the IPMS. It is responsible for initializing the data store, handling persistence 
  * (saving and loading), and providing methods for retrieving and filtering student accounts.
  * </p>
- * @apiNote This class utilizes the **Singleton design pattern** to ensure only one instance 
- * manages the student data globally. It implements **persistence** by serializing the list 
- * of accounts to a DAT file (<code>Constants.STUDENT_DATA_FILE</code>). The manager provides 
- * robust, multi-criteria filtering for student accounts based on attributes like ID, name, 
- * major, and academic year.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

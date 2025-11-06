@@ -1,15 +1,11 @@
 package sc2002OOP.main;
 
-
 /**
  * <h1>System Constants List</h1>
  * <p>
- * This class serves as a central repository for all **hardcoded system constants** used throughout the IPMS application, 
- * primarily defining file paths, resource locations, and data delimiters. Paths are dynamically constructed based on the 
- * {@link #IS_DEBUGGING} flag to ensure data persistence works correctly in both the IDE environment and the compiled JAR.
+ * This class serves as a central repository for all <b>hardcoded system constants</b> used throughout the entire application,
+ * which primarily defines file paths, resource locations, and data delimiters.
  * </p>
- * @apiNote This class is declared <code>public final</code> and contains only <code>public static final</code> fields. 
- * It adheres to the standard pattern for a **constants utility class** to ensure **data integrity** and easy global access to configuration values.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

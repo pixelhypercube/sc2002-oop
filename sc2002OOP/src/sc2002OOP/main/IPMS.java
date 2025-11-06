@@ -23,15 +23,12 @@ import sc2002OOP.test.Test;
 /**
  * <h1>Internship Placement Management System (IPMS) Main Application</h1>
  * <p>
- * This class serves as the <strong>primary entry point</strong> for the entire IPMS system, which contains the <code>main</code> method.
+ * This class serves as the <strong>primary entry point</strong> for the entire system, which contains the <code>main</code> method.
  * </p>
  * <p>
  * It is responsible for initializing all core data managers (users, opportunities, companies, etc.) using the 
  * <b>Singleton design pattern</b>, handling user authentication (login/registration), and driving the primary application loop and menu system.
  * </p>
- * @apiNote This class orchestrates the application startup and shutdown. It ensures all manager instances are initialized 
- * on launch via <code>initInstances()</code> and safely persisted/closed via <code>close()</code> upon exit, adhering to the <b>Singleton pattern</b> 
- * for data management.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

@@ -14,11 +14,9 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationStatus;
  * <h1>Student View Utility</h1>
  * <p>
  * This class provides static utility methods for displaying and formatting 
- * {@code Student} data. It handles the retrieval of associated internship application
+ * {@link sc2002OOP.obj.student.Student Student} data. It also handles the retrieval of associated internship application
  * information to present a comprehensive view of the student's profile and activities.
  * </p>
- * @apiNote This class utilizes the {@code Viewer} utility for consistent table formatting 
- * and interacts with the {@code InternshipApplicationManager} to fetch application data.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -29,6 +27,16 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationStatus;
  * @see sc2002OOP.main.Viewer
  */
 public class StudentView {
+	
+	/**
+     * Prints the detailed profile information for a single {@code Student} object 
+     * in a line-by-line format.
+     * <p>
+     * Note: This method specifically lists only <b>PENDING</b> internship applications.
+     * </p>
+     *
+     * @param student The {@code Student} object whose details are to be printed.
+     */
 	public static void print(Student student) {
 		ArrayList<InternshipApplication> internshipApps = InternshipApplicationManager.getInternshipApps(
 				"",
@@ -46,6 +54,16 @@ public class StudentView {
 		System.out.println("Internhip(s) Applied : " + (!internshipsApplied.isEmpty() ? internshipsApplied : "None"));
 	}
 	
+	/**
+     * Prints a formatted table listing **all students** currently managed by the 
+     * {@code StudentManager}.
+     * <p>
+     * The table includes: Student ID, Name, Major, Year, Email, and a comma-separated list of 
+     * all internship IDs the student has applied for (regardless of status).
+     * </p>
+     *
+     * @see #printTable(ArrayList)
+     */
 	public static void printTable() {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Student ID");
@@ -77,6 +95,16 @@ public class StudentView {
 		Viewer.printTable(headers, data);
 	}
 	
+	/**
+     * Prints a formatted table listing a **specific subset of students** provided in an {@code ArrayList}.
+     * <p>
+     * The table includes: Student ID, Name, Major, Year, Email, and a comma-separated list of 
+     * all internship IDs the student has applied for (regardless of status).
+     * </p>
+     *
+     * @param students An {@code ArrayList} of {@code Student} objects to be displayed.
+     * @see #printTable()
+     */
 	public static void printTable(ArrayList<Student> students) {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Student ID");

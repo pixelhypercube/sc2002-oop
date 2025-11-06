@@ -11,12 +11,8 @@ import sc2002OOP.obj.internshipopportunity.InternshipOpportunityStatus;
  * <h1>Internship Filter Settings (Data Structure)</h1>
  * <p>
  * This class serves as a container for all <b>potential search criteria</b> applicable to internship opportunities. 
- * It is primarily used to store the filter settings provided by users when they view the available internships.
+ * It is primarily used to store the filter settings provided by {@link sc2002OOP.obj.User users} when they view their available internships.
  * </p>
- * @apiNote This class is a <b>Plain Old Java Object (POJO)</b> used strictly for bundling 
- * multiple search parameters (like ID, title, dates, status, and level) into a single, 
- * transportable object. It implements <code>Serializable</code> to allow its state to 
- * be <b>persisted</b> (saved) or transmitted between different parts of the application or system.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

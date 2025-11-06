@@ -26,13 +26,9 @@ import sc2002OOP.obj.student.StudentManager;
  * <h1>Company Representative (User Role)</h1>
  * <p>
  * This class represents a user with the <b>Company Representative</b> role in the IPMS. 
- * It extends the <code>User</code> base class and implements the <code>ICompanyRepresentative</code> 
- * interface, giving it the specific privileges needed to manage internships for their associated company.
+ * It extends the {@link sc2002OOP.obj.User User} base class and implements the {@link sc2002OOP.obj.companyrepresentative.ICompanyRepresentative ICompanyRepresentative}
+ * interface, giving it the specific privileges needed to manage internships for their associated {@link sc2002OOP.obj.company.Company Company}.
  * </p>
- * @apiNote This specialized user class is responsible for the <b>full lifecycle management</b> of internship opportunities, 
- * including creation (<code>createInternship</code>), visibility toggling, applicant approval/rejection (<code>approveRejectApplicant</code>), 
- * and exporting application reports. It is uniquely linked to one company via <code>companyID</code> 
- * and its access is controlled by its <code>status</code> (e.g., PENDING, APPROVED).
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -48,8 +44,22 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 	private String companyID, department, position, email;
 	private CompanyRepresentativeStatus status;
 
+	/**
+     * Default constructor for the Company Representative.
+     */
 	public CompanyRepresentative() {}
 	
+	/**
+     * Constructs a Company Representative object with necessary profile and authentication details.
+     * The super constructor handles {@code userID}, {@code name}, and {@code password}.
+     * * @param userID The unique identifier for the company representative.
+     * @param name The representative's full name.
+     * @param companyID The ID of the company the representative belongs to.
+     * @param department The department of the representative within the company.
+     * @param position The job position of the representative.
+     * @param status The current approval status of the representative's account (PENDING, APPROVED, REJECTED).
+     * @param password The representative's securely hashed password.
+     */
 	public CompanyRepresentative(String userID, String name, String companyID, String department, String position, CompanyRepresentativeStatus status, String password) {
 		super(userID,name,password);
 		this.companyID = companyID;
@@ -58,6 +68,13 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		this.status = status;
 	}
 	
+	/**
+     * Guides the company representative through the process of creating a new internship opportunity.
+     * This method collects all required details (title, description, level, slots, dates, visibility)
+     * and submits the new opportunity with a PENDING status for staff approval.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	public void createInternship(Scanner sc) {
 		System.out.print("\033[H\033[2J");
 		System.out.println("==== Create Internship Opportunity ====");
@@ -233,39 +250,13 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		System.out.println("Successfully created internship opportunity! Please wait for one of our career center staff to approve!");
 	}
 	
-//	public void printInternshipOpps(Scanner sc) {
-//		System.out.print("\033[H\033[2J");
-//		ArrayList<InternshipOpportunity> internshipOpps = InternshipOpportunityManager
-//				.getInternshipOpps(
-//						"",
-//						"",
-//						"",
-//						companyID,
-//						"",
-//						(InternshipOpportunityLevel)null,
-//						(InternshipOpportunityStatus)null,
-//						null,
-//						null,
-//						null,
-//						null,
-//						null
-//					);
-//		
-//		System.out.println("==== Internship Opportunities List ====");
-//		for (InternshipOpportunity internshipOpp : internshipOpps) {
-//			internshipOpp.print();
-//			System.out.println("-".repeat(40));
-//		}
-//	}
-	
-//	public void printInternshipApps(ArrayList<InternshipApplication> iApps) {
-//		System.out.println("==== Internship Applications List ====");
-//		for (InternshipApplication iApp : iApps) {
-//			iApp.print();
-//			System.out.println("-".repeat(40));
-//		}
-//	}
-	
+	/**
+     * Allows the company representative to approve or reject PENDING internship applications
+     * submitted for internships belonging to their company.
+     * Approved applications are set to {@code SUCCESSFUL}, and rejected ones to {@code UNSUCCESSFUL}.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	public void approveRejectApplicant(Scanner sc) {
 		System.out.print("\033[H\033[2J");
 		System.out.println("==== Approve/Reject Applicant ====");
@@ -329,6 +320,11 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		}
 	}
 	
+	/**
+     * Toggles the student-facing visibility status of one of the company's approved internship opportunities.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	public void toggleInternshipOpportunity(Scanner sc) {
 		System.out.print("\033[H\033[2J");
 		ArrayList<InternshipOpportunity> internshipOpps = InternshipOpportunityManager
@@ -375,6 +371,13 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		}
 	}
 
+	/**
+     * {@inheritDoc}
+     * Displays the main menu for the Company Representative, providing options to manage
+     * internships, view profile, and change password.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	@Override
 	public void displayHome(Scanner sc) {
 		// TODO Auto-generated method stub
@@ -435,6 +438,12 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		}
 	}
 
+	/**
+     * {@inheritDoc}
+     * Displays the full profile details of the Company Representative using the {@code CompanyRepresentativeView}.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	@Override
 	public void viewProfile(Scanner sc) {
 		System.out.print("\033[H\033[2J");
@@ -443,6 +452,13 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		System.out.println("==========================================");
 	}
 
+	/**
+     * {@inheritDoc}
+     * Handles the process for the Company Representative to securely change their password.
+     * The password is updated in memory and within the {@code CompanyRepresentativeManager}.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	@Override
 	public void changePassword(Scanner sc) {
 		System.out.print("\033[H\033[2J");
@@ -476,6 +492,13 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		System.out.println("Your password has been successfully changed!");
 	}
 
+	/**
+     * {@inheritDoc}
+     * Allows the Company Representative to view internship opportunities associated with their company.
+     * This method includes a filter setup, persists the filter settings, and displays the results.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	@Override
 	public void viewInternshipOpps(Scanner sc) {
 		if (super.getInternshipFilterSettings()==null) 
@@ -677,42 +700,82 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 	
 	// GETTERS & SETTERS
 	
+	/**
+     * Retrieves the unique ID of the company associated with this representative.
+     * @return The company ID as a String.
+     */
 	public String getCompanyID() {
 		return companyID;
 	}
 
+	/**
+     * Sets the unique ID of the company associated with this representative.
+     * @param companyID The new company ID.
+     */
 	public void setCompanyID(String companyID) {
 		this.companyID = companyID;
 	}
 
+	/**
+     * Retrieves the department of the representative within the company.
+     * @return The department as a String.
+     */
 	public String getDepartment() {
 		return department;
 	}
 
+	/**
+     * Sets the department of the representative within the company.
+     * @param department The new department.
+     */
 	public void setDepartment(String department) {
 		this.department = department;
 	}
 
+	/**
+     * Retrieves the job position of the representative.
+     * @return The position as a String.
+     */
 	public String getPosition() {
 		return position;
 	}
 
+	/**
+     * Sets the job position of the representative.
+     * @param position The new position.
+     */
 	public void setPosition(String position) {
 		this.position = position;
 	}
-
+	
+	/**
+     * Retrieves the email of the representative (inherited from User, but added here for completeness/override).
+     * @return The email as a String.
+     */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+     * Sets the email of the representative.
+     * @param email The new email.
+     */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	/**
+     * Retrieves the current approval status of the company representative's account.
+     * @return The {@code CompanyRepresentativeStatus} (PENDING, APPROVED, or REJECTED).
+     */
 	public CompanyRepresentativeStatus getStatus() {
 		return status;
 	}
 
+	/**
+     * Sets the approval status of the company representative's account.
+     * @param status The new {@code CompanyRepresentativeStatus}.
+     */
 	public void setStatus(CompanyRepresentativeStatus status) {
 		this.status = status;
 	}

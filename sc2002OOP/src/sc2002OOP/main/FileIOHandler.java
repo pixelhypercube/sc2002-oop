@@ -14,13 +14,9 @@ import sc2002OOP.obj.*;
  * <h1>File Input/Output Handler</h1>
  * <p>
  * This class serves as the <b>input/output handler</b> that handles the read and write operations to CSV files.
- * It is mainly used to export internship applications done by company representatives, as well as for the initial 
- * loading of system data from CSV files.
+ * It is mainly used to export internship applications done by {@link sc2002OOP.obj.careercenterstaff.CareerCenterStaff career center staff}, 
+ * as well as for the initial loading of system data from CSV files (to fill up test cases).
  * </p>
- * @apiNote This handler uses <code>Class.getResourceAsStream()</code> to read data files from the <b>classpath</b> 
- * (e.g., resources folder) to ensure <strong>portability</strong> in packaged JAR files. Write operations, however, 
- * are performed directly to the file system path relative to the project directory. It includes a generic 
- * <code>readFile</code> method that accepts a <b>parser function</b> for object deserialization.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

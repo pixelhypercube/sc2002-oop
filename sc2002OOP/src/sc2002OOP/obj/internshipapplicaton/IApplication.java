@@ -3,14 +3,10 @@ package sc2002OOP.obj.internshipapplicaton;
 /**
  * <h1>Internship Application Contract Interface</h1>
  * <p>
- * This interface defines the mandatory contract for an **Internship Application** entity within the IPMS. 
- * It ensures all application objects possess the core attributes and methods necessary to track 
+ * This interface defines the mandatory contract for an {@link sc2002OOP.obj.internshipapplicaton.InternshipApplication internship application} 
+ * within the IPMS. It ensures all application objects possess the core attributes and methods necessary to track 
  * a student's submission to an internship opportunity.
  * </p>
- * @apiNote This contract specifies the required data fields—namely, the unique application ID, 
- * the associated student ID, the internship ID, and the application's current <b>status</b> 
- * (<code>InternshipApplicationStatus</code>). Implementing classes must provide these properties 
- * along with a basic <code>print()</code> utility method.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -21,11 +17,6 @@ package sc2002OOP.obj.internshipapplicaton;
  * @see sc2002OOP.obj.internshipapplicaton.InternshipApplicationStatus
  */
 public interface IApplication {
-    
-//    /**
-//     * Prints the concise details of the internship application to the standard output.
-//     */
-//    void print();
     
     /**
      * Retrieves the unique identifier for this application record.

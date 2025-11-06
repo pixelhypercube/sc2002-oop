@@ -3,13 +3,10 @@ package sc2002OOP.obj.withdrawalrequest;
 /**
  * <h1>Withdrawal Request Contract Interface</h1>
  * <p>
- * This interface defines the mandatory contract for any entity representing a **Student Withdrawal Request** * from an internship application. It ensures all request objects possess the core attributes 
+ * This interface defines the mandatory contract for any entity representing a <b>Student Withdrawal Request</b> 
+ * from an internship application. It ensures all request objects possess the core attributes 
  * needed to link the request to a specific application and track its approval status.
  * </p>
- * @apiNote This contract specifies the required data fields: the **application ID** that the student 
- * wishes to withdraw from, and the **status** (<code>WithdrawalRequestStatus</code>) which is managed 
- * by the Career Center Staff. The interface also mandates a basic <code>print()</code> utility method 
- * for displaying the request details.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi

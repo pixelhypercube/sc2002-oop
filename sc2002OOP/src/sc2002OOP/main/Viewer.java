@@ -3,9 +3,36 @@ package sc2002OOP.main;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
+/**
+ * <h1>Viewer Manager</h1>
+ * <p>
+ * This class provides static functions to print accessible visuals like tables that are used to print out data efficiently.
+ * It handles calculating column widths, truncating long content, and drawing the necessary borders.
+ * </p>
+ * @author Kee Kai Wen
+ * @author Kelvin Tay Wei Jie
+ * @author Koay Jun Zhi
+ * @author Lim Jia Wei Jerald
+ * @author Teo Kai Jie
+ * @version 1.0
+ */
 public class Viewer {
+	
+	/**
+	 * The maximum allowed width, in characters, for any single column
+	 * when printing formatted tables to the console.
+	 */
 	private static final int MAX_COLUMN_WIDTH = 50;
 
+	/**
+	 * Calculates the maximum width required for each column based on the headers and the data,
+	 * ensuring the width does not exceed {@link #MAX_COLUMN_WIDTH}.
+	 *
+	 * @param headers The list of column headers (String).
+	 * @param data The 2D list of data (rows of String lists).
+	 * @return An {@code ArrayList<Integer>} where each integer is the maximum width needed for the corresponding column, clamped by {@link #MAX_COLUMN_WIDTH}.
+	 */
 	private static ArrayList<Integer> getIndivColWidths(ArrayList<String> headers, ArrayList<ArrayList<String>> data) {
 		int n = headers.size(); // also data.size() because they're the same size
 		
@@ -31,6 +58,13 @@ public class Viewer {
 		return res;
 	}
 	
+	/**
+	 * Prints the header row of the table, including the top border and the separator below the headers.
+	 * Content is truncated and padded if it exceeds or is less than the calculated column width.
+	 *
+	 * @param colWidths The list of calculated column widths for each column.
+	 * @param headers The list of column headers to be printed.
+	 */
 	private static void printHeaders(ArrayList<Integer> colWidths, ArrayList<String> headers) {
 		int numHeaderCols = headers.size();
 		// top line first
@@ -73,6 +107,13 @@ public class Viewer {
 		}
 	}
 	
+	/**
+	 * Prints the data rows of the table, including row separators and the final bottom border.
+	 * Cell content is truncated and padded if it exceeds or is less than the column width.
+	 *
+	 * @param colWidths The list of calculated column widths.
+	 * @param data The 2D list of data (rows of String lists) to be printed.
+	 */
 	private static void printData(ArrayList<Integer> colWidths, ArrayList<ArrayList<String>> data) {
 		int numRecords = data.size();
 		for (int i = 0;i<numRecords;i++) {
@@ -120,6 +161,13 @@ public class Viewer {
 		}
 	}
 	
+	/**
+	 * Generates and prints a formatted table to the console using ASCII/Unicode characters.
+	 * It calculates the necessary column widths, prints the headers, and then prints the data rows.
+	 *
+	 * @param headers The list of column headers (String).
+	 * @param data The 2D list of data (rows of String lists).
+	 */
 	public static void printTable(ArrayList<String> headers, ArrayList<ArrayList<String>> data) {
 		// HEADERS
 		

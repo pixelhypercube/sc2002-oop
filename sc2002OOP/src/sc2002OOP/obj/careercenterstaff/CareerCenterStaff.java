@@ -29,17 +29,14 @@ import sc2002OOP.obj.withdrawalrequest.*;
  * <h1>Career Center Staff (User Role)</h1>
  * <p>
  * This class represents a user with the <b>Career Center Staff</b> role in the IPMS. 
- * It inherits core functionalities from the <code>User</code> base class and implements the 
- * <code>ICareerCenterStaff</code> interface to provide administrative and approval functionalities.
+ * It inherits core functionalities from the {@link sc2002OOP.obj.User User} base class and implements the 
+ * {@link sc2002OOP.obj.careercenterstaff.ICareerCenterStaff ICareerCenterStaff} 
+ * interface to provide administrative and approval functionalities.
  * </p>
  * <p>
- * Staff members are primarily responsible for **approving and rejecting** user registrations 
+ * Staff members are primarily responsible for <b>approving and rejecting</b> user registrations 
  * (Company Representatives), internship opportunities, and student withdrawal requests.
  * </p>
- * @apiNote This specialized class is responsible for the **administrative oversight** of the system. 
- * Its core methods focus on state transitions (e.g., PENDING to APPROVED/REJECTED) for key entities 
- * like <code>CompanyRepresentative</code>, <code>InternshipOpportunity</code>, and <code>WithdrawalRequest</code>. 
- * It inherits persistence logic (<code>Serializable</code>) from the base <code>User</code> class.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
@@ -111,7 +108,6 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		System.out.println("==== Approve/Reject Company Representative ====\n");
 		System.out.println("Company Representatives's Requests:");
 		CompanyRepresentativeView.printTable(companyReps);
-//		printCompanyReps(companyReps);
 		
 		String compRepID = "";
 		boolean found = false;

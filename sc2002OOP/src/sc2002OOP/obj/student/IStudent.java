@@ -5,13 +5,9 @@ import java.util.Scanner;
 /**
  * <h1>Student User Contract Interface</h1>
  * <p>
- * This interface defines the complete mandatory contract for any class representing a **Student** * user role within the IPMS. It specifies all necessary methods for user management, 
- * internship searching, application submission, and managing placements.
+ * This interface defines the complete mandatory contract for any class representing a {@link sc2002OOP.obj.student.Student Student} user role within the IPMS. 
+ * It specifies all necessary methods for user management, internship searching, application submission, and managing placements.
  * </p>
- * @apiNote This contract requires methods for basic user functions (login, profile, password change) 
- * and core student functionalities, including **applying for internships**, **withdrawing applications**, 
- * and **managing placement decisions**. It also requires standard getter/setter methods for academic 
- * attributes like major and academic year.
  * @author Kee Kai Wen
  * @author Kelvin Tay Wei Jie
  * @author Koay Jun Zhi
