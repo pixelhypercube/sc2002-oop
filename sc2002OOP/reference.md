@@ -33,3 +33,6 @@
 
 ![](images/Figure5.1.4e.png)
 `Figure 5.1.4e`: ICareerCenterStaff interface with staff specific methods only
+
+![](images/Figure5.3.3.png)
+`Figure 5.3.3`: StudentManager with getInstance() and close() methods
