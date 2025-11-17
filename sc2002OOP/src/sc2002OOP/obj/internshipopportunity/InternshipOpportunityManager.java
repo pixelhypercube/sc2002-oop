@@ -220,6 +220,11 @@ public class InternshipOpportunityManager {
 			
 			if (iOpp != null && count>=iOpp.getNumSlots()) {
 				iOpp.setStatus(InternshipOpportunityStatus.FILLED);
+			} else {
+				// set it back to approved ONLY if it was previously filled (otherwise it would fill up everything as approved)
+				if (iOpp.getStatus() == InternshipOpportunityStatus.FILLED) {
+					iOpp.setStatus(InternshipOpportunityStatus.APPROVED);
+				}
 			}
 		}
 	}

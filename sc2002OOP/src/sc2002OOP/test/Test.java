@@ -39,6 +39,8 @@ import sc2002OOP.obj.withdrawalrequest.WithdrawalRequestView;
  * 
  * */
 public class Test {
+	
+	// printing out directly from csv files
 	public static void printCsvData() {
 		ArrayList<Student> students = retrieveStudentsFromCSV();
 		ArrayList<CareerCenterStaff> staff = retrieveStaffFromCSV();
@@ -60,6 +62,8 @@ public class Test {
 		System.out.println("====== WITHDRAWAL REQUESTS TABLE ======");
 		WithdrawalRequestView.printTable(wReqs);
 	}
+	
+	// helper function to print out test tables
 	public static void printTestTables() {
 		ArrayList<String> headers = new ArrayList<>();
 	    headers.add("A");
@@ -107,7 +111,9 @@ public class Test {
 //		}
 //		Viewer.printTable(headers,data);
 	}
-	public static void getFromCSVFiles() {
+	// retrieves from csv files, then update into the .dat files
+	// CAUTION: this will AMEND the .dat files!
+	public static void getFromCSVFilesAndUpdate() {
 		ArrayList<Student> students = retrieveStudentsFromCSV();
 		ArrayList<CareerCenterStaff> staff = retrieveStaffFromCSV();
 		ArrayList<CompanyRepresentative> companyReps = retrieveCompanyRepsFromCSV();
@@ -130,14 +136,16 @@ public class Test {
 		WithdrawalRequestManager.saveWithdrawalRequests(wReqs);
 		CompanyManager.saveCompanies(companies);
 	}
+	
+	// prints out all records from .dat files
 	public static void printAllRecords() {
-		ArrayList<Student> students = StudentManager.retrieveStudents();
-		ArrayList<CareerCenterStaff> staff = CareerCenterStaffManager.retrieveStaff();
-		ArrayList<CompanyRepresentative> companyReps = CompanyRepresentativeManager.retrieveCompanyReps();
-		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.retrieveInternshipApps();
-		ArrayList<InternshipOpportunity> iOpps = InternshipOpportunityManager.retrieveInternshipOpps();
-		ArrayList<WithdrawalRequest> wReqs = WithdrawalRequestManager.retrieveWithdrawalReqs();
-		ArrayList<Company> companies = CompanyManager.retrieveCompanies();
+//		ArrayList<Student> students = StudentManager.retrieveStudents();
+//		ArrayList<CareerCenterStaff> staff = CareerCenterStaffManager.retrieveStaff();
+//		ArrayList<CompanyRepresentative> companyReps = CompanyRepresentativeManager.retrieveCompanyReps();
+//		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.retrieveInternshipApps();
+//		ArrayList<InternshipOpportunity> iOpps = InternshipOpportunityManager.retrieveInternshipOpps();
+//		ArrayList<WithdrawalRequest> wReqs = WithdrawalRequestManager.retrieveWithdrawalReqs();
+//		ArrayList<Company> companies = CompanyManager.retrieveCompanies();
 		
 		System.out.println("====== CAREER CENTER STAFF TABLE ======");
 		CareerCenterStaffView.printTable();
@@ -189,6 +197,8 @@ public class Test {
 //			System.out.println("-".repeat(40));
 //		}
 	}
+	
+//	INDIV CSV METHODS
 	
 	public static ArrayList<CareerCenterStaff> retrieveStaffFromCSV() {
 		ArrayList<CareerCenterStaff> staff = new ArrayList<>();

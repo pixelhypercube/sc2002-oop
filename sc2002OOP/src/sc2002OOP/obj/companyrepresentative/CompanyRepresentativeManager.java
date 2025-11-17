@@ -193,7 +193,7 @@ public class CompanyRepresentativeManager {
 		// name
 		String name = "";
 		while (name.isEmpty()) {
-			System.out.print("Enter name:");
+			System.out.print("Enter name: ");
 			name = sc.nextLine();
 			if (name.isEmpty()) {
 				System.out.println("Name not filled!");
@@ -206,7 +206,7 @@ public class CompanyRepresentativeManager {
 		while (companyID.isEmpty() || !found) {
 			System.out.println("Company Table:");
 			CompanyView.printTable();
-			System.out.print("Enter company ID:");
+			System.out.print("Enter company ID: ");
 			companyID = sc.nextLine();
 			if (companyID.isEmpty()) {
 				System.out.println("Company Name not filled!");
@@ -221,7 +221,7 @@ public class CompanyRepresentativeManager {
 		// department
 		String department = "";
 		while (department.isEmpty()) {
-			System.out.print("Enter department:");
+			System.out.print("Enter department: ");
 			department = sc.nextLine();
 			if (department.isEmpty()) {
 				System.out.println("Department not filled!");
@@ -231,7 +231,7 @@ public class CompanyRepresentativeManager {
 		// position
 		String position = "";
 		while (position.isEmpty()) {
-			System.out.print("Enter position:");
+			System.out.print("Enter position: ");
 			position = sc.nextLine();
 			if (position.isEmpty()) {
 				System.out.println("Position not filled!");
@@ -240,28 +240,40 @@ public class CompanyRepresentativeManager {
 		
 		// email (UNIQUE IDENTIFER)
 		String email = "";
+		String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
 		while (email.isEmpty() || CompanyRepresentativeManager.getCompRepByID(email)!=null) {
-			System.out.print("Enter email:");
+			System.out.print("Enter email: ");
 			email = sc.nextLine();
-			
-			if (CompanyRepresentativeManager.getCompRepByID(email)!=null) {
-				System.out.println("Sorry, that email has already been taken. Please fill in another email:");
-			}
 			
 			if (email.isEmpty()) {
 				System.out.println("Email not filled!");
+				continue;
+			}
+			
+			if (!email.matches(emailRegex)) {
+		        System.out.println("Invalid email format. Please use a standard email format (e.g., user@domain.com).");
+		        // Clear email to force re-entry
+		        email = ""; 
+		        continue;
+		    }
+			
+			if (CompanyRepresentativeManager.getCompRepByID(email)!=null) {
+				System.out.println("Sorry, that email has already been taken. Please fill in another email:");
+				email = "";
 			}
 		}
-		CompanyRepresentativeManager.companyRepresentatives.add(new CompanyRepresentative(
+		
+		String pwd = PasswordManager.hashPassword("password");
+		CompanyRepresentative newCompanyRep = new CompanyRepresentative(
 				email,
 				name,
 				companyID,
 				department,
 				position,
 				CompanyRepresentativeStatus.PENDING,
-				PasswordManager.hashPassword("password")
-		));
-		
+				pwd
+		);
+		CompanyRepresentativeManager.companyRepresentatives.add(newCompanyRep);
 		System.out.print("\033[H\033[2J");
 		System.out.println("Successfully Registered! Please wait for one of our career center staff to approve you!");
 	}

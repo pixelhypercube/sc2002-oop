@@ -33,12 +33,12 @@ import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
  */
 public class CompanyRepresentativeView {
 	public static void print(CompanyRepresentative cr) {
-		System.out.println("Email:          "+cr.getUserID());
-		System.out.println("Name:           "+cr.getName());
-		System.out.println("Company Name:   "+CompanyManager.getCompanyByID(cr.getCompanyID()).getCompanyName());
-		System.out.println("Department:     "+cr.getDepartment());
-		System.out.println("Position:       "+cr.getPosition());
-		System.out.println("Status:         "+cr.getStatus());
+		System.out.println("Email:               "+cr.getUserID());
+		System.out.println("Name:                "+cr.getName());
+		System.out.println("Company Name:        "+CompanyManager.getCompanyByID(cr.getCompanyID()).getCompanyName());
+		System.out.println("Department:          "+cr.getDepartment());
+		System.out.println("Position:            "+cr.getPosition());
+		System.out.println("Registration Status: "+cr.getStatus());
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class CompanyRepresentativeView {
 		headers.add("Company Name");
 		headers.add("Department");
 		headers.add("Position");
-		headers.add("Status");
+		headers.add("Registration Status");
 
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 		for (CompanyRepresentative companyRep : CompanyRepresentativeManager.getCompanyReps()) {
@@ -106,7 +106,7 @@ public class CompanyRepresentativeView {
 		headers.add("Company Name");
 		headers.add("Department");
 		headers.add("Position");
-		headers.add("Status");
+		headers.add("Registration Status");
 
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 		for (CompanyRepresentative companyRep : companyReps) {

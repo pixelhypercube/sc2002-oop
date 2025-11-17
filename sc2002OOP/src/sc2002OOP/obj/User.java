@@ -109,7 +109,7 @@ public abstract class User implements Serializable {
 			uID = sc.next();
 			if (!uID.isEmpty()) {
 				for (User user : users) {
-					if (user.getUserID().equals(uID)) {
+					if (user.getUserID().toLowerCase().equals(uID.toLowerCase())) {
 						userFound = true;
 						
 						// if user is Company Rep -> check whether status is 'Approved'

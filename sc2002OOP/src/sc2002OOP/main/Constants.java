@@ -22,10 +22,20 @@ public final class Constants {
 	public static final boolean IS_DEBUGGING = false;
 	
 	/**
-     * Defines the base directory path for files that require **read/write access** (e.g., serialized DAT files, exported reports).
-     * <p>In debug mode, this resolves to the absolute path: <code>[Project Root]/src/data/</code>.</p>
-     * <p>In production mode, this resolves to the relative path: <code>data/</code> (relative to the executable JAR).</p>
-     */
+	 * Defines the base directory path for files that require <b>read/write access</b> (e.g., serialized DAT files, exported reports).
+	 * <p><b>If {@link #IS_DEBUGGING} is {@code true} (IDE Mode):</b></p>
+	 * <p>This resolves to the absolute path: {@code [Project Root]/src/data/}</p>
+	 * <p><b>If {@link #IS_DEBUGGING} is {@code false} (Production Mode):</b></p>
+	 * <p>This resolves to the relative path: {@code data/} (relative to the executable JAR).</p>
+	 * <h3>Production Execution Steps (for JAR):</h3>
+	 * <ol>
+	 * <li>Ensure {@link #IS_DEBUGGING} is set to {@code false}.</li>
+	 * <li>Export the project to an executable JAR file (e.g., {@code IPMS.jar}). This JAR file should be placed in the project's <b>{@code bin}</b> folder (i.e. {@code ...\bin}).</li>
+	 * <li><b>If it doesn't already exist, manually create an empty folder named {@code data} inside the {@code bin} folder.</b> (i.e., {@code ...\bin\data}).</li>
+	 * <li>Open Command Prompt, navigate to the <b>{@code bin}</b> folder (e.g., {@code cd [Project Root]/bin}), and execute: {@code java -jar IPMS.jar}</li>
+	 * <li>The application will now read/write files to the <b>{@code data} folder</b> located next to the JAR file.</li>
+	 * </ol>
+	 */
 	public static final String FS_DATA_FOLDER = (IS_DEBUGGING 
 	        ? System.getProperty("user.dir") + java.io.File.separator + "src" + java.io.File.separator + "data" + java.io.File.separator
 	        : "data" + java.io.File.separator);
@@ -80,10 +90,10 @@ public final class Constants {
      */
 	public static final String WITHDRAWAL_REQS_FILE = "withdrawal_requests.csv";
     
-    /**
-     * Default filename for the CSV report generated when exporting internship application data.
-     */
-	public static final String EXPORTED_INTERNSHIP_APP_FILE = "applications.csv";
+//    /**
+//     * Default filename for the CSV report generated when exporting internship application data.
+//     */
+//	public static final String EXPORTED_INTERNSHIP_APP_FILE = "applications.csv";
 	
 	// --- Persistent Data File Names (DAT Files) ---
     

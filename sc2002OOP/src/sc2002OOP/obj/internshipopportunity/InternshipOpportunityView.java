@@ -8,6 +8,7 @@ import sc2002OOP.main.Viewer;
 import sc2002OOP.obj.company.Company;
 import sc2002OOP.obj.company.CompanyManager;
 import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeManager;
+import sc2002OOP.obj.companyrepresentative.CompanyRepresentativeStatus;
 
 /**
  * <h1>Internship Opportunity View Class</h1>
@@ -53,7 +54,7 @@ public class InternshipOpportunityView {
 		System.out.println("Preferred Major(s):       "+iOpp.getPreferredMajor());
 		
 		String companyReps = CompanyRepresentativeManager
-				.getCompanyReps(null, iOpp.getCompanyID(), null, null, null, null)
+				.getCompanyReps(null, iOpp.getCompanyID(), null, null, null, CompanyRepresentativeStatus.APPROVED)
 				.stream()
 				.map(rep->rep.getName() + " ("+rep.getUserID()+")")
 				.collect(Collectors.joining(", "));
@@ -93,7 +94,7 @@ public class InternshipOpportunityView {
 		System.out.println("Company Name:             "+companyName);
 		System.out.println("Preferred Major(s):       "+iOpp.getPreferredMajor());
 		String companyReps = CompanyRepresentativeManager
-				.getCompanyReps(null, iOpp.getCompanyID(), null, null, null, null)
+				.getCompanyReps(null, iOpp.getCompanyID(), null, null, null, CompanyRepresentativeStatus.APPROVED)
 				.stream()
 				.map(rep->rep.getName() + " ("+rep.getUserID()+")")
 				.collect(Collectors.joining(", "));
@@ -109,7 +110,7 @@ public class InternshipOpportunityView {
 		System.out.println("Level:                    "+levelStr);
 		System.out.println("Opening Date:             "+iOpp.getOpeningDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
 		System.out.println("Closing Date:             "+iOpp.getClosingDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
-		System.out.println("Status:                   "+iOpp.getStatus());
+//		System.out.println("Status:                   "+iOpp.getStatus());
 		//		System.out.println("Visible to students:      "+(iOpp.isVisibility() ? "on" : "off"));
 	}
 	
@@ -194,6 +195,7 @@ public class InternshipOpportunityView {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Internship ID");
 		headers.add("Title");
+		headers.add("Status");
 		headers.add("Visible to Students");
 		
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
@@ -201,6 +203,7 @@ public class InternshipOpportunityView {
 			ArrayList<String> rec = new ArrayList<>();
 			rec.add(iOpp.getInternshipID());
 			rec.add(iOpp.getTitle());
+			rec.add(iOpp.getStatus().toString());
 			rec.add((iOpp.isVisibility() ? "on" : "off"));
 			data.add(rec);
 		}

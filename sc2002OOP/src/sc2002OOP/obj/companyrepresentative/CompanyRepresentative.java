@@ -50,18 +50,21 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 	public CompanyRepresentative() {}
 	
 	/**
-     * Constructs a Company Representative object with necessary profile and authentication details.
-     * The super constructor handles {@code userID}, {@code name}, and {@code password}.
-     * * @param userID The unique identifier for the company representative.
-     * @param name The representative's full name.
-     * @param companyID The ID of the company the representative belongs to.
-     * @param department The department of the representative within the company.
-     * @param position The job position of the representative.
-     * @param status The current approval status of the representative's account (PENDING, APPROVED, REJECTED).
-     * @param password The representative's securely hashed password.
-     */
+	 * Constructs a Company Representative object with necessary profile and authentication details.
+	 * <p>
+	 * This calls the four-argument {@code User} super constructor, using {@code userID} 
+	 * to populate both the inherited {@code userID} and {@code email} fields.
+	 * </p>
+	 * @param userID The unique identifier for the company representative (which is their email address).
+	 * @param name The representative's full name.
+	 * @param companyID The ID of the company the representative belongs to.
+	 * @param department The department of the representative within the company.
+	 * @param position The job position of the representative.
+	 * @param status The current approval status of the representative's account (PENDING, APPROVED, REJECTED).
+	 * @param password The representative's securely hashed password.
+	 */
 	public CompanyRepresentative(String userID, String name, String companyID, String department, String position, CompanyRepresentativeStatus status, String password) {
-		super(userID,name,password);
+		super(userID,name,userID,password); // putting userID in email param (even though not needed), because email is userID
 		this.companyID = companyID;
 		this.department = department;
 		this.position = position;
@@ -76,6 +79,32 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
      * @param sc The {@code Scanner} object for input.
      */
 	public void createInternship(Scanner sc) {
+		// need to detect how many internships the COMPANY has applied
+		ArrayList<InternshipOpportunity> internshipOpps
+			= InternshipOpportunityManager.getInternshipOpps(
+						null,
+						null,
+						null,
+						companyID,
+						null,
+						(InternshipOpportunityLevel[]) null,
+						new InternshipOpportunityStatus[] {
+								InternshipOpportunityStatus.APPROVED,
+								InternshipOpportunityStatus.FILLED,
+								InternshipOpportunityStatus.PENDING
+						},
+						null,
+						null,
+						null,
+						null,
+						null
+					);
+		if (internshipOpps.size()>=5) {
+			System.out.print("\033[H\033[2J");
+			System.out.println("Sorry, you cannot create any more internship opportunities as you currently have the maximum limit of 5 active/filled/pending opportunities.");
+			return;
+		}
+		
 		System.out.print("\033[H\033[2J");
 		System.out.println("==== Create Internship Opportunity ====");
 		
@@ -188,32 +217,72 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 			}
 		}
 		
-		// opening date
-		LocalDate openingDate = LocalDate.now();
-		String openingDateStr = "";
+		if (sc.hasNextLine()) {
+            sc.nextLine(); 
+        }
+		
 		String dateRegex = "\\d{4}-\\d{2}-\\d{2}";
-		while (openingDateStr.isEmpty()) {
+		
+		// opening date
+		
+		LocalDate openingDate = null;
+		String openingDateStr;
+		boolean validOpeningDate = false;
+		
+		while (!validOpeningDate) {
 			System.out.print("Enter Opening Date using this format (YYYY-MM-DD): ");
-			openingDateStr = sc.nextLine();
-			if (openingDateStr.matches(dateRegex)) {
-				openingDate = LocalDate.parse(openingDateStr);
-			}
+		    openingDateStr = sc.nextLine().trim();
+		    
+		    if (openingDateStr.isEmpty()) {
+		        System.out.println("Opening Date cannot be empty.");
+		        continue;
+		    }
+
+		    if (!openingDateStr.matches(dateRegex)) {
+		        System.out.println("Invalid format. Please use YYYY-MM-DD.");
+		        continue;
+		    }
+		    
+		    try {
+		    	openingDate = LocalDate.parse(openingDateStr);
+		    	validOpeningDate = true;
+		    } catch (DateTimeParseException e) {
+		    	System.out.println("Invalid date value. Please ensure the month, day and year are valid.");
+		    }
 		}
 		
 		// closing date
-		LocalDate closingDate = LocalDate.now();
-		String closingDateStr = "";
-		while (closingDateStr.isEmpty() || closingDate.isBefore(openingDate)) {
-			System.out.print("Enter Closing Date using this format (YYYY-MM-DD): ");
-			closingDateStr = sc.nextLine();
-			if (closingDateStr.matches(dateRegex)) {
-				closingDate = LocalDate.parse(closingDateStr);
-				if (closingDate.isBefore(openingDate)) {
-					System.out.println("Closing Date should be after opening date ("+openingDate.format(DateTimeFormatter.ISO_DATE)+")");
-				}
-			}
-		}
 		
+		LocalDate closingDate = null;
+		String closingDateStr = "";
+		boolean validClosingDate = false;
+		
+		while (!validClosingDate) {
+			System.out.print("Enter Closing Date using this format (YYYY-MM-DD): ");
+		    closingDateStr = sc.nextLine().trim();
+
+		    if (closingDateStr.isEmpty()) {
+		        System.out.println("Closing Date cannot be empty.");
+		        continue;
+		    }
+
+		    if (!closingDateStr.matches(dateRegex)) {
+		        System.out.println("Invalid format. Please use YYYY-MM-DD.");
+		        continue;
+		    }
+		    
+		    try {
+		        closingDate = LocalDate.parse(closingDateStr);
+
+		        if (closingDate.isBefore(openingDate)) {
+		            System.out.println("Closing Date should be after opening date (" + openingDate.format(DateTimeFormatter.ISO_DATE) + ").");
+		        } else {
+		            validClosingDate = true;
+		        }
+		    } catch (DateTimeParseException e) {
+		        System.out.println("Invalid date value. Please ensure the month and day are valid.");
+		    }
+		}
 		
 		boolean isVisible = false;
 		int in = 0;
@@ -291,12 +360,15 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		
 		InternshipApplicationView.printTable(allIApps);
 		
-		while (applicationID.isEmpty()) {
+		boolean found = false;
+		while (applicationID.isEmpty() || !found) {
 			System.out.print("Enter an Application ID: ");
 			applicationID = sc.next();
 			
+			
 			for (InternshipApplication iApp : allIApps) {
 				if (iApp.getApplicationID().equals(applicationID)) {
+					found = true;
 					int choice = 0;
 					while (choice<=0 || choice>2) {
 						System.out.println("Select a choice:");
@@ -307,21 +379,24 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 						
 						if (choice==1) {
 							iApp.setStatus(InternshipApplicationStatus.SUCCESSFUL);
+							System.out.print("\033[H\033[2J");
 							System.out.println("Successfully approved Application ID " + applicationID);
 						}
 						else if (choice==2) {
 							iApp.setStatus(InternshipApplicationStatus.UNSUCCESSFUL);
+							System.out.print("\033[H\033[2J");
 							System.out.println("Successfully rejected Application ID " + applicationID);
 						}
 						else System.out.println("Please select a choice of either 1 or 2.");
 					}
 				}
 			}
+			if (!found) System.out.println("Application ID not found. Please select another one");
 		}
 	}
 	
 	/**
-     * Toggles the student-facing visibility status of one of the company's approved internship opportunities.
+     * Toggles the student-facing visibility status of one of the company's internship opportunities (excluding rejected ones).
      *
      * @param sc The {@code Scanner} object for input.
      */
@@ -334,8 +409,13 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 						"",
 						companyID,
 						"",
-						(InternshipOpportunityLevel)null,
-						(InternshipOpportunityStatus)null,
+						(InternshipOpportunityLevel[])null,
+						// filter out REJECTED
+			            new InternshipOpportunityStatus[] {
+			                InternshipOpportunityStatus.PENDING,
+			                InternshipOpportunityStatus.APPROVED,
+			                InternshipOpportunityStatus.FILLED
+			            },
 						null,
 						null,
 						null,
@@ -346,7 +426,7 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		String internshipID = "";
 		boolean found = false;
 		while (internshipID.trim().isEmpty() || !found) {
-			System.out.println("==== Toggle Visibility of Internship Oppurtunity ====\n");
+			System.out.println("==== Toggle Visibility of Internship Opportunity (For students) ====\n");
 			System.out.println("Internship Opportunities Table:");
 			InternshipOpportunityView.printVisibilityTable(internshipOpps);
 			
@@ -370,6 +450,75 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 				System.out.println("Sorry, Internship ID not found. Please try again.");
 		}
 	}
+	
+	/**
+	 * Allows the Company Representative to view all internship applications submitted
+	 * for one of their company's internship opportunities.
+	 * <p>
+	 * This method performs the following steps:
+	 * <ul>
+	 * <li>Displays a filtered list of internship opportunities belonging exclusively to the representative's company.</li>
+	 * <li>Prompts the representative to input the unique Internship ID they wish to review.</li>
+	 * <li>Validates that the entered ID exists and belongs to their company.</li>
+	 * <li>Retrieves all {@code InternshipApplication} records matching the selected ID (the applicants).</li>
+	 * <li>Displays a detailed, formatted table of all applicants, including their application status, for the selected internship.</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param sc The {@code Scanner} object for reading user input (the selected Internship ID).
+	 * @see InternshipOpportunityManager
+	 * @see InternshipApplicationManager
+	 * @see InternshipApplicationView
+	 */
+	public void viewStudentApplications(Scanner sc) {
+		System.out.print("\033[H\033[2J");
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
+		
+	    System.out.println("==== View Applicants for Internship Opportunity ====");
+	    
+	    ArrayList<InternshipOpportunity> companyOpps = 
+	    		InternshipOpportunityManager.getInternshipOpps(
+	    			
+	    		)
+	    		.stream()
+	    		.filter(obj->obj.getCompanyID().equals(this.companyID))
+	    		.collect(Collectors.toCollection(ArrayList::new));
+	    
+	    if (companyOpps.isEmpty()) {
+	        System.out.println("No internship opportunities available to view applicants for.");
+	        return;
+	    }
+	    
+	    InternshipOpportunityView.printList(companyOpps);
+	    System.out.print("Enter Internship ID to view applicants: ");
+	    String selectedInternshipID = sc.nextLine().trim();
+	    
+	    InternshipOpportunity selectedOpp = InternshipOpportunityManager.getInternshipOppByID(selectedInternshipID);
+
+	    if (selectedOpp == null || !selectedOpp.getCompanyID().equals(this.companyID)) {
+	        System.out.println("Invalid Internship ID or the internship doesn't belong to your company.");
+	        return;
+	    }
+	    
+	    ArrayList<InternshipApplication> applicants = 
+	    		(ArrayList<InternshipApplication>) InternshipApplicationManager
+				.getInternshipApps()
+				.stream()
+				.filter(app -> app.getInternshipID().equals(selectedInternshipID))
+				.collect(Collectors.toList());
+	    
+	    System.out.print("\033[H\033[2J");
+	    if (applicants.isEmpty()) {
+	    	System.out.println("Sorry, there's no applicants for internship ID " + selectedOpp.getInternshipID());
+	    	return;
+	    }
+	    
+	    System.out.println("Applicant details for Internship: " + selectedOpp.getTitle() + " (ID: " + selectedOpp.getInternshipID() + ")");
+	    
+	    InternshipApplicationView.printTable(applicants);
+	}
 
 	/**
      * {@inheritDoc}
@@ -384,16 +533,17 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		System.out.println("Welcome, " + super.getName() + " (" + super.getUserID() + ")");
 		
 		int choice = 0;
-		while (choice != 7) {
+		while (choice != 8) {
 			System.out.println("=====================================================");
 			System.out.println("Choose an option: ");
-			System.out.println("(1) View All Internship Opportunities");
-			System.out.println("(2) Approve/Reject Applicants");
-			System.out.println("(3) Create Internship Opportunity");
-			System.out.println("(4) Toggle Visibility of Internship Oppurtunity");
-			System.out.println("(5) View Profile");
-			System.out.println("(6) Change Password");
-			System.out.println("(7) Log Out");
+			System.out.println("(1) View Internship Opportunities");
+			System.out.println("(2) View All Applicants for an Internship Opportunity");
+			System.out.println("(3) Approve/Reject Applicants");
+			System.out.println("(4) Create Internship Opportunity");
+			System.out.println("(5) Toggle Visibility of Internship Opportunity (for students)");
+			System.out.println("(6) View Profile");
+			System.out.println("(7) Change Password");
+			System.out.println("(8) Log Out");
 			System.out.println("=====================================================");
 			System.out.print("Select a choice: ");
 			
@@ -405,21 +555,24 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
     					viewInternshipOpps(sc);
     				}
     				case 2 -> {
-    					approveRejectApplicant(sc);
+    					viewStudentApplications(sc);
     				}
     				case 3 -> {
-    					createInternship(sc);
+    					approveRejectApplicant(sc);
     				}
     				case 4 -> {
-    					toggleInternshipOpportunity(sc);
+    					createInternship(sc);
     				}
     				case 5 -> {
-    					viewProfile(sc);
+    					toggleInternshipOpportunity(sc);
     				}
     				case 6 -> {
-    					changePassword(sc);
+    					viewProfile(sc);
     				}
     				case 7 -> {
+    					changePassword(sc);
+    				}
+    				case 8 -> {
     					System.out.print("\033[H\033[2J");
     					System.out.println("Logged out!");
     					break;
@@ -431,7 +584,7 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
     			}
             } catch (NumberFormatException e) {
             	System.out.print("\033[H\033[2J");
-            	System.out.println("Invalid choice. Please enter a valid number (1-7).");
+            	System.out.println("Invalid choice. Please enter a valid number (1-8).");
                 choice = 0;
             }
 			
@@ -488,7 +641,7 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 				break;
 			}
 		}
-
+		System.out.print("\033[H\033[2J");
 		System.out.println("Your password has been successfully changed!");
 	}
 

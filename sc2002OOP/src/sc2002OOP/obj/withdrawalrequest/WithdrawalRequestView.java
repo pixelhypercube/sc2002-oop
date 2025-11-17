@@ -3,6 +3,14 @@ package sc2002OOP.obj.withdrawalrequest;
 import java.util.ArrayList;
 
 import sc2002OOP.main.Viewer;
+import sc2002OOP.obj.company.Company;
+import sc2002OOP.obj.company.CompanyManager;
+import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
+import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
+import sc2002OOP.obj.internshipopportunity.InternshipOpportunity;
+import sc2002OOP.obj.internshipopportunity.InternshipOpportunityManager;
+import sc2002OOP.obj.student.Student;
+import sc2002OOP.obj.student.StudentManager;
 
 /**
  * <h1>Withdrawal Request View Class</h1>
@@ -27,8 +35,8 @@ import sc2002OOP.main.Viewer;
  */
 public class WithdrawalRequestView {
 	public static void print(WithdrawalRequest wr) {
-		System.out.println("Application ID: " + wr.getApplicationID());
-		System.out.println("Status:         "+wr.getStatus());
+		System.out.println("Application ID:    " + wr.getApplicationID());
+		System.out.println("Withdrawal Status: " + wr.getStatus());
 	}
 	
 	/**
@@ -48,12 +56,40 @@ public class WithdrawalRequestView {
 	public static void printTable() {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
-		headers.add("Status: ");
+		headers.add("Student Name");
+		headers.add("Internship Title/Company");
+		headers.add("Current App. Status");
+		headers.add("Withdrawal Req. Status");
 		
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 		for (WithdrawalRequest wReq : WithdrawalRequestManager.getWithdrawalReqs()) {
 			ArrayList<String> rec = new ArrayList<String>();
-			rec.add(wReq.getApplicationID());
+			
+			InternshipApplication app = InternshipApplicationManager.getInternshipAppByID(wReq.getApplicationID());
+			
+			if (app == null) continue;
+			
+			// 2. Get Student Details
+	        Student student = StudentManager.getStudentByID(app.getStudentID());
+	        String studentName = (student != null) ? student.getName() : "Unknown Student";
+
+	        // internship details
+	        InternshipOpportunity iOpp = InternshipOpportunityManager.getInternshipOppByID(app.getInternshipID());
+	        String internshipTitleAndCompany = "Unknown Internship"; // Default value
+
+	        if (iOpp != null) {
+	            // Get Company Name (Assumes CompanyManager.getCompanyByID and Company.getCompanyName exist)
+	            Company company = CompanyManager.getCompanyByID(iOpp.getCompanyID());
+	            String companyName = (company != null) ? company.getCompanyName() : "Unknown Company";
+	            
+	            // Format the combined string for display
+	            internshipTitleAndCompany = iOpp.getTitle() + " @ " + companyName;
+	        }
+					
+	        rec.add(wReq.getApplicationID());
+	        rec.add(studentName);
+	        rec.add(internshipTitleAndCompany);
+			rec.add(app.getStatus().toString());
 			rec.add(wReq.getStatus().toString());
 			data.add(rec);
 		}
@@ -73,12 +109,40 @@ public class WithdrawalRequestView {
 	public static void printTable(ArrayList<WithdrawalRequest> wReqs) {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
-		headers.add("Status: ");
+		headers.add("Student Name");
+		headers.add("Internship Title/Company");
+		headers.add("Current App. Status");
+		headers.add("Withdrawal Req. Status");
 		
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 		for (WithdrawalRequest wReq : wReqs) {
 			ArrayList<String> rec = new ArrayList<String>();
-			rec.add(wReq.getApplicationID());
+			
+			InternshipApplication app = InternshipApplicationManager.getInternshipAppByID(wReq.getApplicationID());
+			
+			if (app == null) continue;
+			
+			// 2. Get Student Details
+	        Student student = StudentManager.getStudentByID(app.getStudentID());
+	        String studentName = (student != null) ? student.getName() : "Unknown Student";
+
+	        // internship details
+	        InternshipOpportunity iOpp = InternshipOpportunityManager.getInternshipOppByID(app.getInternshipID());
+	        String internshipTitleAndCompany = "Unknown Internship"; // Default value
+
+	        if (iOpp != null) {
+	            // Get Company Name (Assumes CompanyManager.getCompanyByID and Company.getCompanyName exist)
+	            Company company = CompanyManager.getCompanyByID(iOpp.getCompanyID());
+	            String companyName = (company != null) ? company.getCompanyName() : "Unknown Company";
+	            
+	            // Format the combined string for display
+	            internshipTitleAndCompany = iOpp.getTitle() + " @ " + companyName;
+	        }
+					
+	        rec.add(wReq.getApplicationID());
+	        rec.add(studentName);
+	        rec.add(internshipTitleAndCompany);
+			rec.add(app.getStatus().toString());
 			rec.add(wReq.getStatus().toString());
 			data.add(rec);
 		}

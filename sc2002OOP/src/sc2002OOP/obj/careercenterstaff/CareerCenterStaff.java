@@ -2,9 +2,11 @@ package sc2002OOP.obj.careercenterstaff;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,6 +24,8 @@ import sc2002OOP.obj.companyrepresentative.*;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplication;
 import sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager;
 import sc2002OOP.obj.internshipopportunity.*;
+import sc2002OOP.obj.student.Student;
+import sc2002OOP.obj.student.StudentManager;
 import sc2002OOP.obj.withdrawalrequest.*;
 
 
@@ -174,17 +178,16 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		
 		System.out.println("==== Approve/Reject Withdrawal Request ====\n");
 		System.out.println("Withdrawal Requests:");
-		WithdrawalRequestView.printTable();
-//		printWithdrawalReqs(withdrawalReqs);
+		WithdrawalRequestView.printTable(withdrawalReqs);
 		
-		String appilcationID = "";
+		String applicationID = "";
 		boolean found = false;
-		while (appilcationID.isEmpty() || !found) {
+		while (applicationID.isEmpty() || !found) {
 			System.out.print("Enter the ID of the Application ID: ");
-			appilcationID = sc.next();
+			applicationID = sc.next();
 			
 			for (WithdrawalRequest withdrawalReq : withdrawalReqs) {
-				if (withdrawalReq.getApplicationID().equals(appilcationID) && 
+				if (withdrawalReq.getApplicationID().equals(applicationID) && 
 						withdrawalReq.getStatus()==WithdrawalRequestStatus.PENDING) {
 					found = true;
 					
@@ -196,11 +199,19 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 						System.out.print("Your choice: ");
 						status = sc.nextInt();
 						if (status==1) {
-//							withdrawalReqs.remove(withdrawalReq);
 							withdrawalReq.setStatus(WithdrawalRequestStatus.SUCCESSFUL);
-							for (InternshipApplication iApp : iApps) {
-								if (iApp.getApplicationID().equals(appilcationID))
-									iApps.remove(iApp);
+							
+							// use iterator instead of for loop for smoother removal
+							Iterator<InternshipApplication> it = iApps.iterator();
+							while (it.hasNext()) {
+								InternshipApplication iApp = it.next();
+								
+								if (iApp != null && iApp.getApplicationID() != null) {
+									if (iApp.getApplicationID().equals(applicationID)) {
+										it.remove();
+										break;
+									}
+								}
 							}
 							InternshipOpportunityManager.updateFilledPlaces(); // update filled status if filled
 							System.out.print("\033[H\033[2J");
@@ -314,6 +325,7 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		// FILTERING
 		System.out.println("Set Filters (Press ENTER to skip):");
 		
+		System.out.println("\n1. Internship Details");
 		System.out.print("Enter Internship ID: ");
 	    String internshipID = sc.nextLine().trim();
 	    internshipID = internshipID.isEmpty() ? null : internshipID;
@@ -383,20 +395,47 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		
 		System.out.print("Enter Opening Date From (YYYY-MM-DD): ");
 		String openingFromInput = sc.nextLine().trim();
-		LocalDate openingFrom = openingFromInput.isEmpty() ? null : LocalDate.parse(openingFromInput, DateTimeFormatter.ISO_DATE);
+		LocalDate openingFrom = null;
+		if (!openingFromInput.isEmpty()) {
+			try {
+				openingFrom = LocalDate.parse(openingFromInput, DateTimeFormatter.ISO_DATE);
+			} catch (DateTimeParseException e) {
+				System.out.println("Invalid date format. Please use YYYY-MM-DD. Opening Date From filter ignored.");
+			}
+		}
 
 		System.out.print("Enter Opening Date To (YYYY-MM-DD): ");
 		String openingToInput = sc.nextLine().trim();
-		LocalDate openingTo = openingToInput.isEmpty() ? null : LocalDate.parse(openingToInput, DateTimeFormatter.ISO_DATE);
+		LocalDate openingTo = null;
+		if (!openingToInput.isEmpty()) {
+			try {
+				openingTo = LocalDate.parse(openingToInput, DateTimeFormatter.ISO_DATE);
+			} catch (DateTimeParseException e) {
+				System.out.println("Invalid date format. Please use YYYY-MM-DD. Opening Date To filter ignored.");
+			}
+		}
 
 		System.out.print("Enter Closing Date From (YYYY-MM-DD): ");
 		String closingFromInput = sc.nextLine().trim();
-		LocalDate closingFrom = closingFromInput.isEmpty() ? null : LocalDate.parse(closingFromInput, DateTimeFormatter.ISO_DATE);
+		LocalDate closingFrom = null;
+		if (!closingFromInput.isEmpty()) {
+			try {
+				closingFrom = LocalDate.parse(closingFromInput, DateTimeFormatter.ISO_DATE);
+			} catch (DateTimeParseException e) {
+				System.out.println("Invalid date format. Please use YYYY-MM-DD. Closing Date From filter ignored.");
+			}
+		}
 
 		System.out.print("Enter Closing Date To (YYYY-MM-DD): ");
 		String closingToInput = sc.nextLine().trim();
-		LocalDate closingTo = closingToInput.isEmpty() ? null : LocalDate.parse(closingToInput, DateTimeFormatter.ISO_DATE);
-
+		LocalDate closingTo = null;
+		if (!closingToInput.isEmpty()) {
+			try {
+				closingTo = LocalDate.parse(closingToInput, DateTimeFormatter.ISO_DATE);
+			} catch (DateTimeParseException e) {
+				System.out.println("Invalid date format. Please use YYYY-MM-DD. Closing Date To filter ignored.");
+			}
+		}
 		
 		ArrayList<InternshipOpportunity> companyRepList = 
 				InternshipOpportunityManager.getInternshipOpps(
@@ -424,23 +463,91 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 				)
 				.collect(Collectors.toCollection(ArrayList::new));
 		
+		
+		// INCLUDE STUDENT INFO
+		
+		System.out.println("\n2. Student Details:");
+		
+		System.out.print("Enter Student ID: ");
+		String inputID = sc.nextLine().trim();
+		final String studentIDFilter = inputID.isEmpty() ? null : inputID.toLowerCase(); 
+
+		System.out.print("Enter Student's Name: ");
+		String inputName = sc.nextLine().trim();
+		final String studentNameFilter = inputName.isEmpty() ? null : inputName.toLowerCase();
+		    
+		System.out.print("Enter Student's Major: ");
+		String inputMajor = sc.nextLine().trim();
+		final String studentMajorFilter = inputMajor.isEmpty() ? null : inputMajor.toLowerCase();
+		    
+		System.out.print("Enter Student's Year: ");
+		String inputYear = sc.nextLine().trim();
+		final String studentYearFilter = inputYear.isEmpty() ? null : inputYear;
+		
+		filteredApplications = 
+				filteredApplications.stream()
+				.filter(app->{
+			        if (studentIDFilter != null && !app.getStudentID().toLowerCase().contains(studentIDFilter)) {
+			            return false;
+			        }
+
+			        Student student = StudentManager.getStudentByID(app.getStudentID());
+			        if (student == null) {
+			            return false; 
+			        }
+
+			        if (studentNameFilter != null && !student.getName().toLowerCase().contains(studentNameFilter)) {
+			            return false;
+			        }
+
+			        if (studentMajorFilter != null && !student.getMajor().toLowerCase().contains(studentMajorFilter)) {
+			            return false;
+			        }
+			        
+			        if (studentYearFilter != null) {
+			        	try {
+			        		int filterYear = Integer.parseInt(studentYearFilter);
+			        		if (student.getYear() != filterYear) {
+			        			return false;
+			        		}
+			        	} catch (NumberFormatException e) {
+			        		return false; 
+			        	}
+			        }
+
+			        return true;
+				})
+				.collect(Collectors.toCollection(ArrayList::new));
+		
 		if (filteredApplications.isEmpty()) {
 			System.out.println("No matching internship applications found. Export aborted.");
 			return;
 		}
 		
 		// include headers first
-		StringBuilder contents = new StringBuilder("ApplicationID,StudentID,InternshipID,Status,Internship_Title,Internship_Description,Internship_CompanyName,Internship_PreferredMajors,Internship_Level,Internship_OpeningDate,Internship_ClosingDate\n");
+		StringBuilder contents = new StringBuilder("ApplicationID,StudentID,Student_Name,Student_Major,Student_Year,InternshipID,Status,Internship_Title,Internship_Description,Internship_CompanyName,Internship_PreferredMajors,Internship_Level,Internship_OpeningDate,Internship_ClosingDate\n");
 		for (InternshipApplication internshipApp : filteredApplications) {
 			InternshipOpportunity internshipOpp = InternshipOpportunityManager.getInternshipOppByID(internshipApp.getInternshipID());
 		    
+			// GET COMPANY DETAILS
 			Company company = CompanyManager.getCompanyByID(internshipOpp.getCompanyID());
 			String companyName = "";
 			if (company == null) companyName = "Company ID Not Found";
 			else companyName = company.getCompanyName();
 			
+			// GET STUDENT DETAILS
+			Student student = StudentManager.getStudentByID(internshipApp.getStudentID());
+		    String studentName = (student != null) ? student.getName() : "Student ID Not Found";
+		    String studentMajor = (student != null) ? student.getMajor() : "N/A";
+		    String studentYear = (student != null) ? String.valueOf(student.getYear()) : "N/A";
+			
 			contents.append(internshipApp.getApplicationID()).append(Constants.DELIMITER)
 		            .append(internshipApp.getStudentID()).append(Constants.DELIMITER)
+		            
+		            .append(studentName).append(Constants.DELIMITER)
+		            .append(studentMajor).append(Constants.DELIMITER)
+		            .append(studentYear).append(Constants.DELIMITER)
+		            
 		            .append(internshipApp.getInternshipID()).append(Constants.DELIMITER)
 		            .append(internshipApp.getStatus()).append(Constants.DELIMITER)
 		            .append(internshipOpp.getTitle()).append(Constants.DELIMITER)
@@ -452,11 +559,13 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		            .append(internshipOpp.getClosingDate().format(DateTimeFormatter.ISO_DATE)).append(Constants.NEW_LINE);
 		}
 		
-		boolean success = FileIOHandler.writeFileContents(Constants.EXPORTED_INTERNSHIP_APP_FILE,Constants.EXPORT_REPORTS_PATH, contents.toString());
+		String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+		String reportFileName = "InternshipApplications_Report_" + timestamp + ".csv";
+		boolean success = FileIOHandler.writeFileContents(reportFileName,Constants.EXPORT_REPORTS_PATH, contents.toString());
 		
 		System.out.print("\033[H\033[2J");
 		if (success) {
-			System.out.println("Report successfully exported to: " + Constants.EXPORT_REPORTS_PATH + Constants.EXPORTED_INTERNSHIP_APP_FILE);
+			System.out.println("Report successfully exported to: " + Constants.EXPORT_REPORTS_PATH + reportFileName);
 		} else {
 			System.out.println("Export operation completed with errors. Please check the console output above.");
 		}
@@ -477,7 +586,7 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		while (choice != 8) {
 			System.out.println("=====================================================");
 			System.out.println("Choose an option: ");
-			System.out.println("(1) View Available Internships");
+			System.out.println("(1) View Internship Opportunities");
 			System.out.println("(2) Approve/Reject Company Representative");
 			System.out.println("(3) Approve/Reject Internship Opportunity");
 			System.out.println("(4) Approve/Reject Withdrawal Request");
@@ -575,7 +684,7 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 				break;
 			}
 		}
-
+		System.out.print("\033[H\033[2J");
 		System.out.println("Your password has been successfully changed!");
 	}
 	

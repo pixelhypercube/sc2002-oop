@@ -1,0 +1,2 @@
+ApplicationID,StudentID,Student_Name,Student_Major,Student_Year,InternshipID,Status,Internship_Title,Internship_Description,Internship_CompanyName,Internship_PreferredMajors,Internship_Level,Internship_OpeningDate,Internship_ClosingDate
+A4,U2310003C,Lim Yi Xuan,Computer Engineering,4,I123,PENDING,Data Engineer,Good fundamentals of Data Science,Robot Pte. Ltd.,Data Science & AI,BASIC,2025-11-01,2026-11-07

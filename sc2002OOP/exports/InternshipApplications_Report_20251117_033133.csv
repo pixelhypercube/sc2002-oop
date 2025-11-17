@@ -1,0 +1,6 @@
+ApplicationID,StudentID,Student_Name,Student_Major,Student_Year,InternshipID,Status,Internship_Title,Internship_Description,Internship_CompanyName,Internship_PreferredMajors,Internship_Level,Internship_OpeningDate,Internship_ClosingDate
+A2,U2310001A,Tan Wei Ling,Computer Science,2,I124,PENDING,AI Engineer,Good fundamentals of AI Engineering,Components Pte. Ltd.,Data Science & AI,ADVANCED,2025-11-02,2026-11-08
+A3,U2310002B,Ng Jia Hao,Data Science & AI,3,I121,PENDING,Software Engineer,Good fundamentals of coding languages,Test Pte. Ltd.,Computer Science,BASIC,2025-10-30,2026-11-05
+A4,U2310003C,Lim Yi Xuan,Computer Engineering,4,I123,PENDING,Data Engineer,Good fundamentals of Data Science,Robot Pte. Ltd.,Data Science & AI,BASIC,2025-11-01,2026-11-07
+A5,U2310001A,Tan Wei Ling,Computer Science,2,I121,PENDING,Software Engineer,Good fundamentals of coding languages,Test Pte. Ltd.,Computer Science,BASIC,2025-10-30,2026-11-05
+A10,U2310002B,Ng Jia Hao,Data Science & AI,3,I123,PENDING,Data Engineer,Good fundamentals of Data Science,Robot Pte. Ltd.,Data Science & AI,BASIC,2025-11-01,2026-11-07

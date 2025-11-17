@@ -1,8 +1,11 @@
 package sc2002OOP.obj.internshipapplicaton;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import sc2002OOP.main.Viewer;
+import sc2002OOP.obj.student.Student;
+import sc2002OOP.obj.student.StudentManager;
 
 
 /**
@@ -34,10 +37,10 @@ public class InternshipApplicationView {
      * @param iApp The {@code InternshipApplication} object to print.
      */
 	public void print(InternshipApplication iApp) {
-		System.out.println("Application ID: " + iApp.getApplicationID());
-		System.out.println("Student ID:     " + iApp.getStudentID());
-		System.out.println("Internship ID:  " + iApp.getInternshipID());
-		System.out.println("Status:         " + iApp.getStatus());
+		System.out.println("Application ID:     " + iApp.getApplicationID());
+		System.out.println("Student ID:         " + iApp.getStudentID());
+		System.out.println("Internship ID:      " + iApp.getInternshipID());
+		System.out.println("Application Status: " + iApp.getStatus());
 	}
 	
 	/**
@@ -56,15 +59,33 @@ public class InternshipApplicationView {
 	public static void printTable() {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
-//		headers.add("Student ID");
+		headers.add("Student ID");
+		headers.add("Student Name");
+		headers.add("Major");
+		headers.add("Year");
 		headers.add("Internship ID");
-		headers.add("Status: ");
+		headers.add("Application Status");
 		
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 		for (InternshipApplication iApp : InternshipApplicationManager.getInternshipApps()) {
 			ArrayList<String> rec = new ArrayList<String>();
+			
+			// STUDENT ID RETRIEVAL
+			String studentID = iApp.getStudentID();
+			Student student = StudentManager.getStudentByID(studentID);
 			rec.add(iApp.getApplicationID());
-//			rec.add(iApp.getStudentID());
+			rec.add(studentID);
+			
+			if (student != null) {
+		        rec.add(student.getName());
+		        rec.add(student.getMajor());
+		        rec.add(String.valueOf(student.getYear()));
+		    } else {
+		        rec.add("N/A");
+		        rec.add("N/A");
+		        rec.add("N/A");
+		    }
+			
 			rec.add(iApp.getInternshipID());
 			rec.add(iApp.getStatus().toString());
 			data.add(rec);
@@ -85,15 +106,33 @@ public class InternshipApplicationView {
 	public static void printTable(ArrayList<InternshipApplication> iApps) {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
-//		headers.add("Student ID");
+		headers.add("Student ID");
+		headers.add("Student Name");
+		headers.add("Major");
+		headers.add("Year");
 		headers.add("Internship ID");
-		headers.add("Status: ");
+		headers.add("Application Status");
 		
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 		for (InternshipApplication iApp : iApps) {
 			ArrayList<String> rec = new ArrayList<String>();
+			
+			// STUDENT ID RETRIEVAL
+			String studentID = iApp.getStudentID();
+			Student student = StudentManager.getStudentByID(studentID);
 			rec.add(iApp.getApplicationID());
-//			rec.add(iApp.getStudentID());
+			rec.add(studentID);
+			
+			if (student != null) {
+		        rec.add(student.getName());
+		        rec.add(student.getMajor());
+		        rec.add(String.valueOf(student.getYear()));
+		    } else {
+		        rec.add("N/A");
+		        rec.add("N/A");
+		        rec.add("N/A");
+		    }
+			
 			rec.add(iApp.getInternshipID());
 			rec.add(iApp.getStatus().toString());
 			data.add(rec);

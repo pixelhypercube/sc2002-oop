@@ -2,6 +2,7 @@ package sc2002OOP.main;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -89,7 +90,7 @@ public class FileIOHandler {
      * @param path The filename to write to (e.g., "students.csv").
      * @param amendedContent The new content to write to the file as a single <code>String</code>.
      */
-	public static void writeFileContents(String path, String amendedContent) {
+	public static void writeFileContents(String path, String amendedContent) {	
 		try (
 				FileWriter fw = new FileWriter(System.getProperty("user.dir") + "\\src\\" + Constants.RESOURCE_DATA_FOLDER + path);
 				BufferedWriter bw = new BufferedWriter(fw);
@@ -110,6 +111,15 @@ public class FileIOHandler {
      * @param amendedContent The new content to write to the file as a single <code>String</code>.
      */
 	public static boolean writeFileContents(String path, String dir, String amendedContent) {
+		File directory = new File(dir);
+
+	    if (!directory.exists()) {
+	        if (!directory.mkdirs()) {
+	            System.err.println("Error: Failed to create export directory: " + dir);
+	            return false;
+	        }
+	    }
+		
 		try (
 				FileWriter fw = new FileWriter(dir + path);
 				BufferedWriter bw = new BufferedWriter(fw);

@@ -46,39 +46,54 @@ public class Student extends User implements IStudent, Serializable {
 	private String major;
 	private int year;
 	
+	/**
+     * Default constructor for the Student.
+     */
 	public Student() {};
 	
+	/**
+     * Constructs a Student object with necessary profile and authentication details.
+     * The super constructor handles {@code userID}, {@code name}, {@code email}, and {@code password}.
+     *
+     * @param userID The unique identifier for the student.
+     * @param name The student's full name.
+     * @param major The student's major (e.g., "Computer Science").
+     * @param year The student's current year of study.
+     * @param email The student's email address.
+     * @param password The student's securely hashed password.
+     */
 	public Student(String userID, String name, String major, int year, String email, String password) {
 		super(userID,name,email,password);
 		this.major = major;
 		this.year = year;
 	}
 	
+	/**
+     * Displays a table of all internship applications submitted by this student.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	public void viewInternshipApplications(Scanner sc) {
 		System.out.print("\033[H\033[2J");
-		ArrayList<InternshipApplication> internshipAppList = InternshipApplicationManager.getInternshipApps(
-				"",
-				getUserID(),
-				"",
-				InternshipApplicationStatus.PENDING
-			);
-		if (internshipAppList != null) {
-			System.out.println("====== "+super.getName()+"'s list of Internship Applications ======");
-
-			ArrayList<InternshipApplication> internshipApps = 
-					InternshipApplicationManager.getInternshipApps("", super.getUserID(), "", null);
-			
-			InternshipApplicationView.printTable(internshipApps);
-			
-//			for (InternshipApplication internship : InternshipApplicationManager.getInternshipApps("", super.getUserID(), "", null)) {
-//				internship.print();
-//				System.out.println("-".repeat(40));
-//			}
-		} else {
-			System.out.println("You do not have any internship applications!");
+		ArrayList<InternshipApplication> internshipApps = 
+				InternshipApplicationManager.getInternshipApps("", super.getUserID(), "", null);
+		
+		if (internshipApps.isEmpty()) {
+			System.out.println("You have not applied for any internships.");
+			return;
 		}
+		
+		System.out.println("====== "+super.getName()+"'s list of Internship Applications ======");
+		
+		InternshipApplicationView.printTable(internshipApps);
 	}
 	
+	/**
+     * {@inheritDoc}
+     * Displays the full profile details of the Student using the {@code StudentView}.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	@Override
 	public void viewProfile(Scanner sc) {
 		System.out.print("\033[H\033[2J");
@@ -87,6 +102,14 @@ public class Student extends User implements IStudent, Serializable {
 		System.out.println("===================================");
 	}
 	
+	/**
+     * {@inheritDoc}
+     * Allows the student to view and filter all available internship opportunities
+     * that are visible to them (e.g., APPROVED, visible=true).
+     * This method includes a filter setup, persists the filter settings, and displays the results.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	@Override
 	public void viewInternshipOpps(Scanner sc) {
 		if (super.getInternshipFilterSettings()==null) 
@@ -131,52 +154,60 @@ public class Student extends User implements IStudent, Serializable {
 	    String companyID = sc.nextLine().trim();
 	    companyID = companyID.isEmpty() ? null : companyID;
 
-	    System.out.print("Enter Preferred Major" + 
-	    	    ((settings.getPreferredMajors()==null || settings.getPreferredMajors().isEmpty()) 
-	    	    		? "" : 
-	    	    			" (Prev: "+settings.getPreferredMajors()+")") + ": ");
-	    String preferredMajor = sc.nextLine().trim();
-	    preferredMajor = preferredMajor.isEmpty() ? null : preferredMajor;
+	    // NOT NEEDED FOR STUDENTS
+//	    System.out.print("Enter Preferred Major" + 
+//	    	    ((settings.getPreferredMajors()==null || settings.getPreferredMajors().isEmpty()) 
+//	    	    		? "" : 
+//	    	    			" (Prev: "+settings.getPreferredMajors()+")") + ": ");
+//	    String preferredMajor = sc.nextLine().trim();
+//	    preferredMajor = preferredMajor.isEmpty() ? null : preferredMajor;
 	    
 		InternshipOpportunityLevel level = null;
-		System.out.println("Level of Difficulty: ");
-		System.out.println("(1) Basic ");
-		System.out.println("(2) Intermediate ");
-		System.out.println("(3) Advanced ");
-		System.out.print("Your Choice" + 
-	    	    ((settings.getLevel()==null) 
-	    	    		? "" : 
-	    	    			" (Prev: "+settings.getLevel()+")") + ": ");
-		String input = sc.nextLine().trim();
-	    if (!input.isEmpty()) {
-	        switch (input) {
-	            case "1" -> level = InternshipOpportunityLevel.BASIC;
-	            case "2" -> level = InternshipOpportunityLevel.INTERMEDIATE;
-	            case "3" -> level = InternshipOpportunityLevel.ADVANCED;
-	            default -> System.out.println("Invalid input. Ignored level filter.");
-	        }
-	    }
+		if (year>=3) {
+			System.out.println("Level of Difficulty: ");
+			System.out.println("(1) Basic ");
+			System.out.println("(2) Intermediate ");
+			System.out.println("(3) Advanced ");
+			System.out.print("Your Choice" + 
+		    	    ((settings.getLevel()==null) 
+		    	    		? "" : 
+		    	    			" (Prev: "+settings.getLevel()+")") + ": ");
+			String input = sc.nextLine().trim();
+		    if (!input.isEmpty()) {
+		        switch (input) {
+		            case "1" -> level = InternshipOpportunityLevel.BASIC;
+		            case "2" -> level = InternshipOpportunityLevel.INTERMEDIATE;
+		            case "3" -> level = InternshipOpportunityLevel.ADVANCED;
+		            default -> System.out.println("Invalid input. Ignored level filter.");
+		        }
+		    }
+		} else {
+			level = InternshipOpportunityLevel.BASIC;
+			System.out.println("Level of Difficulty: (Locked to Basic for Year " + year + " students)");
+		}
 	    
-		InternshipOpportunityStatus status = null;
-		System.out.println("Status: ");
-		System.out.println("(1) Approved ");
-		System.out.println("(2) Pending ");
-		System.out.println("(3) Rejected ");
-		System.out.println("(4) Filled ");
-		System.out.print("Your Choice" + 
-	    	    ((settings.getStatus()==null) 
-	    	    		? "" : 
-	    	    			" (Prev: "+settings.getStatus()+")") + ": ");
-		input = sc.nextLine().trim();
-	    if (!input.isEmpty()) {
-	        switch (input) {
-	            case "1" -> status = InternshipOpportunityStatus.APPROVED;
-	            case "2" -> status = InternshipOpportunityStatus.PENDING;
-	            case "3" -> status = InternshipOpportunityStatus.REJECTED;
-	            case "4" -> status = InternshipOpportunityStatus.FILLED;
-	            default -> System.out.println("Invalid input. Ignored status filter.");
-	        }
-	    }
+		// ONLY SET TO APPROVED
+//		InternshipOpportunityStatus status = null;
+//		System.out.println("Status: ");
+//		System.out.println("(1) Approved ");
+//		System.out.println("(2) Pending ");
+//		System.out.println("(3) Rejected ");
+//		System.out.println("(4) Filled ");
+//		System.out.print("Your Choice" + 
+//	    	    ((settings.getStatus()==null) 
+//	    	    		? "" : 
+//	    	    			" (Prev: "+settings.getStatus()+")") + ": ");
+//		String input = sc.nextLine().trim();
+//	    if (!input.isEmpty()) {
+//	        switch (input) {
+//	            case "1" -> status = InternshipOpportunityStatus.APPROVED;
+//	            case "2" -> status = InternshipOpportunityStatus.PENDING;
+//	            case "3" -> status = InternshipOpportunityStatus.REJECTED;
+//	            case "4" -> status = InternshipOpportunityStatus.FILLED;
+//	            default -> System.out.println("Invalid input. Ignored status filter.");
+//	        }
+//	    }
+	    
 //		Boolean visibility = null;
 //		System.out.println("Visibility (by students): ");
 //		System.out.println("(1) On ");
@@ -249,19 +280,26 @@ public class Student extends User implements IStudent, Serializable {
 			}
 		}
 		
+		// specifically default to students not viewing internships past the closing date
+		LocalDate finalClosingFrom = closingFrom;
+		
+		if (closingFrom == null && closingTo == null) {
+		    finalClosingFrom = LocalDate.now();
+		}
+		
 		ArrayList<InternshipOpportunity> internshipList = 
 				InternshipOpportunityManager.getInternshipOpps(
 				internshipID,
 				title,
 				description,
 				companyID,
-				preferredMajor,
+				major, // specifically for students
 				level,
-				status,
+				InternshipOpportunityStatus.APPROVED,
 				true,
 				openingFrom,
 				openingTo,
-				closingFrom,
+				finalClosingFrom,
 				closingTo
 		);
 		
@@ -270,9 +308,9 @@ public class Student extends User implements IStudent, Serializable {
 		settings.setTitle(title);
 		settings.setDescription(description);
 		settings.setCompanyID(companyID);
-		settings.setPreferredMajors(preferredMajor);
+//		settings.setPreferredMajors();
 		settings.setLevel(level);
-		settings.setStatus(status);
+//		settings.setStatus(status);
 //		settings.setVisibility(visibility);
 		settings.setOpeningDateFrom(openingFrom);
 		settings.setOpeningDateTo(openingTo);
@@ -284,12 +322,22 @@ public class Student extends User implements IStudent, Serializable {
 		System.out.print("\033[H\033[2J");
 		if (internshipList != null && !internshipList.isEmpty()) {
 			System.out.println("===== LIST OF INTERNSHIPS =====");
-			InternshipOpportunityView.printList(internshipList);
+			InternshipOpportunityView.printForStudentList(internshipList);
 		} else {
 			System.out.println("Sorry, no internship opportunities are available at the moment. Please check back later.");
 		}
 	}
 	
+	/**
+     * Displays a pre-filtered list of all *available* and *approved* internship opportunities.
+     * This list is automatically filtered to show only:
+     * <ul>
+     * <li>Opportunities that are {@code APPROVED}.</li>
+     * <li>Opportunities that are {@code visible}.</li>
+     * <li>Opportunities whose closing date has not passed.</li>
+     * <li>Opportunities that match the student's year level (Y1/2 see BASIC/INTERMEDIATE, Y3+ see all).</li>
+     * </ul>
+     */
 	public void printAllInternships() {
 		System.out.print("\033[H\033[2J");
 		ArrayList<InternshipOpportunity> internshipList = 
@@ -299,18 +347,17 @@ public class Student extends User implements IStudent, Serializable {
 					null,
 					null,
 					null,
-					null,
-					(year<=2) 
-					? new InternshipOpportunityLevel[]{InternshipOpportunityLevel.BASIC,InternshipOpportunityLevel.INTERMEDIATE}
-					: new InternshipOpportunityLevel[]{InternshipOpportunityLevel.BASIC,InternshipOpportunityLevel.INTERMEDIATE,InternshipOpportunityLevel.ADVANCED},
-					null,
+					major, // include major
+					(year<=2) // view only basic if year<=2
+					? InternshipOpportunityLevel.BASIC
+					: null,
+					InternshipOpportunityStatus.APPROVED,
 					true,
 					null,
 					null,
-					null,
-					LocalDate.now()
+					LocalDate.now(),
+					null
 				).stream()
-				.filter(opp->opp.getStatus()==InternshipOpportunityStatus.APPROVED)
 				.collect(Collectors.toCollection(ArrayList::new));
 		
 		if (internshipList != null) {
@@ -321,7 +368,14 @@ public class Student extends User implements IStudent, Serializable {
 		}
 	}
 
-//	 WITHDRAW INTERNSHIP APPLICATION
+	/**
+     * Guides the student through submitting a withdrawal request for an existing application.
+     * The student can only request withdrawal for applications that are {@code PENDING},
+     * {@code SUCCESSFUL}, or {@code ACCEPTED}, and do not already have a pending request.
+     * All withdrawal requests are subject to staff approval.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	public void withdrawApp(Scanner sc) {
 		System.out.print("\033[H\033[2J");
 		ArrayList<WithdrawalRequest> withdrawalReqList = WithdrawalRequestManager.getWithdrawalReqs();
@@ -335,7 +389,12 @@ public class Student extends User implements IStudent, Serializable {
 					"",
 					null
 				).stream()
-				.filter(app->app.getStatus()==InternshipApplicationStatus.SUCCESSFUL || app.getStatus()==InternshipApplicationStatus.ACCEPTED)
+				.filter(
+						app->
+						app.getStatus()==InternshipApplicationStatus.SUCCESSFUL || 
+						app.getStatus()==InternshipApplicationStatus.ACCEPTED ||
+						app.getStatus()==InternshipApplicationStatus.PENDING
+					)
 				.filter(app->!excludedApplicationIDs.contains(app.getApplicationID()))
 				.collect(Collectors.toCollection(ArrayList::new));
 		
@@ -365,6 +424,10 @@ public class Student extends User implements IStudent, Serializable {
 						found = true;
 						
 						WithdrawalRequestManager.getWithdrawalReqs().add(new WithdrawalRequest(applicationID));
+						
+						System.out.print("\033[H\033[2J");
+						System.out.println("Successfully submitted withdrawal request! Please wait for one of our career center staff to approve!");
+						
 						break;
 					}
 				}
@@ -377,9 +440,44 @@ public class Student extends User implements IStudent, Serializable {
 		
 	}
 	
-	// APPLY INTERNSHIP
+	/**
+     * Guides the student through the process of applying for an internship.
+     * <p>
+     * This method displays available internships (filtered by year level),
+     * then validates the student's choice against several rules:
+     * <ul>
+     * <li>Student's total application count (max 3).</li>
+     * <li>Duplicate applications for the same internship.</li>
+     * <li>Internship status (must be APPROVED, not FILLED, not past closing date).</li>
+     * <li>Year level restrictions (Y1/2 students can only apply for {@code BASIC} level).</li>
+     * </ul>
+     * If successful, a new {@code PENDING} application is created.
+     * </p>
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	public void applyInternship(Scanner sc) {
 		System.out.print("\033[H\033[2J");
+		
+		ArrayList<InternshipOpportunity> availableInternships = 
+				InternshipOpportunityManager.getInternshipOpps(
+				null,
+				null,
+				null,
+				null,
+				major, // include major
+				(year<=2) // view only basic if year<=2
+				? InternshipOpportunityLevel.BASIC
+				: null,
+				InternshipOpportunityStatus.APPROVED,
+				true,
+				null,
+				null,
+				LocalDate.now(),
+				null
+			).stream()
+			.collect(Collectors.toCollection(ArrayList::new));
+		
 		ArrayList<InternshipOpportunity> internshipList = InternshipOpportunityManager.getInternshipOpps();
 		ArrayList<InternshipApplication> internshipApps = InternshipApplicationManager.getInternshipApps();
 		
@@ -390,6 +488,21 @@ public class Student extends User implements IStudent, Serializable {
 				null
 			).size()>=3) {
 			System.out.println("Sorry, you are not allowed to apply more internships as you have reached the maximum limit of applications (3).");
+			return;
+		}
+		
+		if (!InternshipApplicationManager.getInternshipApps(
+			null,
+			super.getUserID(),
+			null,
+			InternshipApplicationStatus.ACCEPTED
+		).isEmpty()) {
+			System.out.println("Sorry, you have already accepted an internship placing!");
+			return;
+		}
+		
+		if (availableInternships.isEmpty()) {
+			System.out.println("Sorry, you do not have any available internships to apply for at the moment.");
 			return;
 		}
 		
@@ -417,24 +530,49 @@ public class Student extends User implements IStudent, Serializable {
 			
 			for (InternshipOpportunity internship : internshipList) {
 				if (internshipID.equals(internship.getInternshipID())) {
+					// Filled guard
 					if (internship.getStatus()==InternshipOpportunityStatus.FILLED) {
 						invalidated = true;
-						System.out.println("Sorry, the internship you've tried to apply is full. Please select another Internship ID.");
+						System.out.println("Sorry, this internship is no longer accepting applications as all slots have been filled. Please select another Internship ID.");
 						break;
 					}
-					else if (LocalDate.now().isBefore(internship.getClosingDate())) {
+					// Closing date guard
+					else if (LocalDate.now().isAfter(internship.getClosingDate())) { // fixed logically reversed validation
 						invalidated = true;
 						System.out.println("Sorry, the internship you've tried to apply is past its closing date. Please select another Internship ID.");
 						break;
 					}
+					// Status guard
 					else if (internship.getStatus()==InternshipOpportunityStatus.PENDING) {
 						invalidated = true;
 						System.out.println("Sorry, the internship you've tried to apply is currently awaiting approval from one of our career center staff. Please select another Internship ID.");
 						break;
 					}
-					else if (internship.getLevel()==InternshipOpportunityLevel.ADVANCED && year<=2) {
+					// Level guard
+					else if (
+						(
+							internship.getLevel()==InternshipOpportunityLevel.ADVANCED || 
+							internship.getLevel()==InternshipOpportunityLevel.INTERMEDIATE
+						) && 
+						year<=2) {
 						invalidated = true;
-						System.out.println("Sorry, this internship is not available for you as it's only available for year 3 students and above. Please select another Internship ID.");
+						System.out.println("Sorry, you are ineligible to apply. This internship requires a minimum of Year 3 standing. Please select a Basic level opportunity.");
+						break;
+					}
+					// Major preference guard
+					else if (
+							!internship.getPreferredMajor().toLowerCase().equals(major.toLowerCase())
+					) {
+						invalidated = true;
+						System.out.println("Sorry, you are ineligible to apply. This internship requires a different major preference. Please select another Internship ID.");
+						break;
+					}
+					// Visibility for students guard
+					else if (
+							!internship.isVisibility()
+							) {
+						invalidated = true;
+						System.out.println("Sorry, this internship opportunity is currently unavailable for student applications. Please select another Internship ID");
 						break;
 					}
 						
@@ -456,7 +594,20 @@ public class Student extends User implements IStudent, Serializable {
 		}
 	}
 	
-	// ACCEPT/REJECT INTERNSHIP PLACEMENT
+	/**
+     * Allows the student to accept or reject a {@code SUCCESSFUL} internship placement offer.
+     * <p>
+     * If the student accepts an offer:
+     * <ul>
+     * <li>The application status is set to {@code ACCEPTED}.</li>
+     * <li>All other applications from this student (regardless of status) are removed from the system.</li>
+     * <li>The system updates the fill-count for the internship opportunity.</li>
+     * </ul>
+     * If the student rejects, the application status is set to {@code REJECTED}.
+     * </p>
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	public void acceptRejectInternshipPlacement(Scanner sc) {
 		System.out.print("\033[H\033[2J");
 		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.getInternshipApps(null, super.getUserID(), null, InternshipApplicationStatus.SUCCESSFUL);
@@ -517,9 +668,15 @@ public class Student extends User implements IStudent, Serializable {
 		
 	}
 
+	/**
+     * {@inheritDoc}
+     * Displays the main menu for the Student, providing options to manage
+     * internships, view applications, and manage their profile.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	@Override
 	public void displayHome(Scanner sc) {
-		// TODO Auto-generated method stub
 		
 		System.out.println("Welcome, " + super.getName() + " (" + super.getUserID() + ")");
 		
@@ -527,7 +684,7 @@ public class Student extends User implements IStudent, Serializable {
 		while (choice != 8) {
 			System.out.println("=====================================================");
 			System.out.println("Choose an option: ");
-			System.out.println("(1) View Available Internships");
+			System.out.println("(1) View Available Internship Opportunities");
 			System.out.println("(2) View Your Internship Application(s)");
 			System.out.println("(3) Apply for Internship");
 			System.out.println("(4) Accept/Reject Internship Placement");
@@ -570,10 +727,16 @@ public class Student extends User implements IStudent, Serializable {
                 System.out.println("Invalid choice. Please enter a valid number (1-8).");
                 choice = 0;
             }
-			
 		}
 	}
 
+	/**
+     * {@inheritDoc}
+     * Handles the process for the Student to securely change their password.
+     * The password is updated in memory and within the {@code StudentManager}.
+     *
+     * @param sc The {@code Scanner} object for input.
+     */
 	@Override
 	public void changePassword(Scanner sc) {
 		System.out.print("\033[H\033[2J");
@@ -603,23 +766,40 @@ public class Student extends User implements IStudent, Serializable {
 				break;
 			}
 		}
+		System.out.print("\033[H\033[2J");
 		System.out.println("Your password has been successfully changed!");
 	}
 	
 	// GETTERS & SETTERS
 	
+	/**
+     * Retrieves the student's major.
+     * @return The major as a String.
+     */
 	public String getMajor() {
 		return major;
 	}
 
+	/**
+     * Sets the student's major.
+     * @param major The new major.
+     */
 	public void setMajor(String major) {
 		this.major = major;
 	}
 
+	/**
+     * Retrieves the student's year of study.
+     * @return The year as an integer.
+     */
 	public int getYear() {
 		return year;
 	}
 
+	/**
+     * Sets the student's year of study.
+     * @param year The new year.
+     */
 	public void setYear(int year) {
 		this.year = year;
 	}

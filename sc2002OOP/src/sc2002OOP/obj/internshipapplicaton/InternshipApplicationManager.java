@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import sc2002OOP.main.Constants;
 import sc2002OOP.main.FileIOHandler;
 import sc2002OOP.main.Viewer;
+import sc2002OOP.obj.student.Student;
 
 /**
  * <h1>Internship Application Data Manager</h1>
@@ -242,5 +243,20 @@ public class InternshipApplicationManager {
 					))
 				.collect(Collectors.toCollection(ArrayList::new));
 		
+	}
+	
+	/**
+	 * Retrieves a specific {@code InternshipApplication} object using its unique application ID.
+	 * * This method searches through the list of all stored internship applications.
+	 *
+	 * @param internshipAppID The unique ID of the internship application to retrieve (e.g., "A1234").
+	 * @return The matching {@code InternshipApplication} object, or {@code null} if no application with the given ID is found.
+	 */
+	public static InternshipApplication getInternshipAppByID(String internshipAppID) {
+		for (InternshipApplication iApp : internshipApps)
+			if (iApp.getApplicationID().equals(internshipAppID))
+				return iApp;
+		
+		return null;
 	}
 }

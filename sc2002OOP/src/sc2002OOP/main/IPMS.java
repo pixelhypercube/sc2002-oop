@@ -139,13 +139,15 @@ public class IPMS {
 					users.add(companyRep);
 				}
 				
+				// TESTING DATA
 //				Test.printCsvData();
 				Test.printAllRecords();
 //				Test.printTestTables();
+//				Test.getFromCSVFilesAndUpdate();
 				System.out.print("Your Choice: ");
 				
 				
-				String input = sc.next();	
+				String input = sc.next();
 				try {
 	                choice = Integer.parseInt(input.trim()); 
 	                
