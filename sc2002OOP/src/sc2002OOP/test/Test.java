@@ -316,6 +316,10 @@ public class Test {
 							internshipApp.setStatus(InternshipApplicationStatus.ACCEPTED);
 						else if (cell.toLowerCase().equals("rejected"))
 							internshipApp.setStatus(InternshipApplicationStatus.REJECTED);
+						else if (cell.toLowerCase().equals("successful"))
+							internshipApp.setStatus(InternshipApplicationStatus.SUCCESSFUL);
+						else if (cell.toLowerCase().equals("unsuccessful"))
+							internshipApp.setStatus(InternshipApplicationStatus.UNSUCCESSFUL);
 //						else if (cell.toLowerCase().equals("filled"))
 //							internshipApp.setStatus(InternshipApplicationStatus.FILLED);
 					}

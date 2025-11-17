@@ -575,6 +575,16 @@ public class Student extends User implements IStudent, Serializable {
 						System.out.println("Sorry, this internship opportunity is currently unavailable for student applications. Please select another Internship ID");
 						break;
 					}
+					// Filled up number of slots guard
+					
+					int acceptedCount = InternshipOpportunityManager
+							.countNumAcceptedAppsByInternshipID(internship.getInternshipID());
+					int maxSlots = internship.getNumSlots();
+					if (acceptedCount >= maxSlots) {
+				        invalidated = true;
+				        System.out.println("Sorry, this internship opportunity has reached its maximum capacity. Please select another Internship ID.");
+				        break;
+				    }
 						
 					found = true;
 					InternshipApplication internshipApp = new InternshipApplication(
@@ -613,7 +623,7 @@ public class Student extends User implements IStudent, Serializable {
 		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.getInternshipApps(null, super.getUserID(), null, InternshipApplicationStatus.SUCCESSFUL);
 		ArrayList<InternshipApplication> allIApps = InternshipApplicationManager.getInternshipApps();
 		if (iApps.isEmpty()) {
-			System.out.println("Sorry, you don't have any internship applications that are successful :(");
+			System.out.println("Sorry, you don't have any internship applications to approve/reject");
 			return;
 		}
 		System.out.println("Congratulations! You have sucessful internship applications!");
@@ -638,6 +648,19 @@ public class Student extends User implements IStudent, Serializable {
 						choice = sc.nextInt();
 						
 						if (choice==1) {
+							String internshipID = studentIApp.getInternshipID();
+							InternshipOpportunity iOpp = InternshipOpportunityManager.getInternshipOppByID(internshipID);
+							
+							int numSlots = iOpp.getNumSlots();
+							int numAcceptedApps = InternshipOpportunityManager.countNumAcceptedAppsByInternshipID(internshipID);
+							
+							if (numAcceptedApps >= numSlots) {
+								System.out.print("\033[H\033[2J");
+						        System.out.println("Sorry, all of the slots for this internship offer have been taken up.");
+						        System.out.println("You are unable to accept this offer at this time.");
+						        break;
+							}
+							
 							studentIApp.setStatus(InternshipApplicationStatus.ACCEPTED);
 							
 							// iterate backwards to safely remove elems

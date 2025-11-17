@@ -117,6 +117,10 @@ public class IPMS {
 	 */
 	public static void main(String[] args) {
 		initInstances();
+		
+		// update filled places for internship opportunities
+		InternshipOpportunityManager.updateFilledPlaces();
+		
 		System.out.print("\033[H\033[2J");
 		try (
 				Scanner sc = new Scanner(System.in);

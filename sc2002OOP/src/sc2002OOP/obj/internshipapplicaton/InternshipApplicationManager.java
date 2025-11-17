@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,8 @@ import sc2002OOP.main.Constants;
 import sc2002OOP.main.FileIOHandler;
 import sc2002OOP.main.Viewer;
 import sc2002OOP.obj.student.Student;
+import sc2002OOP.obj.withdrawalrequest.WithdrawalRequest;
+import sc2002OOP.obj.withdrawalrequest.WithdrawalRequestManager;
 
 /**
  * <h1>Internship Application Data Manager</h1>
@@ -258,5 +261,33 @@ public class InternshipApplicationManager {
 				return iApp;
 		
 		return null;
+	}
+	
+	/**
+	 * Deletes all {@code InternshipApplication} records associated with a given Internship ID from the master list.
+	 * * <p>This method is responsible for maintaining data integrity by also triggering the cleanup
+	 * of associated {@code WithdrawalRequest} records for each deleted application.</p>
+	 *
+	 * @param internshipID The unique ID of the internship opportunity whose applications should be removed.
+	 * @return The total number of {@code InternshipApplication} records removed.
+	 * @see sc2002OOP.obj.internshipapplicaton.WithdrawalRequestManager#removeWithdrawalRequestByAppID(String)
+	 */
+	public static int removeApplicationsByInternshipID(String internshipID) {
+		int res = 0;
+		Iterator<InternshipApplication> it = internshipApps.iterator();
+		
+		while (it.hasNext()) {
+			InternshipApplication iApp = it.next();
+			
+			if (iApp.getInternshipID().equals(internshipID)) {
+				// REMOVE WITHDRAWAL REQS TOO
+				WithdrawalRequestManager
+				.removeWithdrawalRequestByAppID(iApp.getApplicationID());
+				
+				it.remove();
+				res++;
+			}
+		}
+		return res;
 	}
 }

@@ -30,6 +30,43 @@ public interface ICompanyRepresentative {
 	void createInternship(Scanner sc);
 	
 	/**
+     * Guides the company representative through the process of **editing** an existing
+     * internship opportunity associated with their company.
+     *
+     * @param sc The {@code Scanner} object for input, used to read the internship
+     * identifier and new details from the console.
+     */
+	void editInternship(Scanner sc);
+
+	/**
+     * Guides the company representative through the process of **deleting** an existing
+     * internship opportunity associated with their company.
+     *
+     * @param sc The {@code Scanner} object for input, used to read the internship
+     * identifier for the opportunity to be deleted from the console.
+     */
+	void deleteInternship(Scanner sc);
+	
+	/**
+     * Displays a list of all student applications submitted to the company,
+     * typically allowing the representative to filter or select an application
+     * for review.
+     *
+     * @param sc The {@code Scanner} object for input, used for interaction (e.g.,
+     * selecting an application to view details).
+     */
+	void viewStudentApplications(Scanner sc);
+	
+	/**
+     * Displays a list of all internship opportunities currently managed by
+     * this company representative.
+     *
+     * @param sc The {@code Scanner} object for input, used for interaction (e.g.,
+     * selecting an opportunity for further action like editing or toggling).
+     */
+	void viewInternshipOpps(Scanner sc);
+	
+	/**
      * Toggles the visibility status (On/Off) for students of an internship opportunity
      * managed by this company.
      *

@@ -1,15 +1,15 @@
 InternshipID,Title,Description,CompanyID,PreferredMajors,NumSlots,Level,Status,OpeningDate,ClosingDate,Visibility
-I121,Software Engineer,Good fundamentals of coding languages,C1,Computer Science,10,Basic,Approved,10/30/2025,11/5/2026,on
-I122,Software Engineer,Good fundamentals of coding languages,C1,Computer Science,3,Intermediate,Approved,10/31/2025,11/6/2026,off
-I123,Data Engineer,Good fundamentals of Data Science,C2,Data Science & AI,2,Basic,Approved,11/1/2025,11/7/2026,on
-I124,AI Engineer,Good fundamentals of AI Engineering,C3,Data Science & AI,1,Advanced,Approved,11/2/2025,11/8/2026,on
-I125,iOS Developer,6months+ iOS dev experience,C4,Computer Science,2,Intermediate,Approved,11/3/2025,11/9/2026,off
-I126,RPA Engineer,Good RPA Skills required.,C5,Computer Engineering,8,Basic,Approved,11/4/2025,11/10/2026,on
-I127,Software Engineer,Good fundamentals of coding languages,C5,Computer Science,5,Basic,Approved,10/31/2025,12/31/2026,on
-I128,Network Analyst,Internship focused on Network Analyst in the Data Science & AI domain.,C5,Data Science & AI,3,Intermediate,Approved,12/7/2025,11/2/2026,on
-I129,Database Administrator,Internship focused on Database Administrator in the Computer Science domain.,C2,Computer Science,9,Basic,Approved,12/6/2025,6/25/2026,on
-I130,Software Engineer,Internship focused on Software Engineer in the Computer Engineering domain.,C5,Computer Engineering,10,Basic,Approved,12/14/2025,6/11/2026,on
-I131,Data Scientist,Internship focused on Data Scientist in the Computer Science domain.,C4,Computer Science,1,Advanced,Approved,12/17/2025,6/29/2026,on
-I132,AI Engineer,Internship focused on AI Engineer in the Computer Science domain.,C2,Computer Science,5,Intermediate,Pending,12/19/2025,10/14/2026,on
-I133,Data Scientist,Internship focused on Data Scientist in the Computer Science domain.,C4,Computer Science,1,Basic,Approved,12/17/2025,6/29/2026,on
-I134,Data Scientist,Internship focused on Data Scientist in the Computer Science domain.,C4,Computer Science,1,Basic,Approved,12/17/2025,6/29/2025,on
+I121,Software Engineer,Good fundamentals of coding languages,C1,Computer Science,10,Basic,Approved,2025-10-30,2026-11-05,on
+I122,Software Engineer,Good fundamentals of coding languages,C1,Computer Science,3,Intermediate,Approved,2025-10-31,2026-11-06,off
+I123,Data Engineer,Good fundamentals of Data Science,C2,Data Science & AI,2,Basic,Approved,2025-11-01,2026-11-07,on
+I124,AI Engineer,Good fundamentals of AI Engineering,C3,Data Science & AI,1,Advanced,Approved,2025-11-02,2026-11-08,on
+I125,iOS Developer,6months+ iOS dev experience,C4,Computer Science,2,Intermediate,Approved,2025-11-03,2026-11-09,off
+I126,RPA Engineer,Good RPA Skills required.,C5,Computer Engineering,8,Basic,Approved,2025-11-04,2026-11-10,on
+I127,Software Engineer,Good fundamentals of coding languages,C5,Computer Science,5,Basic,Approved,2025-10-31,2026-12-31,on
+I128,Network Analyst,Internship focused on Network Analyst in the Data Science & AI domain.,C5,Data Science & AI,3,Intermediate,Approved,2025-12-07,2026-11-02,on
+I129,Database Administrator,Internship focused on Database Administrator in the Computer Science domain.,C2,Computer Science,9,Basic,Approved,2025-12-06,2026-06-25,on
+I130,Software Engineer,Internship focused on Software Engineer in the Computer Engineering domain.,C5,Computer Engineering,10,Basic,Approved,2025-12-14,2026-06-11,on
+I131,Data Scientist,Internship focused on Data Scientist in the Computer Science domain.,C4,Computer Science,1,Advanced,Approved,2025-12-17,2026-06-29,on
+I132,AI Engineer,Internship focused on AI Engineer in the Computer Science domain.,C2,Computer Science,5,Intermediate,Pending,2025-12-19,2026-10-14,on
+I133,Data Scientist,Internship focused on Data Scientist in the Computer Science domain.,C4,Computer Science,1,Basic,Approved,2025-12-17,2026-06-29,on
+I134,Data Scientist,Internship focused on Data Scientist in the Computer Science domain.,C4,Computer Science,1,Basic,Approved,2025-12-17,2025-06-29,on

@@ -60,8 +60,8 @@ public class InternshipApplicationView {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
 		headers.add("Student ID");
-		headers.add("Student Name");
-		headers.add("Major");
+		headers.add("Student's Name");
+		headers.add("Student's Major");
 		headers.add("Year");
 		headers.add("Internship ID");
 		headers.add("Application Status");
@@ -107,8 +107,8 @@ public class InternshipApplicationView {
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Application ID");
 		headers.add("Student ID");
-		headers.add("Student Name");
-		headers.add("Major");
+		headers.add("Student's Name");
+		headers.add("Student's Major");
 		headers.add("Year");
 		headers.add("Internship ID");
 		headers.add("Application Status");

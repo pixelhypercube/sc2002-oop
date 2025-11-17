@@ -15,6 +15,7 @@ import sc2002OOP.main.*;
 import sc2002OOP.obj.InternshipFilterSettings;
 import sc2002OOP.obj.User;
 import sc2002OOP.obj.company.CompanyManager;
+import sc2002OOP.obj.company.CompanyView;
 //IMPORTS 
 import sc2002OOP.obj.internshipapplicaton.*;
 import sc2002OOP.obj.internshipopportunity.*;
@@ -320,78 +321,519 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 	}
 	
 	/**
-     * Allows the company representative to approve or reject PENDING internship applications
-     * submitted for internships belonging to their company.
-     * Approved applications are set to {@code SUCCESSFUL}, and rejected ones to {@code UNSUCCESSFUL}.
-     *
-     * @param sc The {@code Scanner} object for input.
-     */
-	public void approveRejectApplicant(Scanner sc) {
+	 * Allows the company representative to edit details of an existing internship opportunity
+	 * belonging to their company, provided its status is editable (e.g., PENDING, DRAFT).
+	 * * <p>The editing process includes robust security checks and input validation:</p>
+	 * <ul>
+	 * <li>Displays only editable internships owned by the company for selection.</li>
+	 * <li>Blocks editing for internships that are APPROVED, FILLED, or REJECTED.</li>
+	 * <li>Allows the user to skip (retain the old value) for any field by pressing ENTER.</li>
+	 * <li>Validates input formats for {@code numSlots} (range 1-10), {@code level}, and {@code LocalDate} fields (YYYY-MM-DD format).</li>
+	 * </ul>
+	 *
+	 * @param sc The {@code Scanner} object for reading user input.
+	 * @see sc2002OOP.obj.internshipopportunity.InternshipOpportunityStatus
+	 * @see java.time.LocalDate
+	 */
+	public void editInternship(Scanner sc) {
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
+		
 		System.out.print("\033[H\033[2J");
-		System.out.println("==== Approve/Reject Applicant ====");
+		System.out.println("==== Edit Internship Opportunity ====");
 		
-		String applicationID = "";
+		System.out.println("\nList of internship opportunities:");
+		ArrayList<InternshipOpportunity> companyIOpps = 
+			    InternshipOpportunityManager.getInternshipOpps(
+			        null, null, null, 
+			        this.companyID, // Filter by company ID
+			        null, 
+			        (InternshipOpportunityLevel) null, 
+			        InternshipOpportunityStatus.PENDING, 
+			        null, null, null, null, null
+			    );
 		
-		Set<String> permittedIDs = InternshipOpportunityManager
+		if (companyIOpps.isEmpty()) {
+			System.out.print("\033[H\033[2J");
+			System.out.println("Sorry, there are no available internship opportunities to edit.");
+			return;
+		}
+		
+		InternshipOpportunityView.printList(companyIOpps);
+		
+		String internshipID = "";
+		while (true) {
+			System.out.print("Enter an Internship ID (Type ENTER to exit): ");
+			internshipID = sc.nextLine().trim();
+			
+			// NO INTERNSHIP ID
+			if (internshipID.isEmpty()) {
+				System.out.print("\033[H\033[2J");
+				break;
+			}
+			
+			// GET INTERNSHIP ID AND THEN EDIT
+			
+			InternshipOpportunity iOpp = InternshipOpportunityManager.getInternshipOppByID(internshipID);
+			
+			// INTERNSHIP OPPORTUNITY NOT FOUND
+			if (iOpp==null) {
+				System.out.println("Internship ID not found. Please select another internship opportunity.");
+				continue;
+			}
+			
+			// INTERNSHIP OPPORTUNITY DOES NOT BELONG TO COMPANY
+			if (!iOpp.getCompanyID().equals(this.companyID)) {
+			    System.out.println("Sorry, you are only authorized to edit internships belonging to your company.");
+			    continue;
+			}
+			
+			// INTERNSHIP OPPORTUNITY APPROVED/FILLED - NOT ALLOWED TO EDIT
+			if (
+					iOpp.getStatus() == InternshipOpportunityStatus.APPROVED ||
+					iOpp.getStatus() == InternshipOpportunityStatus.FILLED
+				) {
+				System.out.println("Sorry, this internship opportunity has been approved and are restricted from editing. Please select another internship opportunity.");
+				continue;
+			}
+			
+			// INTERNSHIP OPPORTUNITY APPROVED/FILLED - NOT ALLOWED TO EDIT
+			if (
+					iOpp.getStatus() == InternshipOpportunityStatus.REJECTED
+				) {
+				System.out.println("Sorry, this internship opportunity has been rejected and are restricted from editing. Please select another internship opportunity.");
+				continue;
+			}
+			
+			
+			// EDIT SECTION
+			
+			System.out.println("Editing '" + iOpp.getTitle() + "' (ID: " + iOpp.getInternshipID() + ")\n");
+			
+			System.out.println("Press ENTER to skip");
+			// title
+			System.out.print("Enter new title (prev: " + iOpp.getTitle() + "): ");
+			String newTitle = sc.nextLine().trim();
+			if (newTitle.isEmpty()) 
+				newTitle = iOpp.getTitle(); // revert back to original if empty
+			
+			// description
+			System.out.print("Enter new description (prev: " + iOpp.getDescription() + "): ");
+			String newDescription = sc.nextLine().trim();
+			if (newDescription.isEmpty()) 
+				newDescription = iOpp.getDescription(); // revert back to original if empty
+			
+//			System.out.print("Enter new company ID (prev: " + iOpp.getCompanyID() + "): ");
+//			String newCompanyID = sc.nextLine().trim();
+//			if (newCompanyID.isEmpty()) 
+//				newCompanyID = iOpp.getCompanyID(); // revert back to original if empty
+			
+			// preferredMajor
+			System.out.print("Enter new preferred major (prev: " + iOpp.getPreferredMajor() + "): ");
+			String newPreferredMajor = sc.nextLine().trim();
+			if (newPreferredMajor.isEmpty()) 
+				newPreferredMajor = iOpp.getPreferredMajor(); // revert back to original if empty
+			
+			// num slots
+			int newNumSlots = iOpp.getNumSlots();
+			
+			while (true) {
+				System.out.print("Enter new number of slots (1-10) (prev: " + iOpp.getNumSlots() + ", press ENTER to skip): ");
+			    String input = sc.nextLine().trim();
+			    
+			    if (input.isEmpty()) {
+			    	break;
+			    }
+			    
+			    try {
+			    	int parsedSlots = Integer.parseInt(input);
+			    	if (parsedSlots >= 1 && parsedSlots <= 10) {
+			    		newNumSlots = parsedSlots;
+			    		break;
+			    	} else {
+			    		System.out.println("Error: The number must be between 1 and 10.");
+			    	}
+			    } catch (NumberFormatException e) {
+			    	System.out.println("Error: Invalid input format. Please enter a whole number.");
+			    }
+			}
+			
+			
+			// internship opportunity level
+			InternshipOpportunityLevel newIOppLevel = iOpp.getLevel();
+			boolean validInput = false;
+			
+			while (!validInput) {
+				System.out.println("\nChoose a new level (prev: " + iOpp.getLevel() + "): : ");
+				System.out.println("(1) Basic");
+			    System.out.println("(2) Intermediate");
+			    System.out.println("(3) Advanced");
+			    System.out.print("Your choice: ");
+			    
+			    String input = sc.nextLine().trim();
+			    if (input.isEmpty()) {
+			    	validInput = true;
+			    	continue;
+			    }
+			    
+			    try {
+			    	int levelChoice = Integer.parseInt(input);
+			    	switch (levelChoice) {
+				    	case 1 -> newIOppLevel = InternshipOpportunityLevel.BASIC;
+				    	case 2 -> newIOppLevel = InternshipOpportunityLevel.INTERMEDIATE;
+				    	case 3 -> newIOppLevel = InternshipOpportunityLevel.ADVANCED;
+				    	default -> {
+			                System.out.println("Invalid input. Enter either 1, 2 or 3.");
+			                continue;
+			            }
+			    	}
+			    	validInput = true;
+			    } catch (NumberFormatException e) {
+			        System.out.println("Invalid input. Please enter 1, 2, 3, or press ENTER to skip.");
+			    }
+			}
+			
+			// SKIP STATUS
+			
+			String dateRegex = "\\d{4}-\\d{2}-\\d{2}";
+			
+			// opening date
+			LocalDate newOpeningDate = iOpp.getOpeningDate();
+			String newOpeningDateStr;
+			boolean validOpeningDate = false;
+			
+			while (!validOpeningDate) {
+				System.out.print("Enter Opening Date using this format (YYYY-MM-DD): ");
+				newOpeningDateStr = sc.nextLine().trim();
+			    
+			    if (newOpeningDateStr.isEmpty()) {
+			        break;
+			    }
+
+			    if (!newOpeningDateStr.matches(dateRegex)) {
+			        System.out.println("Invalid format. Please use YYYY-MM-DD.");
+			        continue;
+			    }
+			    
+			    try {
+			    	newOpeningDate = LocalDate.parse(newOpeningDateStr);
+			    	validOpeningDate = true;
+			    } catch (DateTimeParseException e) {
+			    	System.out.println("Invalid date value. Please ensure the month, day and year are valid.");
+			    }
+			}
+			
+			// closing date
+			
+			LocalDate newClosingDate = iOpp.getClosingDate();
+			String newClosingDateStr = "";
+			boolean validClosingDate = false;
+			
+			while (!validClosingDate) {
+				System.out.print("Enter Closing Date using this format (YYYY-MM-DD): ");
+			    newClosingDateStr = sc.nextLine().trim();
+
+			    if (newClosingDateStr.isEmpty()) {
+			        break;
+			    }
+
+			    if (!newClosingDateStr.matches(dateRegex)) {
+			        System.out.println("Invalid format. Please use YYYY-MM-DD.");
+			        continue;
+			    }
+			    
+			    try {
+			        LocalDate potentialClosingDate = LocalDate.parse(newClosingDateStr);
+
+			        if (potentialClosingDate.isBefore(newOpeningDate)) {
+			        	System.out.println("Closing Date should be after opening date (" + newOpeningDate.format(DateTimeFormatter.ISO_DATE) + ").");
+			        } else {
+			        	newClosingDate = potentialClosingDate;
+			            validClosingDate = true;
+			        }
+			    } catch (DateTimeParseException e) {
+			        System.out.println("Invalid date value. Please ensure the month and day are valid.");
+			    }
+			}
+			
+			Boolean newVisibility = iOpp.isVisibility();
+			String visibilityText = iOpp.isVisibility() ? "On" : "Off";
+			
+			while (true) {
+				System.out.println("\nChoose new Visibility (prev: " + visibilityText + "):");
+				System.out.println("(1) On");
+				System.out.println("(2) Off");
+				System.out.print("Your Choice: ");
+				
+				String input = sc.nextLine().trim();
+				
+				if (input.isEmpty()) {
+					break;
+				}
+				
+				if (input.equals("1")) {
+					newVisibility = true;
+					break;
+				} else if (input.equals("2")) {
+					newVisibility = false;
+					break;
+				} else {
+					System.out.println("Invalid input. Please enter 1, 2, or press ENTER to skip.");
+				}
+			}
+			
+			iOpp.setTitle(newTitle);
+			iOpp.setDescription(newDescription);
+			iOpp.setPreferredMajor(newPreferredMajor);
+			iOpp.setNumSlots(newNumSlots);
+			iOpp.setLevel(newIOppLevel);
+			iOpp.setOpeningDate(newOpeningDate);
+			iOpp.setClosingDate(newClosingDate);
+			iOpp.setVisibility(newVisibility);
+			
+			System.out.print("\033[H\033[2J");
+			System.out.println("\nInternship Opportunity ID " + internshipID + " has been successfully updated!");
+			break;
+		}
+	}
+	
+	/**
+	 * Guides the company representative through deleting one of their company's internship opportunities.
+	 * * <p>This process includes several mandatory security and confirmation steps:</p>
+	 * <ul>
+	 * <li>Filters and displays only internships belonging to the representative's company.</li>
+	 * <li>Requires explicit confirmation ("YES") from the user to proceed with deletion.</li>
+	 * <li>Upon confirmation, the method removes the {@code InternshipOpportunity} record.</li>
+	 * <li>Crucially, it cleans up all associated student data, including all related 
+	 * {@code InternshipApplication} and {@code WithdrawalRequest} records.</li>
+	 * </ul>
+	 *
+	 * @param sc The {@code Scanner} object for reading user input.
+	 * @see sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager#removeApplicationsByInternshipID(String)
+	 * @see sc2002OOP.obj.internshipopportunity.InternshipOpportunityManager
+	 */
+	public void deleteInternship(Scanner sc) {
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
+		
+		System.out.print("\033[H\033[2J");
+		System.out.println("==== Delete Internship Opportunity ====");
+		
+		System.out.println("\nList of internship opportunities:");
+		ArrayList<InternshipOpportunity> companyIOpps = 
+			    InternshipOpportunityManager.getInternshipOpps(
+			        null, null, null, 
+			        this.companyID, // Filter by company ID
+			        null, 
+			        (InternshipOpportunityLevel) null, 
+			        (InternshipOpportunityStatus) null, 
+			        null, null, null, null, null
+			    );
+		
+		if (companyIOpps.isEmpty()) {
+			System.out.print("\033[H\033[2J");
+			System.out.println("Sorry, there are no available internship opportunities to delete.");
+			return;
+		}
+		
+		InternshipOpportunityView.printList(companyIOpps);
+
+		System.out.println("\n Press ENTER to skip:");
+		while (true) {
+			System.out.print("Enter Internship ID to delete: ");
+			String internshipID = sc.nextLine().trim();
+			
+			// NO INTERNSHIP ID
+			if (internshipID.isEmpty()) {
+				break;
+			}
+			
+			// GET INTERNSHIP ID AND THEN EDIT
+			
+			InternshipOpportunity iOpp = InternshipOpportunityManager.getInternshipOppByID(internshipID);
+			
+			// INTERNSHIP OPPORTUNITY NOT FOUND
+			if (iOpp==null) {
+				System.out.println("Internship ID not found. Please select another internship opportunity.");
+				continue;
+			}
+			
+			// INTERNSHIP OPPORTUNITY DOES NOT BELONG TO COMPANY
+			if (!iOpp.getCompanyID().equals(this.companyID)) {
+			    System.out.println("Sorry, you are only authorized to delete internships belonging to your company.");
+			    continue;
+			}
+			
+			System.out.println("\n-- Confirmation --");
+	        System.out.println("You are about to delete the internship: " + iOpp.getTitle());
+	        System.out.println("This will remove ALL associated student applications. Are you sure?");
+	        System.out.print("Type 'YES' to confirm deletion, or press ENTER to cancel: ");
+	        
+	        String confirmation = sc.nextLine().trim();
+	        if (!confirmation.equalsIgnoreCase("YES")) {
+	        	System.out.print("\033[H\033[2J");
+	            System.out.println("==== Delete Internship Opportunity ====");
+	            
+	            InternshipOpportunityView.printList(companyIOpps); 
+	            System.out.println("Deletion cancelled for Internship ID " + internshipID + ".");
+	            System.out.println("\nPress ENTER to skip:");
+	            continue;
+	        }
+			
+			System.out.print("\033[H\033[2J");
+			System.out.println("Internship Opportunity (ID: " + iOpp.getInternshipID() + ") has been successfully removed.");
+			
+			int numAppsRemoved = InternshipApplicationManager.removeApplicationsByInternshipID(internshipID);
+			
+			InternshipOpportunityManager.getInternshipOpps().remove(iOpp);
+			System.out.println("(" + numAppsRemoved + " student application(s) were also removed.)");
+			
+			// remove withdrawal applications
+			
+			// don't need to update to 'filled' anymore as it's already deleted
+			break;
+		}
+	}
+	
+	/**
+	 * Allows the company representative to review, approve, or reject PENDING internship applications
+	 * submitted for internships belonging to their company.
+	 * * <p>The method performs the following steps:</p>
+	 * <ul>
+	 * <li>Filters and displays only PENDING applications for the representative's company.</li>
+	 * <li>Prompts the user for an Application ID.</li>
+	 * <li>Validates ownership, status (must be PENDING), and checks if the corresponding internship
+	 * is already full (if approval is chosen).</li>
+	 * <li>Sets the application status to {@code SUCCESSFUL} upon approval or {@code UNSUCCESSFUL} upon rejection.</li>
+	 * </ul>
+	 *
+	 * @param sc The {@code Scanner} object for reading user input.
+	 * @see sc2002OOP.obj.internshipapplicaton.InternshipApplicationStatus
+	 * @see sc2002OOP.obj.internshipopportunity.InternshipOpportunityManager#countNumAcceptedAppsByInternshipID(String)
+	 */
+	public void approveRejectApplicant(Scanner sc) {
+		if (sc.hasNextLine()) {
+			sc.nextLine();
+		}
+		
+		ArrayList<InternshipOpportunity> iOpps = 
+				InternshipOpportunityManager
 				.getInternshipOpps(
-						"",
-						"",
-						"",
-						companyID,
-						"",
-						(InternshipOpportunityLevel)null,
-						(InternshipOpportunityStatus)null,
 						null,
 						null,
-						null,
-						null,
-						null
-					).stream()
+			            null,
+			            companyID,
+			            null,
+			            (InternshipOpportunityLevel[])null,
+			            (InternshipOpportunityStatus[])null,
+			            null,
+			            null,
+			            null,
+			            null,
+			            null
+			     );
+		
+		Set<String> permittedIDs = iOpps.stream()
 				.map(InternshipOpportunity::getInternshipID)
 				.collect(Collectors.toSet());
 		
-		ArrayList<InternshipApplication> allIApps = 
-				(ArrayList<InternshipApplication>) InternshipApplicationManager
-		.getInternshipApps()
-		.stream()
-		.filter(app->permittedIDs.contains(app.getInternshipID()))
-		.filter(app -> app.getStatus()==InternshipApplicationStatus.PENDING)
-		.collect(Collectors.toList());
+		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.getInternshipApps().stream()
+				.filter(app -> permittedIDs.contains(app.getInternshipID()))
+				.filter(app -> app.getStatus() == InternshipApplicationStatus.PENDING)
+				.collect(Collectors.toCollection(ArrayList::new));
 		
-		InternshipApplicationView.printTable(allIApps);
+		if (iApps.isEmpty()) {
+			System.out.print("\033[H\033[2J");
+			System.out.println("Sorry, there are no applications to approve/reject at the moment. Please try again later.");
+			return;
+		}
 		
-		boolean found = false;
-		while (applicationID.isEmpty() || !found) {
-			System.out.print("Enter an Application ID: ");
-			applicationID = sc.next();
+		System.out.print("\033[H\033[2J");
+		System.out.println("==== Approve/Reject Applicant ====\n");
+		
+		System.out.println("List of Applicants:");
+		InternshipApplicationView.printTable(iApps);
+		
+		String applicationID = "";
+		while (true) {
+			System.out.print("Enter an Application ID (or press ENTER to exit): ");
+			applicationID = sc.nextLine().trim();
 			
+			// exit method
+			if (applicationID.isEmpty()) {
+				return;
+			}
 			
-			for (InternshipApplication iApp : allIApps) {
-				if (iApp.getApplicationID().equals(applicationID)) {
-					found = true;
-					int choice = 0;
-					while (choice<=0 || choice>2) {
-						System.out.println("Select a choice:");
-						System.out.println("(1) Approve");
-						System.out.println("(2) Reject");
-						System.out.print("Your choice: ");
-						choice = sc.nextInt();
-						
-						if (choice==1) {
-							iApp.setStatus(InternshipApplicationStatus.SUCCESSFUL);
-							System.out.print("\033[H\033[2J");
-							System.out.println("Successfully approved Application ID " + applicationID);
-						}
-						else if (choice==2) {
-							iApp.setStatus(InternshipApplicationStatus.UNSUCCESSFUL);
-							System.out.print("\033[H\033[2J");
-							System.out.println("Successfully rejected Application ID " + applicationID);
-						}
-						else System.out.println("Please select a choice of either 1 or 2.");
-					}
+			// FILTER BASED ON COMPANY ID
+			InternshipApplication iApp = 
+					InternshipApplicationManager.getInternshipAppByID(applicationID);
+			
+			// does not exist
+			if (iApp==null) {
+				System.out.println("Application ID not found. Please select an Application ID");
+				continue;
+			}
+			
+			String internshipID = iApp.getInternshipID();
+			InternshipOpportunity iOpp = InternshipOpportunityManager.getInternshipOppByID(internshipID);
+			
+			if (!iOpp.getCompanyID().equals(this.companyID)) {
+			    System.out.println("Error: This application does not belong to your company's internships.");
+			    continue;
+			}
+			
+			// status not pending
+			if (iApp.getStatus() != InternshipApplicationStatus.PENDING) {
+				String statusStr = "";
+				switch (iApp.getStatus()) {
+					case ACCEPTED -> statusStr = "Accepted";
+					case SUCCESSFUL -> statusStr = "Successful";
+					case REJECTED -> statusStr = "Rejected";
+					case UNSUCCESSFUL -> statusStr = "Unsuccessful";
+					default -> throw new IllegalArgumentException("Unexpected value: " + iApp.getStatus());
+				}
+				System.out.println("Sorry, this application has already been " + statusStr + ". Please select another Application ID.");
+				continue;
+			}
+			
+			int numSlots = InternshipOpportunityManager
+					.getInternshipOppByID(iApp.getInternshipID())
+					.getNumSlots();
+			
+			int numAcceptedApps = InternshipOpportunityManager
+					.countNumAcceptedAppsByInternshipID(iApp.getInternshipID());
+			
+			// count filled
+			if (numAcceptedApps >= numSlots) {
+				System.out.println("Sorry, this internship opportunity is full. Please select another Application ID.");
+				continue;
+			}
+			
+			String choiceStr = "";
+			while (choiceStr.isEmpty()) {
+				System.out.println("Enter a choice:");
+				System.out.println("(1) Approve");
+				System.out.println("(2) Reject");
+				System.out.print("Your Choice: ");
+				choiceStr = sc.nextLine();
+				
+				if (choiceStr.equals("1")) {
+					iApp.setStatus(InternshipApplicationStatus.SUCCESSFUL);
+					System.out.print("\033[H\033[2J");
+					System.out.println("Successfully approved internship application.");
+					return;
+				} else if (choiceStr.equals("2")) {
+					iApp.setStatus(InternshipApplicationStatus.UNSUCCESSFUL);
+					System.out.print("\033[H\033[2J");
+					System.out.println("Successfully rejected internship application.");
+					return;
+				} else {
+					System.out.println("Please select a choice of either (1) or (2).");
+					choiceStr = "";
 				}
 			}
-			if (!found) System.out.println("Application ID not found. Please select another one");
 		}
 	}
 	
@@ -533,17 +975,19 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		System.out.println("Welcome, " + super.getName() + " (" + super.getUserID() + ")");
 		
 		int choice = 0;
-		while (choice != 8) {
+		while (choice != 10) {
 			System.out.println("=====================================================");
 			System.out.println("Choose an option: ");
 			System.out.println("(1) View Internship Opportunities");
 			System.out.println("(2) View All Applicants for an Internship Opportunity");
 			System.out.println("(3) Approve/Reject Applicants");
 			System.out.println("(4) Create Internship Opportunity");
-			System.out.println("(5) Toggle Visibility of Internship Opportunity (for students)");
-			System.out.println("(6) View Profile");
-			System.out.println("(7) Change Password");
-			System.out.println("(8) Log Out");
+			System.out.println("(5) Edit Internship Opportunity");
+			System.out.println("(6) Delete Internship Opportunity");
+			System.out.println("(7) Toggle Visibility of Internship Opportunity (for students)");
+			System.out.println("(8) View Profile");
+			System.out.println("(9) Change Password");
+			System.out.println("(10) Log Out");
 			System.out.println("=====================================================");
 			System.out.print("Select a choice: ");
 			
@@ -564,15 +1008,21 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
     					createInternship(sc);
     				}
     				case 5 -> {
-    					toggleInternshipOpportunity(sc);
+    					editInternship(sc);
     				}
     				case 6 -> {
-    					viewProfile(sc);
+    					deleteInternship(sc);
     				}
     				case 7 -> {
-    					changePassword(sc);
+    					toggleInternshipOpportunity(sc);
     				}
     				case 8 -> {
+    					viewProfile(sc);
+    				}
+    				case 9 -> {
+    					changePassword(sc);
+    				}
+    				case 10 -> {
     					System.out.print("\033[H\033[2J");
     					System.out.println("Logged out!");
     					break;

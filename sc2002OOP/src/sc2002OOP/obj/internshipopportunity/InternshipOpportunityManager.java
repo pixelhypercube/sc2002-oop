@@ -183,27 +183,22 @@ public class InternshipOpportunityManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-     * Counts the frequency of applications with an {@code ACCEPTED} status for each internship ID.
-     * This helper function is used to determine which internships are potentially filled.
-     *
-     * @return A {@code Map} where the key is the Internship ID and the value is the count of accepted applications.
-     */
-	public static Map<String, Integer> countSuccessFreqs() {
-		Map<String, Integer> idSuccessFreq = new HashMap<>();
-		
-		for (InternshipApplication iApp : InternshipApplicationManager.getInternshipApps()) {
-			if (iApp.getStatus()==InternshipApplicationStatus.ACCEPTED) {
-				String internshipId = iApp.getInternshipID();
-				idSuccessFreq.put(internshipId,idSuccessFreq.getOrDefault(internshipId,0)+1);
-				
-				InternshipOpportunity iOpp = InternshipOpportunityManager.getInternshipOppByID(internshipId);
-				if (idSuccessFreq.get(internshipId)>=iOpp.getNumSlots())
-					iOpp.setStatus(InternshipOpportunityStatus.FILLED);
-			}
-		}
-		return idSuccessFreq;
+	 * Counts the total number of applications for a specific internship opportunity
+	 * that have the status set to {@code ACCEPTED}.
+	 * <p>
+	 * This method delegates the filtering logic to {@code InternshipApplicationManager}.
+	 * </p>
+	 *
+	 * @param internshipID The unique ID of the internship opportunity to count applications for.
+	 * @return The total number of accepted internship applications for the given opportunity ID.
+	 * @see sc2002OOP.obj.internshipapplicaton.InternshipApplicationManager#getInternshipApps(String, String, String, InternshipApplicationStatus)
+	 */
+	public static int countNumAcceptedAppsByInternshipID(String internshipID) {
+	    return InternshipApplicationManager
+	            .getInternshipApps(null, null, internshipID, InternshipApplicationStatus.ACCEPTED)
+	            .size();
 	}
 	
 	/**
@@ -211,20 +206,22 @@ public class InternshipOpportunityManager {
      * accepted applications meets or exceeds the number of available slots.
      */
 	public static void updateFilledPlaces() {
-		Map<String, Integer> idSuccessFreq = countSuccessFreqs();
-		for (Map.Entry<String, Integer> entry : idSuccessFreq.entrySet()) {
-			String internshipId = entry.getKey();
-			int count = entry.getValue();
-			
-			InternshipOpportunity iOpp = InternshipOpportunityManager.getInternshipOppByID(internshipId);
-			
-			if (iOpp != null && count>=iOpp.getNumSlots()) {
-				iOpp.setStatus(InternshipOpportunityStatus.FILLED);
-			} else {
-				// set it back to approved ONLY if it was previously filled (otherwise it would fill up everything as approved)
-				if (iOpp.getStatus() == InternshipOpportunityStatus.FILLED) {
-					iOpp.setStatus(InternshipOpportunityStatus.APPROVED);
-				}
+		ArrayList<InternshipOpportunity> iOpps = InternshipOpportunityManager.getInternshipOpps();
+		for (InternshipOpportunity iOpp : iOpps) {
+			// only do this to APPROVED/FILLED opportunities
+			if (
+					iOpp.getStatus() == InternshipOpportunityStatus.APPROVED ||
+					iOpp.getStatus() == InternshipOpportunityStatus.FILLED
+				) {
+				String internshipID = iOpp.getInternshipID();
+				
+				// count the number of applications
+				int numApplications = countNumAcceptedAppsByInternshipID(internshipID);
+				
+				if (numApplications>=iOpp.getNumSlots())
+					iOpp.setStatus(InternshipOpportunityStatus.FILLED);
+				else
+					iOpp.setStatus(InternshipOpportunityStatus.APPROVED); 
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -195,6 +196,27 @@ public class WithdrawalRequestManager {
 					(status==null || Objects.equals(status, req.getStatus()))
 				)
 				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Removes all {@code WithdrawalRequest} records associated with a specific Application ID 
+	 * from the master list of withdrawal requests.
+	 *
+	 * <p>This function is typically called during the deletion of a parent {@code InternshipApplication} 
+	 * to prevent orphaned data records.</p>
+	 *
+	 * @param applicationID The unique ID of the internship application whose withdrawal request(s) should be removed.
+	 */
+	public static void removeWithdrawalRequestByAppID(String applicationID) {
+	    Iterator<WithdrawalRequest> it = withdrawalReqs.iterator(); 
+	    
+	    while (it.hasNext()) {
+	        WithdrawalRequest wReq = it.next();
+	        
+	        if (wReq.getApplicationID().equals(applicationID)) {
+	            it.remove(); 
+	        }
+	    }
 	}
 
 	/**
