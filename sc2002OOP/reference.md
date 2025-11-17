@@ -29,4 +29,7 @@
 
 
 ![](images/Figure5.1.4d.png)
-`Figure 5.1.4d`: Interface header with student specific methods
+`Figure 5.1.4d`: IStudent interface with student specific methods only
+
+![](images/Figure5.1.4e.png)
+`Figure 5.1.4e`: ICareerCenterStaff interface with staff specific methods only
