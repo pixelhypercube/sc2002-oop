@@ -504,7 +504,7 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 			boolean validOpeningDate = false;
 			
 			while (!validOpeningDate) {
-				System.out.print("Enter Opening Date using this format (YYYY-MM-DD): ");
+				System.out.print("Enter Opening Date using this format (YYYY-MM-DD) (prev: " + iOpp.getOpeningDate() + "): ");
 				newOpeningDateStr = sc.nextLine().trim();
 			    
 			    if (newOpeningDateStr.isEmpty()) {
@@ -531,7 +531,7 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 			boolean validClosingDate = false;
 			
 			while (!validClosingDate) {
-				System.out.print("Enter Closing Date using this format (YYYY-MM-DD): ");
+				System.out.print("Enter Closing Date using this format (YYYY-MM-DD) (prev: " + iOpp.getClosingDate() + "): ");
 			    newClosingDateStr = sc.nextLine().trim();
 
 			    if (newClosingDateStr.isEmpty()) {
