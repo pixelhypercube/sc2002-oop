@@ -7,7 +7,7 @@
 
 ![](images/Figure2.png) 
 
-`Figure 3`: Class Diagram
+`Figure 2`: Class Diagram
 
 
 ![](images/Figure3.png) 
