@@ -7,7 +7,7 @@
 
 ![](images/Figure3.png) 
 
-`Figure 3': Sequence Diagram
+`Figure 3`: Sequence Diagram
 
 
 ![](images/Fig5.1.1a.png) 
