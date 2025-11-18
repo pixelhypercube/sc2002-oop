@@ -116,10 +116,11 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		// title
 		String title = "";
 		while (title.isEmpty()) {
-			System.out.print("Enter title: ");
+			System.out.print("Enter title (Press ENTER to exit): ");
 			title = sc.nextLine();
 			if (title.isEmpty()) {
-				System.out.println("Title not entered.");
+				System.out.print("\033[H\033[2J");
+				return;
 			}
 		}
 		
@@ -364,10 +365,10 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		
 		String internshipID = "";
 		while (true) {
-			System.out.print("Enter an Internship ID (Type ENTER to exit): ");
+			System.out.print("Enter an Internship ID (Press ENTER to exit): ");
 			internshipID = sc.nextLine().trim();
 			
-			// NO INTERNSHIP ID
+			// EXIT OPERATION
 			if (internshipID.isEmpty()) {
 				System.out.print("\033[H\033[2J");
 				break;
@@ -640,14 +641,14 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 		
 		InternshipOpportunityView.printList(companyIOpps);
 
-		System.out.println("\n Press ENTER to skip:");
 		while (true) {
-			System.out.print("Enter Internship ID to delete: ");
+			System.out.print("Enter Internship ID to delete (Press ENTER to exit): ");
 			String internshipID = sc.nextLine().trim();
 			
-			// NO INTERNSHIP ID
+			// EXIT OPERATION
 			if (internshipID.isEmpty()) {
-				break;
+				System.out.print("\033[H\033[2J");
+				return;
 			}
 			
 			// GET INTERNSHIP ID AND THEN EDIT
@@ -761,8 +762,9 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 			System.out.print("Enter an Application ID (or press ENTER to exit): ");
 			applicationID = sc.nextLine().trim();
 			
-			// exit method
+			// EXIT OPERATION
 			if (applicationID.isEmpty()) {
+				System.out.print("\033[H\033[2J");
 				return;
 			}
 			
@@ -843,6 +845,10 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
      * @param sc The {@code Scanner} object for input.
      */
 	public void toggleInternshipOpportunity(Scanner sc) {
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
+		
 		System.out.print("\033[H\033[2J");
 		ArrayList<InternshipOpportunity> internshipOpps = InternshipOpportunityManager
 				.getInternshipOpps(
@@ -872,8 +878,14 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 			System.out.println("Internship Opportunities Table:");
 			InternshipOpportunityView.printVisibilityTable(internshipOpps);
 			
-			System.out.print("Enter Internship ID: ");
-			internshipID = sc.next();
+			System.out.print("Enter Internship ID (Press ENTER to exit): ");
+			internshipID = sc.nextLine().trim();
+			
+			// EXIT OPERATION
+			if (internshipID.trim().isEmpty()) {
+				System.out.print("\033[H\033[2J");
+				return;
+			}
 			
 			System.out.print("\033[H\033[2J");
 			for (InternshipOpportunity iOpp : internshipOpps) {
@@ -934,8 +946,14 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
 	    }
 	    
 	    InternshipOpportunityView.printList(companyOpps);
-	    System.out.print("Enter Internship ID to view applicants: ");
+	    System.out.print("Enter Internship ID to view applicants (Press ENTER to exit): ");
 	    String selectedInternshipID = sc.nextLine().trim();
+	    
+	    // EXIT OPERATION
+	    if (selectedInternshipID.isEmpty()) {
+	    	System.out.print("\033[H\033[2J");
+	    	return;
+	    }
 	    
 	    InternshipOpportunity selectedOpp = InternshipOpportunityManager.getInternshipOppByID(selectedInternshipID);
 
@@ -1029,12 +1047,12 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
     				}
     				default -> {
     					System.out.print("\033[H\033[2J");
-	                    System.out.println("Invalid choice. Please enter a valid number (1-7).");
+	                    System.out.println("Invalid choice. Please enter a valid number (1-10).");
     				}
     			}
             } catch (NumberFormatException e) {
             	System.out.print("\033[H\033[2J");
-            	System.out.println("Invalid choice. Please enter a valid number (1-8).");
+            	System.out.println("Invalid choice. Please enter a valid number (1-10).");
                 choice = 0;
             }
 			
@@ -1064,12 +1082,22 @@ public class CompanyRepresentative extends User implements ICompanyRepresentativ
      */
 	@Override
 	public void changePassword(Scanner sc) {
+		if (sc.hasNextLine()) {
+			sc.nextLine();
+		}
+		
 		System.out.print("\033[H\033[2J");
 		// TODO Auto-generated method stub
 		String newPassword = "";
 		while (newPassword.length()<8) {
-			System.out.print("Enter new password: ");
-			newPassword = sc.next();
+			System.out.print("Enter new password (Press ENTER to exit): ");
+			newPassword = sc.nextLine();
+			
+			if (newPassword.isEmpty()) {
+				System.out.print("\033[H\033[2J");
+				return;
+			}
+			
 			if (newPassword.length()<8)
 				System.out.println("Password must be at least 8 chars.");
 		}

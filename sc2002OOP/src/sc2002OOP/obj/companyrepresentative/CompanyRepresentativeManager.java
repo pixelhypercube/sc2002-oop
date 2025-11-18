@@ -192,12 +192,15 @@ public class CompanyRepresentativeManager {
 		
 		// name
 		String name = "";
-		while (name.isEmpty()) {
-			System.out.print("Enter name: ");
+		while (true) {
+			System.out.print("Enter name (Press ENTER to skip): ");
 			name = sc.nextLine();
+			
+			// EXIT OPERATION
 			if (name.isEmpty()) {
-				System.out.println("Name not filled!");
-			}
+				System.out.print("\033[H\033[2J");
+				return;
+			} else break;
 		}
 		
 		// companyID

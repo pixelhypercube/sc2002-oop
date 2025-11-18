@@ -95,6 +95,9 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 	 * @param sc The {@code Scanner} object used for user input.
 	 */
 	public void approveRejectCompRep(Scanner sc) {
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
 		System.out.print("\033[H\033[2J");
 		ArrayList<CompanyRepresentative> companyReps = CompanyRepresentativeManager.getCompanyReps(
 				null,
@@ -116,11 +119,13 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		String compRepID = "";
 		boolean found = false;
 		while (compRepID.isEmpty() || !found) {
-			System.out.print("Enter the email of the company rep.: ");
-			compRepID = sc.next();
+			System.out.print("Enter the email of the company rep. (Press ENTER to exit): ");
+			compRepID = sc.nextLine().trim();
+			
+			// EXIT OPERATION
 			if (compRepID.isEmpty()) {
-				System.out.println("Please enter a company rep's email.");
-				continue;
+				System.out.print("\033[H\033[2J");
+				return;
 			}
 			
 			for (CompanyRepresentative companyRep : companyReps) {
@@ -167,6 +172,9 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 	 * @param sc The {@code Scanner} object used for user input.
 	 */
 	public void approveRejectWithdrawalRequest(Scanner sc) {
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
 		System.out.print("\033[H\033[2J");
 		ArrayList<WithdrawalRequest> withdrawalReqs = WithdrawalRequestManager.getWithdrawalReqs(null,WithdrawalRequestStatus.PENDING);
 		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.getInternshipApps();
@@ -182,9 +190,15 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		
 		String applicationID = "";
 		boolean found = false;
-		while (applicationID.isEmpty() || !found) {
-			System.out.print("Enter the ID of the Application ID: ");
-			applicationID = sc.next();
+		while (!found) {
+			System.out.print("Enter the ID of the Application ID (Press ENTER to skip): ");
+			applicationID = sc.nextLine().trim();
+			
+			// EXIT OPERATION
+			if (applicationID.isEmpty()) {
+				System.out.print("\033[H\033[2J");
+				return;
+			}
 			
 			for (WithdrawalRequest withdrawalReq : withdrawalReqs) {
 				if (withdrawalReq.getApplicationID().equals(applicationID) && 
@@ -242,6 +256,9 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 	 * @param sc The {@code Scanner} object used for user input.
 	 */
 	public void approveRejectInternshipOpp(Scanner sc) {
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
 		ArrayList<InternshipOpportunity> internshipOpportunities =
 				InternshipOpportunityManager.getInternshipOpps(
 						null,
@@ -271,8 +288,15 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 		String internshipID = "";
 		boolean found = false;
 		while (internshipID.isEmpty() || !found) {
-			System.out.print("Enter an Internship ID: ");
-			internshipID = sc.next();
+			System.out.print("Enter an Internship ID (Press ENTER to exit): ");
+			internshipID = sc.nextLine().trim();
+			
+			// EXIT OPERATION
+			if (internshipID.isEmpty()) {
+				System.out.print("\033[H\033[2J");
+				return;
+			}
+			
 			for (InternshipOpportunity internshipOpp : internshipOpportunities) {
 				if (internshipOpp.getInternshipID().equals(internshipID)) {
 					found = true;
@@ -658,11 +682,20 @@ public class CareerCenterStaff extends User implements ICareerCenterStaff, Seria
 	 */
 	@Override
 	public void changePassword(Scanner sc) {
+		if (sc.hasNextLine()) {
+			sc.nextLine();
+		}
+		
 		System.out.print("\033[H\033[2J");
 		String newPassword = "";
 		while (newPassword.length()<8) {
-			System.out.print("Enter new password: ");
-			newPassword = sc.next();
+			System.out.print("Enter new password (Press ENTER to exit): ");
+			newPassword = sc.nextLine();
+			
+			if (newPassword.isEmpty()) {
+				System.out.print("\033[H\033[2J");
+				return;
+			}
 			if (newPassword.length()<8)
 				System.out.println("Password must be at least 8 chars.");
 		}

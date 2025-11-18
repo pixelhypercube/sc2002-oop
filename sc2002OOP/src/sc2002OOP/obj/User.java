@@ -98,6 +98,10 @@ public abstract class User implements Serializable {
      * @return The authenticated <code>User</code> object if login is successful, or <code>null</code> if authentication fails or if a Company Representative is pending/rejected.
      */
 	public static User login(Scanner sc, ArrayList<User> users) {
+		if (sc.hasNextLine()) {
+			sc.nextLine();
+		}
+		
 		System.out.print("\033[H\033[2J");
 		String uID = "";
 		String pwd = "";
@@ -105,8 +109,8 @@ public abstract class User implements Serializable {
 		boolean userFound = false;
 		while (uID.isEmpty() || pwd.isEmpty() || !userFound) {
 			System.out.println("==== Login ====");
-			System.out.print("Enter Your User ID: ");
-			uID = sc.next();
+			System.out.print("Enter Your User ID/Email (Press ENTER to exit): ");
+			uID = sc.nextLine().trim();
 			if (!uID.isEmpty()) {
 				for (User user : users) {
 					if (user.getUserID().toLowerCase().equals(uID.toLowerCase())) {
@@ -140,8 +144,15 @@ public abstract class User implements Serializable {
 				}
 				if (!userFound) {
 					System.out.print("\033[H\033[2J");
-					System.out.println("Sorry, User ID "+uID+" not found. Please try again.");
+					
+					String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+					
+					System.out.println("Sorry, " + (uID.matches(emailRegex) ? "Email " : "User ID ") + uID + " not found. Please try again.");
 				}
+			} else {
+				// EXIT OPERATION
+				System.out.print("\033[H\033[2J");
+				return null;
 			}
 		}
 		return null;

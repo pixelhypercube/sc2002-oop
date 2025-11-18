@@ -60,7 +60,9 @@ public class InternshipOpportunityView {
 				.collect(Collectors.joining(", "));
 		
 		System.out.println("Company Rep(s) in Charge: "+(!companyReps.isEmpty() ? companyReps : "(None)"));
-		System.out.println("Number of Slots:          "+iOpp.getNumSlots());
+		System.out.println("Number of filled places:  "
+		+ InternshipOpportunityManager.countNumAcceptedAppsByInternshipID(iOpp.getInternshipID()));
+		System.out.println("Max Number of Slots:      "+iOpp.getNumSlots());
 		String levelStr = "";
 		switch (iOpp.getLevel()) {
 			case BASIC -> levelStr = "Basic";
@@ -100,7 +102,9 @@ public class InternshipOpportunityView {
 				.collect(Collectors.joining(", "));
 		
 		System.out.println("Company Rep(s) in Charge: "+(!companyReps.isEmpty() ? companyReps : "(None)"));
-		System.out.println("Number of Slots:          "+iOpp.getNumSlots());
+		System.out.println("Number of filled places:  "
+				+ InternshipOpportunityManager.countNumAcceptedAppsByInternshipID(iOpp.getInternshipID()));
+		System.out.println("Max Number of Slots:      "+iOpp.getNumSlots());
 		String levelStr = "";
 		switch (iOpp.getLevel()) {
 			case BASIC -> levelStr = "Basic";

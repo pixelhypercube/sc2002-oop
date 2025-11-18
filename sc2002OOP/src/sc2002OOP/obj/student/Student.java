@@ -378,6 +378,11 @@ public class Student extends User implements IStudent, Serializable {
      */
 	public void withdrawApp(Scanner sc) {
 		System.out.print("\033[H\033[2J");
+		
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
+		
 		ArrayList<WithdrawalRequest> withdrawalReqList = WithdrawalRequestManager.getWithdrawalReqs();
 		Set<String> excludedApplicationIDs = withdrawalReqList.stream()
 				.map(WithdrawalRequest::getApplicationID)
@@ -406,10 +411,17 @@ public class Student extends User implements IStudent, Serializable {
 			String applicationID = "";
 			boolean found = false;
 			boolean inWithdrawalReqList = false;
-			while (applicationID.isEmpty() || !found || inWithdrawalReqList) {
+			while (!found || inWithdrawalReqList) {
 				inWithdrawalReqList = false;
-				System.out.print("Enter an Application ID to withdraw: ");
-				applicationID = sc.next();
+				System.out.print("Enter an Application ID to withdraw (Press ENTER to exit): ");
+				applicationID = sc.nextLine().trim();
+				
+				// EXIT OPERATION
+				if (applicationID.isEmpty()) {
+					System.out.print("\033[H\033[2J"); 
+					return;
+				}
+				
 				
 				// check if it's inside withdrawal req list
 				final String currApplicationID = applicationID;
@@ -457,6 +469,10 @@ public class Student extends User implements IStudent, Serializable {
      * @param sc The {@code Scanner} object for input.
      */
 	public void applyInternship(Scanner sc) {
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
+		
 		System.out.print("\033[H\033[2J");
 		
 		ArrayList<InternshipOpportunity> availableInternships = 
@@ -511,9 +527,14 @@ public class Student extends User implements IStudent, Serializable {
 		String internshipID = "";
 		boolean found = false;
 		while (!found || (internshipID == null || internshipID.isEmpty())) {
-			System.out.print("Type the Internship ID to submit your application: ");
-			internshipID = sc.next();
-			if (internshipID.isEmpty()) continue;
+			System.out.print("Type the Internship ID to submit your application (Press ENTER to exit): ");
+			internshipID = sc.nextLine().trim();
+			
+			// EXIT OPERATION
+			if (internshipID.isEmpty()) {
+				System.out.print("\033[H\033[2J");
+				return;
+			}
 			
 			final String currInternshipID = internshipID; // for lambda fn
 			boolean invalidated = false;
@@ -619,6 +640,9 @@ public class Student extends User implements IStudent, Serializable {
      * @param sc The {@code Scanner} object for input.
      */
 	public void acceptRejectInternshipPlacement(Scanner sc) {
+		if (sc.hasNextLine()) {
+	        sc.nextLine(); 
+	    }
 		System.out.print("\033[H\033[2J");
 		ArrayList<InternshipApplication> iApps = InternshipApplicationManager.getInternshipApps(null, super.getUserID(), null, InternshipApplicationStatus.SUCCESSFUL);
 		ArrayList<InternshipApplication> allIApps = InternshipApplicationManager.getInternshipApps();
@@ -632,9 +656,12 @@ public class Student extends User implements IStudent, Serializable {
 		
 		String applicationID = "";
 		boolean found = false;
-		while (applicationID.isEmpty() || !found) {
-			System.out.print("Enter an Application ID: ");
-			applicationID = sc.next();
+		while (!found) {
+			System.out.print("Enter an Application ID (Press ENTER to exit): ");
+			applicationID = sc.nextLine().trim();
+			
+			if (applicationID.isEmpty()) break; // EXIT OPERATION
+			
 			for (InternshipApplication studentIApp : iApps) {
 				if (studentIApp.getApplicationID().equals(applicationID)) {
 					found = true;
@@ -762,12 +789,22 @@ public class Student extends User implements IStudent, Serializable {
      */
 	@Override
 	public void changePassword(Scanner sc) {
+		if (sc.hasNextLine()) {
+			sc.nextLine();
+		}
+		
 		System.out.print("\033[H\033[2J");
 		// TODO Auto-generated method stub
 		String newPassword = "";
 		while (newPassword.length()<8) {
-			System.out.print("Enter new password: ");
-			newPassword = sc.next();
+			System.out.print("Enter new password (Press ENTER to exit): ");
+			newPassword = sc.nextLine();
+			
+			if (newPassword.isEmpty()) {
+				System.out.print("\033[H\033[2J");
+				return;
+			}
+			
 			if (newPassword.length()<8)
 				System.out.println("Password must be at least 8 chars.");
 		}

@@ -145,7 +145,7 @@ public class IPMS {
 				
 				// TESTING DATA
 //				Test.printCsvData();
-				Test.printAllRecords();
+//				Test.printAllRecords();
 //				Test.printTestTables();
 //				Test.getFromCSVFilesAndUpdate();
 				System.out.print("Your Choice: ");
