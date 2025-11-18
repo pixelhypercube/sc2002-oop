@@ -5,6 +5,11 @@
 
 ## Figures for Sc2002 Report
 
+![](images/Figure2.png) 
+
+`Figure 3`: Class Diagram
+
+
 ![](images/Figure3.png) 
 
 `Figure 3`: Sequence Diagram
