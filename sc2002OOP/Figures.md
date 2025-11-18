@@ -3,7 +3,7 @@
 - **Project**: Internship Placement Management System (SC2002 OOP)
 
 
-## Figures
+## Figures for Sc2002 Report
 ![](images/Fig5.1.1a.png) 
 `Figure 5.1.1a`: Different User Fields
 
@@ -35,4 +35,5 @@
 `Figure 5.1.4e`: ICareerCenterStaff interface with staff specific methods only
 
 ![](images/Figure5.3.3.png)
+
 `Figure 5.3.3`: StudentManager with getInstance() and close() methods
