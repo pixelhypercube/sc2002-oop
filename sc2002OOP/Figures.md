@@ -4,6 +4,12 @@
 
 
 ## Figures for Sc2002 Report
+
+![](images/Figure3.png) 
+
+`Figure 3': Sequence Diagram
+
+
 ![](images/Fig5.1.1a.png) 
 
 `Figure 4.1.1a`: Different User Fields
