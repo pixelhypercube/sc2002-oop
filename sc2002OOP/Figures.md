@@ -5,7 +5,7 @@
 
 ## Figures for Sc2002 Report
 
-![](images/Figure2.jpg) 
+![](images/Figure2.jpeg) 
 
 `Figure 2`: Class Diagram
 
